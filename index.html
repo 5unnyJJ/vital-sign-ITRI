@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>機構資料看板</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface-hover: #222632;
+    --border: #2a2e3a;
+    --text: #e4e4e7;
+    --text-dim: #71717a;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.15);
+    --green: #22c55e;
+    --red: #ef4444;
+    --orange: #f59e0b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Login */
+  #login-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 50%, rgba(139,92,246,0.06) 0%, transparent 50%),
+      var(--bg);
+  }
+
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px 40px;
+    width: 400px;
+    max-width: 90vw;
+  }
+
+  .login-box h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+
+  .login-box p {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .field input {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .btn {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 8px;
+  }
+
+  .btn:hover { opacity: 0.9; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .error-msg {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.2);
+    color: var(--red);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  /* Dashboard */
+  #dashboard { display: none; }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topbar-left .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+  }
+
+  .topbar-left span {
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+
+  .topbar-left strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .btn-logout {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-logout:hover {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .main {
+    padding: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    padding: 10px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab:hover { border-color: var(--accent); color: var(--text); }
+
+  .tab.active {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .table-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .table-info .count {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .btn-refresh {
+    padding: 8px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-refresh:hover { border-color: var(--accent); }
+
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 900px;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody tr:hover { background: var(--surface-hover); }
+  tbody tr:last-child td { border-bottom: none; }
+
+  .no-data {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  .loading::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .badge-dc { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .badge-cy { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .badge-yk { background: rgba(245,158,11,0.15); color: #fbbf24; }
+</style>
+</head>
+<body>
+
+<!-- ========== LOGIN ========== -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>機構資料看板</h1>
+    <p>請使用已授權的帳號登入</p>
+    <div class="error-msg" id="login-error"></div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="your@email.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>密碼</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn" id="btn-login" onclick="doLogin()">登入</button>
+  </div>
+</div>
+
+<!-- ========== DASHBOARD ========== -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="dot"></div>
+      <span>已登入：<strong id="user-email"></strong></span>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">登出</button>
+  </div>
+
+  <div class="main">
+    <div class="tabs" id="tabs"></div>
+
+    <div class="table-info">
+      <div class="count" id="row-count"></div>
+      <button class="btn-refresh" onclick="loadCurrentTable()">重新整理</button>
+    </div>
+
+    <div class="table-wrap">
+      <div id="table-content">
+        <div class="no-data">請選擇資料表</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==========================================
+// Supabase 初始化
+// ==========================================
+const SUPABASE_URL = 'https://lrrxswxvphoeyuvemvin.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxycnhzd3h2cGhvZXl1dmVtdmluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMzU1NjksImV4cCI6MjA4MzkxMTU2OX0.54qS-CTVL9XeIbNO83r8spsRrk8woyBz3u-HoRdFxHs';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ==========================================
+// 權限對照表
+// ==========================================
+const ACCESS_MAP = {
+  'dulancliniccloud@gmail.com':  ['DC_data_base'],
+  'ttricloudtest001@gmail.com':  ['CY_data_base', 'YK_data_base'],
+  'kingpig4628@gmail.com':       ['DC_data_base', 'CY_data_base', 'YK_data_base'],
+  'zywu.1487@gmail.com':         ['DC_data_base', 'CY_data_base', 'YK_data_base'],
+};
+
+const BADGE_CLASS = {
+  'DC_data_base': 'badge-dc',
+  'CY_data_base': 'badge-cy',
+  'YK_data_base': 'badge-yk',
+};
+
+let currentTable = null;
+
+// ==========================================
+// 顯示欄位（排除 id）
+// ==========================================
+const COLUMNS = [
+  { key: 'member_id',  label: '會員編號' },
+  { key: 'date_minute', label: '量測時間' },
+  { key: 'heartbeat',  label: '心跳' },
+  { key: 'temp',       label: '體溫' },
+  { key: 'breath',     label: '呼吸' },
+  { key: 'sbp',        label: '收縮壓' },
+  { key: 'dbp',        label: '舒張壓' },
+  { key: 'pulse',      label: '脈搏' },
+  { key: 'step',       label: '步數' },
+  { key: 'calorie',    label: '卡路里' },
+  { key: 'action',     label: '動作' },
+  { key: 'received_at', label: '接收時間' },
+];
+
+// ==========================================
+// 登入
+// ==========================================
+async function doLogin() {
+  const email = document.getElementById('email').value.trim();
+  const pass = document.getElementById('password').value;
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('btn-login');
+
+  errEl.style.display = 'none';
+
+  if (!email || !pass) {
+    errEl.textContent = '請輸入 Email 和密碼';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  if (!ACCESS_MAP[email]) {
+    errEl.textContent = '此帳號無權限存取';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '登入中...';
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+
+  if (error) {
+    errEl.textContent = '登入失敗：' + error.message;
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = '登入';
+    return;
+  }
+
+  showDashboard(email);
+}
+
+// Enter 鍵登入
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') {
+    doLogin();
+  }
+});
+
+// ==========================================
+// 登出
+// ==========================================
+async function doLogout() {
+  await sb.auth.signOut();
+  currentTable = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('email').value = '';
+  document.getElementById('password').value = '';
+}
+
+// ==========================================
+// 顯示 Dashboard
+// ==========================================
+function showDashboard(email) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('user-email').textContent = email;
+
+  const tables = ACCESS_MAP[email] || [];
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = '';
+
+  tables.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (i === 0 ? ' active' : '');
+    btn.textContent = t;
+    btn.onclick = () => switchTable(t, btn);
+    tabsEl.appendChild(btn);
+  });
+
+  if (tables.length > 0) {
+    switchTable(tables[0], tabsEl.querySelector('.tab'));
+  }
+}
+
+// ==========================================
+// 切換表
+// ==========================================
+function switchTable(tableName, btnEl) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  currentTable = tableName;
+  loadCurrentTable();
+}
+
+// ==========================================
+// 載入資料
+// ==========================================
+async function loadCurrentTable() {
+  if (!currentTable) return;
+
+  const content = document.getElementById('table-content');
+  const countEl = document.getElementById('row-count');
+
+  content.innerHTML = '<div class="loading">載入中</div>';
+  countEl.textContent = '';
+
+  const { data, error } = await sb
+    .from(currentTable)
+    .select('*')
+    .order('date_minute', { ascending: false })
+    .limit(500);
+
+  if (error) {
+    content.innerHTML = `<div class="no-data">查詢失敗：${error.message}</div>`;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    content.innerHTML = '<div class="no-data">此資料表目前沒有資料</div>';
+    countEl.textContent = '0 筆資料';
+    return;
+  }
+
+  countEl.textContent = `${data.length} 筆資料（最新 500 筆）`;
+
+  let html = '<table><thead><tr>';
+  COLUMNS.forEach(c => { html += `<th>${c.label}</th>`; });
+  html += '</tr></thead><tbody>';
+
+  data.forEach(row => {
+    html += '<tr>';
+    COLUMNS.forEach(c => {
+      let val = row[c.key];
+      if (val === null || val === undefined) {
+        val = '<span style="color:var(--text-dim)">—</span>';
+      } else if (c.key === 'date_minute' || c.key === 'received_at') {
+        val = formatTime(val);
+      } else if (c.key === 'temp' && val !== null) {
+        val = parseFloat(val).toFixed(1) + '°C';
+      }
+      html += `<td>${val}</td>`;
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  content.innerHTML = html;
+}
+
+// ==========================================
+// 時間格式化
+// ==========================================
+function formatTime(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+// ==========================================
+// 自動恢復 session
+// ==========================================
+(async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user?.email && ACCESS_MAP[session.user.email]) {
+    showDashboard(session.user.email);
+  }
+})();
+</script>
+</body>
+</html>
