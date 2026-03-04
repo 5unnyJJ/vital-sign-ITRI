@@ -3,576 +3,1157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>機構資料看板</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>機構健康資料看板</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface-hover: #222632;
-    --border: #2a2e3a;
-    --text: #e4e4e7;
-    --text-dim: #71717a;
-    --accent: #3b82f6;
-    --accent-glow: rgba(59, 130, 246, 0.15);
-    --green: #22c55e;
-    --red: #ef4444;
-    --orange: #f59e0b;
-  }
+:root{--bg:#ecf0ed;--bg-alt:#f3f7f4;--surface:#fff;--border:#d2e2d9;--border-light:#e5eeea;
+--mint:#7aaa96;--mint-mid:#5d9180;--mint-dark:#3d6b5a;--mint-light:#d8efe5;--mint-xlight:#f0f9f4;
+--text:#1e2d26;--text-mid:#486055;--text-dim:#84a098;--text-light:#b5ccc5;
+--red:#b85450;--red-light:#faeeee;--orange:#bf7a45;--orange-light:#faf1e6;--green:#5e9e72;--green-light:#e6f4eb;
+--shadow-sm:0 1px 4px rgba(40,70,55,.07);--shadow:0 4px 18px rgba(40,70,55,.09);--shadow-md:0 8px 36px rgba(40,70,55,.12);
+--r-xl:20px;--r-lg:14px;--r-md:10px;--r-sm:7px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans TC','DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ── LOGIN ── */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;
+background:radial-gradient(ellipse at 22% 44%,rgba(122,170,150,.16) 0%,transparent 52%),
+radial-gradient(ellipse at 80% 60%,rgba(93,145,128,.08) 0%,transparent 48%),var(--bg);}
+.login-wrap{display:flex;background:var(--surface);border-radius:24px;box-shadow:var(--shadow-md);overflow:hidden;width:820px;max-width:93vw;}
+.login-aside{width:280px;flex-shrink:0;background:linear-gradient(148deg,#72a890 0%,#3a6856 100%);padding:52px 38px;display:flex;flex-direction:column;justify-content:space-between;}
+.login-brand h1{font-size:21px;font-weight:700;color:#fff;line-height:1.4;letter-spacing:-.3px;}
+.login-brand small{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.6px;text-transform:uppercase;margin-top:5px;display:block;}
+.login-deco{font-size:68px;opacity:.18;text-align:right;user-select:none;}
+.login-form{flex:1;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;}
+.login-form h2{font-size:22px;font-weight:700;letter-spacing:-.4px;margin-bottom:5px;}
+.login-form .sub{font-size:14px;color:var(--text-dim);margin-bottom:34px;}
+.field{margin-bottom:17px;}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--text-mid);margin-bottom:7px;text-transform:uppercase;letter-spacing:.6px;}
+.field input{width:100%;padding:12px 15px;background:var(--bg-alt);border:1.5px solid var(--border);border-radius:var(--r-md);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .18s,box-shadow .18s,background .15s;}
+.field input:focus{border-color:var(--mint);background:#fff;box-shadow:0 0 0 3px rgba(122,170,150,.17);}
+.remember-row{display:flex;align-items:center;gap:8px;margin:0 0 22px;}
+.remember-row input[type=checkbox]{width:14px;height:14px;accent-color:var(--mint);cursor:pointer;}
+.remember-row label{font-size:13px;color:var(--text-dim);cursor:pointer;}
+.btn-login{width:100%;padding:13px;background:var(--mint);color:#fff;border:none;border-radius:var(--r-md);font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .18s,transform .1s;box-shadow:0 4px 14px rgba(122,170,150,.38);}
+.btn-login:hover{background:var(--mint-mid);}.btn-login:active{transform:scale(.99);}
+.btn-login:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;}
+.error-msg{background:var(--red-light);border:1px solid rgba(184,84,80,.18);color:var(--red);padding:10px 14px;border-radius:var(--r-sm);font-size:13px;margin-bottom:15px;display:none;}
+/* Session resume banner */
+.session-banner{background:var(--mint-xlight);border:1.5px solid var(--mint-light);border-radius:var(--r-md);padding:13px 16px;margin-bottom:18px;display:none;}
+.session-banner p{font-size:13px;color:var(--text-mid);margin-bottom:10px;}
+.session-banner .session-email{font-weight:700;color:var(--mint-dark);}
+.session-btns{display:flex;gap:8px;}
+.btn-resume{flex:1;padding:9px;background:var(--mint);color:#fff;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s;}
+.btn-resume:hover{background:var(--mint-mid);}
+.btn-relogin{flex:1;padding:9px;background:transparent;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:13px;color:var(--text-dim);font-family:inherit;cursor:pointer;transition:all .15s;}
+.btn-relogin:hover{border-color:var(--red);color:var(--red);}
+@media(max-width:600px){.login-aside{display:none;}.login-form{padding:36px 24px;}}
 
-  body {
-    font-family: 'Noto Sans TC', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
+/* ── TOPBAR ── */
+#dashboard{display:none;}
+.topbar{position:sticky;top:0;z-index:300;display:flex;align-items:center;justify-content:space-between;height:62px;padding:0 40px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-light);}
+.topbar-brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--mint-dark);letter-spacing:-.2px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.user-chip{display:flex;align-items:center;gap:7px;padding:4px 13px 4px 5px;background:var(--mint-xlight);border:1.5px solid var(--mint-light);border-radius:40px;}
+.user-avatar{width:28px;height:28px;background:var(--mint);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.user-chip span{font-size:13px;color:var(--text-mid);font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rt-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:600;background:rgba(239,68,68,.1);color:#b85450;border:1px solid rgba(184,84,80,.2);}
+.rt-badge.active{background:rgba(94,158,114,.12);color:#2d6b40;border-color:rgba(94,158,114,.25);}
+.rt-dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
+.rt-dot.pulse{animation:rtpulse 1.2s ease infinite;}
+@keyframes rtpulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.8);}}
+.btn-logout{padding:7px 15px;background:transparent;border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text-dim);font-size:13px;font-family:inherit;cursor:pointer;transition:all .18s;}
+.btn-logout:hover{border-color:var(--red);color:var(--red);background:var(--red-light);}
+.btn-account{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text-mid);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .18s;}
+.btn-account:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
+.btn-account.has-filter{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
+.btn-fontsize{display:flex;align-items:center;gap:5px;padding:7px 13px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text-mid);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .18s;letter-spacing:-.2px;}
+.btn-fontsize:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
+.btn-fontsize.active{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
 
-  /* Login */
-  #login-screen {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: 
-      radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 50%, rgba(139,92,246,0.06) 0%, transparent 50%),
-      var(--bg);
-  }
+/* ── ACCOUNT SIDEBAR ── */
+.acct-overlay{display:none;position:fixed;inset:0;z-index:400;}
+.acct-overlay.open{display:block;}
+.acct-backdrop{position:absolute;inset:0;background:rgba(30,45,38,.18);}
+.acct-sidebar{position:absolute;top:0;right:0;bottom:0;width:320px;max-width:92vw;background:var(--surface);box-shadow:var(--shadow-md);display:flex;flex-direction:column;animation:slideIn .22s ease;}
+@keyframes slideIn{from{transform:translateX(100%);}to{transform:translateX(0);}}
+.acct-header{display:flex;align-items:center;justify-content:space-between;padding:20px 22px 16px;border-bottom:1px solid var(--border-light);}
+.acct-header h3{font-size:15px;font-weight:700;}
+.acct-close{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;border-radius:var(--r-sm);color:var(--text-dim);font-size:18px;cursor:pointer;transition:all .15s;}
+.acct-close:hover{background:var(--bg-alt);color:var(--text);}
+.acct-search-wrap{padding:12px 16px;border-bottom:1px solid var(--border-light);}
+.acct-search{width:100%;padding:9px 12px;background:var(--bg-alt);border:1.5px solid var(--border);border-radius:var(--r-md);font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:border-color .15s;}
+.acct-search:focus{border-color:var(--mint);}
+.acct-scan{display:flex;align-items:center;gap:6px;padding:8px 16px;background:transparent;border:none;color:var(--text-dim);font-size:12px;font-family:inherit;cursor:pointer;width:100%;text-align:left;transition:color .15s;}
+.acct-scan:hover{color:var(--mint-dark);}
+.acct-list{flex:1;overflow-y:auto;padding:8px 10px;}
+.acct-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-md);cursor:pointer;transition:background .13s;margin-bottom:2px;}
+.acct-item:hover{background:var(--bg-alt);}
+.acct-item.active{background:var(--mint-xlight);border:1.5px solid var(--mint-light);}
+.acct-dot{width:8px;height:8px;border-radius:50%;background:var(--mint);flex-shrink:0;}
+.acct-dot.all{background:var(--text-dim);}
+.acct-name{font-size:14px;font-weight:600;flex:1;}
+.acct-item.active .acct-name{color:var(--mint-dark);}
+.acct-check{color:var(--mint);font-size:14px;display:none;}
+.acct-item.active .acct-check{display:block;}
 
-  .login-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 48px 40px;
-    width: 400px;
-    max-width: 90vw;
-  }
+/* ── MAIN ── */
+.main{padding:36px 40px;max-width:1500px;margin:0 auto;}
+.page-header{margin-bottom:28px;}
+.page-header h1{font-size:24px;font-weight:700;letter-spacing:-.4px;margin-bottom:3px;}
+.context-label{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:var(--mint-xlight);border:1.5px solid var(--mint-light);border-radius:40px;font-size:12.5px;color:var(--text-mid);font-weight:600;margin-top:8px;}
+.context-label span{color:var(--mint-dark);}
 
-  .login-box h1 {
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    letter-spacing: -0.3px;
-  }
+/* ── TABS ── */
+.tabs{display:flex;gap:9px;margin-bottom:24px;flex-wrap:wrap;}
+.tab{display:flex;align-items:center;gap:6px;padding:9px 22px;background:var(--surface);border:1.5px solid var(--border);border-radius:40px;color:var(--text-dim);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .18s;box-shadow:var(--shadow-sm);}
+.tab:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
+.tab.active{background:var(--mint);border-color:var(--mint);color:#fff;box-shadow:0 3px 12px rgba(122,170,150,.38);}
+.tab-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7;flex-shrink:0;}
 
-  .login-box p {
-    color: var(--text-dim);
-    font-size: 14px;
-    margin-bottom: 32px;
-  }
+/* ── NAV ── */
+.view-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.view-toggle{display:flex;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);}
+.view-btn{padding:8px 20px;background:transparent;border:none;font-size:13px;font-weight:600;font-family:inherit;color:var(--text-dim);cursor:pointer;transition:all .15s;}
+.view-btn:hover{background:var(--bg-alt);color:var(--mint-dark);}
+.view-btn.active{background:var(--mint);color:#fff;}
+.nav-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.date-nav{display:flex;align-items:center;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);}
+.date-nav-btn{padding:9px 15px;background:transparent;border:none;color:var(--text-mid);font-size:17px;cursor:pointer;transition:background .15s;display:flex;align-items:center;}
+.date-nav-btn:hover{background:var(--bg-alt);color:var(--mint-dark);}
+.date-display{padding:9px 18px;font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.2px;white-space:nowrap;border-left:1px solid var(--border-light);border-right:1px solid var(--border-light);}
+.btn-today{padding:9px 14px;background:transparent;border:none;font-size:12px;font-weight:700;color:var(--mint-mid);font-family:inherit;cursor:pointer;transition:background .15s;}
+.btn-today:hover{background:var(--mint-xlight);}
+.btn-search-nav{display:flex;align-items:center;gap:6px;padding:9px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);color:var(--text-mid);font-size:13px;font-family:inherit;cursor:pointer;transition:all .18s;box-shadow:var(--shadow-sm);}
+.btn-search-nav:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
 
-  .field {
-    margin-bottom: 20px;
-  }
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin:16px 0;gap:10px;flex-wrap:wrap;}
+.count-badge{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;color:var(--text-mid);box-shadow:var(--shadow-sm);}
+.count-badge strong{color:var(--text);font-weight:700;}
+.toolbar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.refresh-selector{display:flex;align-items:center;gap:6px;}
+.refresh-selector label{font-size:12px;color:var(--text-dim);white-space:nowrap;}
+.refresh-selector select{padding:7px 10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text-mid);font-size:12px;font-family:inherit;cursor:pointer;outline:none;}
+.refresh-selector select:focus{border-color:var(--mint);}
+.refresh-countdown{font-size:11px;color:var(--mint-mid);font-weight:700;font-feature-settings:'tnum';min-width:28px;}
+/* Last upload indicator */
+.last-upload{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);font-size:12px;color:var(--text-dim);box-shadow:var(--shadow-sm);font-feature-settings:'tnum';white-space:nowrap;}
+.last-upload .lu-time{color:var(--text-mid);font-weight:600;}
+.last-upload .lu-ago{color:var(--text-light);}
+.last-upload.fresh .lu-time{color:var(--green);}
+.btn-refresh{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text-mid);font-size:13px;font-family:inherit;cursor:pointer;transition:all .18s;box-shadow:var(--shadow-sm);}
+.btn-refresh:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
+.btn-refresh.spinning svg{animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
-  .field label {
-    display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-dim);
-    margin-bottom: 8px;
-  }
+/* ── SEARCH OVERLAY ── */
+.search-overlay{display:none;position:fixed;inset:0;z-index:500;}
+.search-overlay.open{display:block;}
+.search-backdrop{position:absolute;inset:0;}
+.search-dialog{position:absolute;top:110px;left:50%;transform:translateX(-50%);background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-md);padding:26px 28px;width:340px;max-width:90vw;}
+.search-dialog h3{font-size:15px;font-weight:700;margin-bottom:4px;}
+.search-dialog p{font-size:12.5px;color:var(--text-dim);margin-bottom:16px;}
+.search-input{width:100%;padding:11px 14px;background:var(--bg-alt);border:1.5px solid var(--border);border-radius:var(--r-md);font-size:14px;font-family:inherit;color:var(--text);outline:none;margin-bottom:11px;transition:border-color .18s,box-shadow .18s;}
+.search-input:focus{border-color:var(--mint);box-shadow:0 0 0 3px rgba(122,170,150,.17);background:#fff;}
+.search-quick{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.quick-btn{padding:6px 12px;background:var(--bg-alt);border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;color:var(--text-mid);font-family:inherit;cursor:pointer;transition:all .15s;}
+.quick-btn:hover{background:var(--mint-xlight);border-color:var(--mint);color:var(--mint-dark);}
+.btn-search-go{width:100%;padding:11px;background:var(--mint);color:#fff;border:none;border-radius:var(--r-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .18s;}
+.btn-search-go:hover{background:var(--mint-mid);}
 
-  .field input {
-    width: 100%;
-    padding: 12px 16px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-size: 15px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s;
-  }
+/* ── TREND PANEL ── */
+.trend-panel{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);margin-bottom:20px;overflow:hidden;}
+.trend-tabs{display:flex;border-bottom:1px solid var(--border-light);}
+.trend-tab{padding:13px 22px;font-size:13px;font-weight:600;font-family:inherit;background:transparent;border:none;color:var(--text-dim);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:all .15s;white-space:nowrap;}
+.trend-tab:hover{color:var(--text);}
+.trend-tab.active{color:var(--mint-dark);border-bottom-color:var(--mint);}
+.trend-body{padding:20px 24px;}
+.trend-range-btns{display:flex;gap:6px;margin-bottom:14px;}
+.trend-range-btn{padding:5px 14px;background:var(--bg-alt);border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;color:var(--text-mid);font-family:inherit;cursor:pointer;transition:all .13s;}
+.trend-range-btn:hover{border-color:var(--mint);color:var(--mint-dark);}
+.trend-range-btn.active{background:var(--mint);border-color:var(--mint);color:#fff;}
+.trend-chart-wrap{width:100%;overflow:hidden;}
+.trend-empty{text-align:center;padding:32px;color:var(--text-dim);font-size:13px;}
+.trend-note{font-size:11px;color:var(--text-dim);margin-top:8px;text-align:right;}
 
-  .field input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow);
-  }
+/* ── DATE / HOUR CARDS ── */
+#table-content{display:flex;flex-direction:column;gap:14px;}
+.date-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-sm);transition:box-shadow .2s;}
+.date-card:hover{box-shadow:var(--shadow);}
+.date-header{display:flex;align-items:center;justify-content:space-between;padding:20px 26px;cursor:pointer;user-select:none;transition:background .15s;}
+.date-header:hover{background:var(--bg-alt);}
+.date-header-left{display:flex;align-items:center;gap:14px;flex:1;}
+.date-icon{width:42px;height:42px;background:var(--mint-light);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.date-info{flex:1;}
+.date-label{font-size:16px;font-weight:700;letter-spacing:-.3px;}
+.date-meta{font-size:12.5px;color:var(--text-dim);margin-top:2px;}
+.date-vitals{display:flex;gap:16px;margin-top:6px;flex-wrap:wrap;}
+.date-vital{font-size:12px;color:var(--text-mid);display:flex;align-items:center;gap:4px;}
+.date-vital strong{font-weight:700;color:var(--text);}
+.date-vital.std strong{color:var(--mint-mid);}
+.date-chevron{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:7px;color:var(--text-light);transition:transform .25s ease,color .15s;flex-shrink:0;}
+.date-card.open .date-chevron{transform:rotate(180deg);color:var(--mint);}
+.date-body{display:none;padding:0 16px 16px;flex-direction:column;gap:8px;}
+.date-card.open .date-body{display:flex;}
+.hour-card{background:var(--bg-alt);border:1.5px solid var(--border-light);border-radius:var(--r-lg);overflow:hidden;}
+.hour-header{display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;user-select:none;transition:background .15s;}
+.hour-header:hover{background:var(--mint-xlight);}
+.hour-label{font-size:14px;font-weight:700;font-feature-settings:'tnum';flex-shrink:0;}
+.hour-count{font-size:11.5px;color:var(--text-dim);background:var(--surface);border:1px solid var(--border);padding:2px 9px;border-radius:20px;flex-shrink:0;}
+.hour-stats{display:flex;align-items:center;gap:10px;flex:1;flex-wrap:wrap;}
+.stat-chip{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text-mid);}
+.stat-val{font-weight:700;color:var(--text);font-feature-settings:'tnum';}
+.stat-val.is-red{color:var(--red);}.stat-val.is-orange{color:var(--orange);}
+.hour-chevron{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--text-light);transition:transform .2s;flex-shrink:0;margin-left:auto;}
+.hour-card.open .hour-chevron{transform:rotate(180deg);}
+.hour-body{display:none;border-top:1px solid var(--border-light);}
+.hour-card.open .hour-body{display:block;}
+.sparkline-area{display:flex;align-items:center;gap:28px;padding:14px 20px 11px;background:var(--surface);border-bottom:1px solid var(--border-light);overflow-x:auto;}
+.spark-item{display:flex;flex-direction:column;gap:4px;}
+.spark-label{font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.6px;}
+@keyframes newrow{from{background:rgba(122,170,150,.22);}to{background:transparent;}}
+.row-new td{animation:newrow 2s ease forwards;}
 
-  .btn {
-    width: 100%;
-    padding: 13px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: opacity 0.2s;
-    margin-top: 8px;
-  }
+/* ── DATA TABLE ── */
+.data-table-wrap{overflow-x:auto;background:var(--surface);}
+.data-table{width:100%;border-collapse:collapse;font-size:13px;min-width:920px;}
+.data-table thead th{padding:12px 16px;text-align:left;font-weight:700;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.7px;background:var(--bg-alt);border-bottom:1px solid var(--border-light);white-space:nowrap;}
+.data-table tbody td{padding:13px 16px;border-bottom:1px solid var(--border-light);white-space:nowrap;vertical-align:middle;}
+.data-table tbody tr:hover td{background:var(--mint-xlight);}
+.data-table tbody tr:last-child td{border-bottom:none;}
+.val-neutral{font-size:13px;color:var(--text);font-feature-settings:'tnum';}
+.val-dim{color:var(--text-light);}
+.val-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:12.5px;font-weight:700;font-feature-settings:'tnum';}
+.val-green{background:var(--green-light);color:#2d6b40;}
+.val-orange{background:var(--orange-light);color:#7a4818;}
+.val-red{background:var(--red-light);color:#862624;}
+.val-count{font-size:11px;color:var(--text-dim);background:var(--bg-alt);padding:2px 8px;border-radius:5px;}
 
-  .btn:hover { opacity: 0.9; }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+/* ── MONTH VIEW ── */
+.month-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;}
+.day-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:20px 22px;box-shadow:var(--shadow-sm);cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.day-card:hover{box-shadow:var(--shadow);border-color:var(--mint);transform:translateY(-1px);}
+.day-card.loading-day::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--mint-light),var(--mint),var(--mint-light));background-size:200% 100%;animation:shimmer 1.2s linear infinite;}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.day-card-date{font-size:15px;font-weight:700;letter-spacing:-.2px;margin-bottom:12px;}
+.day-card-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.day-stat{display:flex;flex-direction:column;gap:2px;}
+.day-stat-label{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;}
+.day-stat-val{font-size:15px;font-weight:700;color:var(--text);font-feature-settings:'tnum';}
+.day-stat-val.is-red{color:var(--red);}.day-stat-val.is-orange{color:var(--orange);}
+.day-card-footer{margin-top:14px;font-size:11.5px;color:var(--text-dim);display:flex;align-items:center;justify-content:space-between;}
+.day-card.no-data{opacity:.5;cursor:default;}
+.day-card.no-data:hover{transform:none;border-color:var(--border);box-shadow:var(--shadow-sm);}
 
-  .error-msg {
-    background: rgba(239,68,68,0.1);
-    border: 1px solid rgba(239,68,68,0.2);
-    color: var(--red);
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    margin-bottom: 16px;
-    display: none;
-  }
+/* ── PAGINATION ── */
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;padding:20px 0 4px;flex-wrap:wrap;}
+.page-btn{min-width:36px;height:36px;padding:0 10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:13px;font-weight:500;color:var(--text-mid);font-family:inherit;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.page-btn:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
+.page-btn.active{background:var(--mint);border-color:var(--mint);color:#fff;box-shadow:0 2px 8px rgba(122,170,150,.35);}
+.page-btn:disabled{opacity:.4;cursor:default;}
+.page-info{font-size:12px;color:var(--text-dim);padding:0 4px;}
 
-  /* Dashboard */
-  #dashboard { display: none; }
-
-  .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 32px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-  }
-
-  .topbar-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .topbar-left .dot {
-    width: 8px;
-    height: 8px;
-    background: var(--green);
-    border-radius: 50%;
-  }
-
-  .topbar-left span {
-    font-size: 14px;
-    color: var(--text-dim);
-  }
-
-  .topbar-left strong {
-    color: var(--text);
-    font-weight: 500;
-  }
-
-  .btn-logout {
-    padding: 8px 20px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-dim);
-    font-size: 13px;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-logout:hover {
-    border-color: var(--red);
-    color: var(--red);
-  }
-
-  .main {
-    padding: 32px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .tab {
-    padding: 10px 24px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text-dim);
-    font-size: 14px;
-    font-weight: 500;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .tab:hover { border-color: var(--accent); color: var(--text); }
-
-  .tab.active {
-    background: var(--accent-glow);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .table-info {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-
-  .table-info .count {
-    font-size: 13px;
-    color: var(--text-dim);
-  }
-
-  .btn-refresh {
-    padding: 8px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-size: 13px;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-refresh:hover { border-color: var(--accent); }
-
-  .table-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: auto;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    min-width: 900px;
-  }
-
-  thead th {
-    position: sticky;
-    top: 0;
-    background: var(--surface);
-    padding: 14px 16px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 12px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-  }
-
-  tbody td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-  }
-
-  tbody tr:hover { background: var(--surface-hover); }
-  tbody tr:last-child td { border-bottom: none; }
-
-  .no-data {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-dim);
-    font-size: 14px;
-  }
-
-  .loading {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-dim);
-    font-size: 14px;
-  }
-
-  .loading::after {
-    content: '';
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-    margin-left: 8px;
-    vertical-align: middle;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 500;
-  }
-
-  .badge-dc { background: rgba(59,130,246,0.15); color: #60a5fa; }
-  .badge-cy { background: rgba(34,197,94,0.15); color: #4ade80; }
-  .badge-yk { background: rgba(245,158,11,0.15); color: #fbbf24; }
+/* ── STATES ── */
+.state-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-xl);padding:72px 32px;text-align:center;color:var(--text-dim);font-size:15px;box-shadow:var(--shadow-sm);}
+.progress-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-xl);padding:40px;text-align:center;box-shadow:var(--shadow-sm);}
+.progress-label{font-size:14px;color:var(--text-mid);margin-bottom:16px;}
+.progress-bar-bg{width:100%;max-width:320px;height:6px;background:var(--border);border-radius:10px;margin:0 auto;}
+.progress-bar-fill{height:6px;background:var(--mint);border-radius:10px;transition:width .3s ease;width:0%;}
+.progress-note{font-size:12px;color:var(--text-dim);margin-top:10px;}
+@media(max-width:800px){.topbar,.main{padding-left:16px;padding-right:16px;}.hour-stats,.sparkline-area{display:none;}.month-grid{grid-template-columns:1fr 1fr;}.trend-panel{display:none;}}
+@media(max-width:480px){.month-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<!-- ========== LOGIN ========== -->
+<!--
+  ═══════════════════════════════════════════════════════════════
+  SUPABASE SETUP REQUIRED (執行一次)
+  ═══════════════════════════════════════════════════════════════
+
+  1. 建立 user_access 資料表：
+  CREATE TABLE user_access (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    email text NOT NULL,
+    table_name text NOT NULL,
+    UNIQUE(email, table_name)
+  );
+
+  2. 啟用 RLS：
+  ALTER TABLE user_access ENABLE ROW LEVEL SECURITY;
+  CREATE POLICY "own_access_only" ON user_access
+    FOR SELECT USING (auth.email() = email);
+
+  3. 插入既有權限：
+  INSERT INTO user_access (email, table_name) VALUES
+    ('dulancliniccloud@gmail.com','DC_data_base'),
+    ('ttricloudtest001@gmail.com','CY_data_base'),
+    ('ttricloudtest001@gmail.com','YK_data_base'),
+    ('kingpig4628@gmail.com','DC_data_base'),
+    ('kingpig4628@gmail.com','CY_data_base'),
+    ('kingpig4628@gmail.com','YK_data_base'),
+    ('zywu.1487@gmail.com','DC_data_base'),
+    ('zywu.1487@gmail.com','CY_data_base'),
+    ('zywu.1487@gmail.com','YK_data_base'),
+    ('ttrismartextilegpt@gmail.com','DC_data_base'),
+    ('ttrismartextilegpt@gmail.com','CY_data_base'),
+    ('ttrismartextilegpt@gmail.com','YK_data_base'),
+    ('ttrismartextilegpt02@gmail.com','DC_data_base'),
+    ('ttrismartextilegpt02@gmail.com','CY_data_base'),
+    ('ttrismartextilegpt02@gmail.com','YK_data_base'),
+    ('ttrismartextilegpt03@gmail.com','DC_data_base'),
+    ('ttrismartextilegpt03@gmail.com','CY_data_base'),
+    ('ttrismartextilegpt03@gmail.com','YK_data_base')
+  ON CONFLICT (email, table_name) DO NOTHING;
+
+  4. 各 table 也要開啟 RLS + policy（讓 authenticated users 才能讀）：
+  ALTER TABLE "DC_data_base" ENABLE ROW LEVEL SECURITY;
+  CREATE POLICY "auth_read" ON "DC_data_base" FOR SELECT TO authenticated USING (true);
+
+  ALTER TABLE "CY_data_base" ENABLE ROW LEVEL SECURITY;
+  CREATE POLICY "auth_read" ON "CY_data_base" FOR SELECT TO authenticated USING (true);
+
+  ALTER TABLE "YK_data_base" ENABLE ROW LEVEL SECURITY;
+  CREATE POLICY "auth_read" ON "YK_data_base" FOR SELECT TO authenticated USING (true);
+
+  ALTER TABLE "T1_data_base" ENABLE ROW LEVEL SECURITY;
+  CREATE POLICY "auth_read" ON "T1_data_base" FOR SELECT TO authenticated USING (true);
+
+  ═══════════════════════════════════════════════════════════════
+-->
+
+<!-- ── LOGIN ── -->
 <div id="login-screen">
-  <div class="login-box">
-    <h1>機構資料看板</h1>
-    <p>請使用已授權的帳號登入</p>
-    <div class="error-msg" id="login-error"></div>
-    <div class="field">
-      <label>Email</label>
-      <input type="email" id="email" placeholder="your@email.com" autocomplete="email">
+  <div class="login-wrap">
+    <div class="login-aside">
+      <div class="login-brand"><h1>機構健康<br>資料看板</h1><small>Healthcare Dashboard</small></div>
+      <div class="login-deco">🌿</div>
     </div>
-    <div class="field">
-      <label>密碼</label>
-      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+    <div class="login-form">
+      <h2>歡迎回來</h2><p class="sub">請使用已授權的帳號登入</p>
+      <!-- AC-LOGIN-01/02: Session resume banner (Option B) -->
+      <div class="session-banner" id="session-banner">
+        <p>偵測到已登入帳號：<span class="session-email" id="session-email-display"></span></p>
+        <div class="session-btns">
+          <button class="btn-resume" onclick="resumeSession()">繼續使用</button>
+          <button class="btn-relogin" onclick="dismissResume()">重新登入</button>
+        </div>
+      </div>
+      <div class="error-msg" id="login-error"></div>
+      <div class="field"><label>Email</label><input type="email" id="email" placeholder="your@email.com" autocomplete="email"></div>
+      <div class="field"><label>密碼</label><input type="password" id="password" placeholder="••••••••" autocomplete="current-password"></div>
+      <div class="remember-row"><input type="checkbox" id="remember"><label for="remember">記住帳號與密碼</label></div>
+      <button class="btn-login" id="btn-login" onclick="doLogin()">登入</button>
     </div>
-    <button class="btn" id="btn-login" onclick="doLogin()">登入</button>
   </div>
 </div>
 
-<!-- ========== DASHBOARD ========== -->
+<!-- ── SEARCH OVERLAY ── -->
+<div class="search-overlay" id="search-overlay">
+  <div class="search-backdrop" onclick="closeSearch()"></div>
+  <div class="search-dialog">
+    <h3>🔍 查詢資料</h3><p>輸入日期（YYYY-MM-DD）或年月（YYYY-MM）</p>
+    <input class="search-input" id="search-input" placeholder="例：2025-06-15 或 2025-06" onkeydown="if(event.key==='Enter')doSearch()">
+    <div class="search-quick">
+      <button class="quick-btn" onclick="quickDate(0)">今天</button>
+      <button class="quick-btn" onclick="quickDate(-1)">昨天</button>
+      <button class="quick-btn" onclick="quickDate(-7)">一週前</button>
+      <button class="quick-btn" onclick="quickMonth(0)">本月</button>
+      <button class="quick-btn" onclick="quickMonth(-1)">上個月</button>
+    </div>
+    <button class="btn-search-go" onclick="doSearch()">前往查詢</button>
+  </div>
+</div>
+
+<!-- ── ACCOUNT SIDEBAR ── -->
+<div class="acct-overlay" id="acct-overlay">
+  <div class="acct-backdrop" onclick="closeAccountSidebar()"></div>
+  <div class="acct-sidebar">
+    <div class="acct-header">
+      <h3>👤 帳號選擇</h3>
+      <button class="acct-close" onclick="closeAccountSidebar()">✕</button>
+    </div>
+    <div class="acct-search-wrap">
+      <input class="acct-search" id="acct-search" placeholder="搜尋帳號…" oninput="filterMemberList(this.value)">
+    </div>
+    <button class="acct-scan" id="acct-scan-btn" onclick="scanMonthMembers()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      掃描本月所有帳號
+    </button>
+    <div class="acct-list" id="acct-list"></div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
 <div id="dashboard">
   <div class="topbar">
-    <div class="topbar-left">
-      <div class="dot"></div>
-      <span>已登入：<strong id="user-email"></strong></span>
+    <div class="topbar-brand">🌿 健康資料看板</div>
+    <div class="topbar-right">
+      <div class="rt-badge" id="rt-badge"><span class="rt-dot" id="rt-dot"></span><span id="rt-label">離線</span></div>
+      <button class="btn-fontsize" id="btn-fontsize" onclick="cycleFontSize()" title="調整字體大小">A 標準</button>
+      <button class="btn-account" id="btn-account" onclick="openAccountSidebar()">👤 帳戶</button>
+      <div class="user-chip"><div class="user-avatar" id="user-avatar">?</div><span id="user-email"></span></div>
+      <button class="btn-logout" onclick="doLogout()">登出</button>
     </div>
-    <button class="btn-logout" onclick="doLogout()">登出</button>
   </div>
 
   <div class="main">
-    <div class="tabs" id="tabs"></div>
-
-    <div class="table-info">
-      <div class="count" id="row-count"></div>
-      <button class="btn-refresh" onclick="loadCurrentTable()">重新整理</button>
+    <div class="page-header">
+      <h1>健康資料總覽</h1>
+      <div class="context-label" id="context-label"><span id="ctx-table">—</span>／帳號：<span id="ctx-member">全部</span></div>
     </div>
-
-    <div class="table-wrap">
-      <div id="table-content">
-        <div class="no-data">請選擇資料表</div>
+    <div class="tabs" id="tabs"></div>
+    <div class="view-row">
+      <div class="nav-bar">
+        <div class="view-toggle">
+          <button class="view-btn active" id="view-day-btn" onclick="setView('day')">📅 日視圖</button>
+          <button class="view-btn" id="view-month-btn" onclick="setView('month')">📆 月視圖</button>
+        </div>
+        <div class="date-nav">
+          <button class="date-nav-btn" onclick="navPrev()">&#8592;</button>
+          <div class="date-display" id="date-display">—</div>
+          <button class="date-nav-btn" onclick="navNext()">&#8594;</button>
+          <button class="btn-today" onclick="goToday()">今天</button>
+        </div>
+        <button class="btn-search-nav" onclick="openSearch()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>查詢
+        </button>
       </div>
     </div>
+
+    <div class="toolbar">
+      <div class="count-badge" id="row-count" style="visibility:hidden">—</div>
+      <div class="toolbar-right">
+        <!-- AC-LASTUPLOAD-01 -->
+        <div class="last-upload" id="last-upload" style="display:none">
+          <span>最後上傳：</span><span class="lu-time" id="lu-time">—</span><span class="lu-ago" id="lu-ago"></span>
+        </div>
+        <div class="refresh-selector">
+          <label>自動更新</label>
+          <select id="refresh-interval" onchange="setAutoRefresh()">
+            <option value="0">關閉</option>
+            <option value="30" selected>30 秒</option>
+            <option value="60">1 分鐘</option>
+            <option value="300">5 分鐘</option>
+          </select>
+          <span class="refresh-countdown" id="refresh-countdown"></span>
+        </div>
+        <button class="btn-refresh" id="btn-refresh" onclick="manualRefresh()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>重新整理
+        </button>
+      </div>
+    </div>
+
+    <!-- TREND PANEL -->
+    <div class="trend-panel" id="trend-panel" style="display:none">
+      <div class="trend-tabs">
+        <button class="trend-tab active" id="ttab-hb" onclick="setTrendTab('hb')">❤️ 心跳趨勢</button>
+        <button class="trend-tab" id="ttab-hbbr" onclick="setTrendTab('hbbr')">❤️ + 🫁 心跳 &amp; 呼吸</button>
+      </div>
+      <div class="trend-body" id="trend-body"><div class="trend-empty">載入資料後顯示趨勢</div></div>
+    </div>
+
+    <div id="table-content"><div class="state-card">請選擇機構</div></div>
+    <div id="pagination-wrap" class="pagination"></div>
   </div>
 </div>
 
 <script>
-// ==========================================
-// Supabase 初始化
-// ==========================================
-const SUPABASE_URL = 'https://lrrxswxvphoeyuvemvin.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxycnhzd3h2cGhvZXl1dmVtdmluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMzU1NjksImV4cCI6MjA4MzkxMTU2OX0.54qS-CTVL9XeIbNO83r8spsRrk8woyBz3u-HoRdFxHs';
-
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// ==========================================
-// 權限對照表
-// ==========================================
-const ACCESS_MAP = {
-  'dulancliniccloud@gmail.com':  ['DC_data_base'],
-  'ttricloudtest001@gmail.com':  ['CY_data_base', 'YK_data_base'],
-  'kingpig4628@gmail.com':       ['DC_data_base', 'CY_data_base', 'YK_data_base'],
-  'zywu.1487@gmail.com':         ['DC_data_base', 'CY_data_base', 'YK_data_base'],
+/* ═══════════════════════════════════════════════════════════
+   SUPABASE INIT
+   ═══════════════════════════════════════════════════════════ */
+const SUPABASE_URL='https://lrrxswxvphoeyuvemvin.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxycnhzd3h2cGhvZXl1dmVtdmluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMzU1NjksImV4cCI6MjA4MzkxMTU2OX0.54qS-CTVL9XeIbNO83r8spsRrk8woyBz3u-HoRdFxHs';
+// 本地備援權限表（當 user_access 資料表尚未建立或查詢失敗時使用）
+const ACCESS_MAP={
+  'dulancliniccloud@gmail.com':['DC_data_base'],
+  'ttricloudtest001@gmail.com':['CY_data_base','YK_data_base'],
+  'kingpig4628@gmail.com':['DC_data_base','CY_data_base','YK_data_base','T1_data_base'],
+  'zywu.1487@gmail.com':['DC_data_base','CY_data_base','YK_data_base','T1_data_base'],
+  'ttrismartextilegpt@gmail.com':['DC_data_base','CY_data_base','YK_data_base','T1_data_base'],
+  'ttrismartextilegpt02@gmail.com':['DC_data_base','CY_data_base','YK_data_base','T1_data_base'],
+  'ttrismartextilegpt03@gmail.com':['DC_data_base','CY_data_base','YK_data_base','T1_data_base'],
+};
+const TABLE_LABEL={
+  'DC_data_base':'都蘭診所',
+  'CY_data_base':'嘉義醫院',
+  'YK_data_base':'員郭醫院',
+  'T1_data_base':'T1機構'
 };
 
-const BADGE_CLASS = {
-  'DC_data_base': 'badge-dc',
-  'CY_data_base': 'badge-cy',
-  'YK_data_base': 'badge-yk',
-};
-
-let currentTable = null;
-
-// ==========================================
-// 顯示欄位（排除 id）
-// ==========================================
-const COLUMNS = [
-  { key: 'member_id',  label: '會員編號' },
-  { key: 'date_minute', label: '量測時間' },
-  { key: 'heartbeat',  label: '心跳' },
-  { key: 'temp',       label: '體溫' },
-  { key: 'breath',     label: '呼吸' },
-  { key: 'sbp',        label: '收縮壓' },
-  { key: 'dbp',        label: '舒張壓' },
-  { key: 'pulse',      label: '脈搏' },
-  { key: 'step',       label: '步數' },
-  { key: 'calorie',    label: '卡路里' },
-  { key: 'action',     label: '動作' },
-  { key: 'received_at', label: '接收時間' },
+// AC-ACTION-01: action uses mode (眾數), not avg
+const AGG_COLS=[
+  {key:'time',label:'分鐘',badge:false},
+  {key:'count',label:'筆數',badge:false},
+  {key:'temp',label:'體溫 avg',badge:true},
+  {key:'heartbeat',label:'心跳 avg',badge:true},
+  {key:'breath',label:'呼吸 avg',badge:false},
+  {key:'sbp',label:'收縮壓 avg',badge:true},
+  {key:'dbp',label:'舒張壓 avg',badge:true},
+  {key:'pulse',label:'脈搏 avg',badge:false},
+  {key:'step',label:'步數 avg',badge:false},
+  {key:'action',label:'動作（眾數）',badge:false},
 ];
+const HOURS_PER_PAGE=6;
 
-// ==========================================
-// 登入
-// ==========================================
-async function doLogin() {
-  const email = document.getElementById('email').value.trim();
-  const pass = document.getElementById('password').value;
-  const errEl = document.getElementById('login-error');
-  const btn = document.getElementById('btn-login');
+let sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-  errEl.style.display = 'none';
+/* ── STATE ── */
+let currentTable=null,currentDate=todayStr(),currentMonth=monthStr(),currentView='day';
+let currentPage=1,totalPages=1,groupedCache=null,rawRowsCache=[];
+let rtChannel=null,arInterval=30,arTimer=null,arCountdown=0;
+let currentMemberId='ALL',memberList=[],dailySummaryCache={};
+let trendTab='hb',hbBreathRange='day';
+let dayStats=null;
+// AC-LASTUPLOAD
+let lastUploadTime=null,lastUploadTicker=null;
+// Session resume
+let resumeSession_data=null;
 
-  if (!email || !pass) {
-    errEl.textContent = '請輸入 Email 和密碼';
-    errEl.style.display = 'block';
-    return;
-  }
+/* ═══════════════════════════════════════════════════════════
+   MATH HELPERS
+   ═══════════════════════════════════════════════════════════ */
+function p2(n){return String(n).padStart(2,'0');}
+function todayStr(){const d=new Date();return`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;}
+function monthStr(offset=0){const d=new Date();d.setMonth(d.getMonth()+offset);return`${d.getFullYear()}-${p2(d.getMonth()+1)}`;}
+function formatMinute(iso){if(!iso)return'—';const d=new Date(iso);return`${p2(d.getHours())}:${p2(d.getMinutes())}`;}
+function formatHMS(d){return`${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`;}
 
-  if (!ACCESS_MAP[email]) {
-    errEl.textContent = '此帳號無權限存取';
-    errEl.style.display = 'block';
-    return;
-  }
+function avg(arr){const n=arr.map(v=>parseFloat(v)).filter(v=>!isNaN(v));if(!n.length)return null;return Math.round(n.reduce((a,b)=>a+b,0)/n.length*10)/10;}
 
-  btn.disabled = true;
-  btn.textContent = '登入中...';
-
-  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
-
-  if (error) {
-    errEl.textContent = '登入失敗：' + error.message;
-    errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = '登入';
-    return;
-  }
-
-  showDashboard(email);
+// AC-VAR-01: Standard deviation
+function stdOf(arr){
+  const n=arr.map(v=>parseFloat(v)).filter(v=>!isNaN(v));
+  if(n.length<2)return null;
+  const mean=n.reduce((a,b)=>a+b,0)/n.length;
+  const variance=n.reduce((s,v)=>s+(v-mean)**2,0)/n.length;
+  return Math.round(Math.sqrt(variance)*10)/10;
 }
 
-// Enter 鍵登入
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') {
-    doLogin();
-  }
-});
-
-// ==========================================
-// 登出
-// ==========================================
-async function doLogout() {
-  await sb.auth.signOut();
-  currentTable = null;
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('email').value = '';
-  document.getElementById('password').value = '';
+// AC-ACTION-01: Mode (眾數) - returns most frequent value, integer-safe
+function modeOf(vals){
+  const v=vals.filter(x=>x!==null&&x!==undefined);
+  if(!v.length)return null;
+  const counts={};let maxC=0,modeVal=v[v.length-1];
+  v.forEach(x=>{counts[x]=(counts[x]||0)+1;if(counts[x]>maxC){maxC=counts[x];modeVal=x;}});
+  return modeVal;
 }
 
-// ==========================================
-// 顯示 Dashboard
-// ==========================================
-function showDashboard(email) {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  document.getElementById('user-email').textContent = email;
+function anomalyLevel(key,v){if(v===null||v===undefined)return'neutral';const n=parseFloat(v);if(isNaN(n))return'neutral';switch(key){case'sbp':return n>=160||n<80?'red':n>=140||n<90?'orange':'green';case'dbp':return n>=100||n<55?'red':n>=90||n<60?'orange':'green';case'heartbeat':return n>120||n<50?'red':n>100||n<60?'orange':'green';case'temp':return n>38||n<36?'red':n>37.2?'orange':'green';default:return'neutral';}}
 
-  const tables = ACCESS_MAP[email] || [];
-  const tabsEl = document.getElementById('tabs');
-  tabsEl.innerHTML = '';
+/* ═══════════════════════════════════════════════════════════
+   TREND CHART SVG
+   ═══════════════════════════════════════════════════════════ */
+function trendSVG(series,labels){
+  const W=620,H=130,PL=36,PR=12,PT=18,PB=26,CW=W-PL-PR,CH=H-PT-PB;
+  const allVals=series.flatMap(s=>s.values.filter(v=>v!==null&&!isNaN(v)));
+  if(!allVals.length)return'<div class="trend-empty">此期間無資料</div>';
+  const mn=Math.min(...allVals),mx=Math.max(...allVals),rng=mx-mn||1;
+  const n=labels.length;
+  const xS=i=>PL+(n>1?i/(n-1):0.5)*CW;
+  const yS=v=>PT+CH-((v-mn)/rng)*CH;
+  let paths='',hasPartial=false;
+  series.forEach(s=>{
+    let segs=[],cur=[];
+    s.values.forEach((v,i)=>{
+      if(v===null||isNaN(v)){if(cur.length){segs.push(cur);cur=[];}hasPartial=true;}
+      else cur.push(`${xS(i).toFixed(1)},${yS(v).toFixed(1)}`);
+    });
+    if(cur.length)segs.push(cur);
+    segs.forEach(pts=>{
+      if(pts.length===1){const[cx,cy]=pts[0].split(',');paths+=`<circle cx="${cx}" cy="${cy}" r="2.5" fill="${s.color}" opacity=".8"/>`;}
+      else paths+=`<polyline points="${pts.join(' ')}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>`;
+    });
+  });
+  const step=Math.max(1,Math.floor(n/7));
+  let xLabs='',yLabs='';
+  for(let i=0;i<n;i+=step)xLabs+=`<text x="${xS(i).toFixed(1)}" y="${H-4}" font-size="9" fill="#84a098" text-anchor="middle" font-family="DM Sans,sans-serif">${labels[i]||''}</text>`;
+  const mid=(mn+mx)/2;
+  yLabs+=`<text x="${PL-4}" y="${PT+5}" font-size="9" fill="#84a098" text-anchor="end" font-family="DM Sans,sans-serif">${Math.round(mx)}</text>`;
+  yLabs+=`<text x="${PL-4}" y="${PT+CH}" font-size="9" fill="#84a098" text-anchor="end" font-family="DM Sans,sans-serif">${Math.round(mn)}</text>`;
+  yLabs+=`<text x="${PL-4}" y="${((PT+PT+CH)/2+3).toFixed(1)}" font-size="9" fill="#b5ccc5" text-anchor="end" font-family="DM Sans,sans-serif">${Math.round(mid)}</text>`;
+  let legend='',lx=PL;
+  series.forEach(s=>{legend+=`<line x1="${lx}" y1="${PT-6}" x2="${lx+12}" y2="${PT-6}" stroke="${s.color}" stroke-width="2" stroke-linecap="round"/>`;legend+=`<text x="${lx+16}" y="${PT-3}" font-size="10" fill="#486055" font-family="Noto Sans TC,sans-serif">${s.label}</text>`;lx+=80;});
+  const gm=yS(mid);
+  return`<div class="trend-chart-wrap"><svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
+    <line x1="${PL}" y1="${PT}" x2="${PL+CW}" y2="${PT}" stroke="#e5eeea" stroke-width="1"/>
+    <line x1="${PL}" y1="${gm.toFixed(1)}" x2="${PL+CW}" y2="${gm.toFixed(1)}" stroke="#e5eeea" stroke-width="0.5" stroke-dasharray="4,3"/>
+    <line x1="${PL}" y1="${PT+CH}" x2="${PL+CW}" y2="${PT+CH}" stroke="#e5eeea" stroke-width="1"/>
+    ${yLabs}${xLabs}${legend}${paths}
+  </svg>${hasPartial?'<div class="trend-note">部分時段無資料（斷線處）</div>':''}</div>`;
+}
+function sparkline(values,stroke,w=180,h=32){
+  const nums=values.map(v=>parseFloat(v)).filter(v=>!isNaN(v));
+  if(nums.length<2)return`<svg width="${w}" height="${h}"><text x="4" y="18" font-size="10" fill="#b5ccc5">—</text></svg>`;
+  const mn=Math.min(...nums),mx=Math.max(...nums),rng=mx-mn||1,p=3;
+  const pts=nums.map((v,i)=>{const x=p+(i/(nums.length-1))*(w-p*2);const y=(h-p)-((v-mn)/rng)*(h-p*2)+p/2;return`${x.toFixed(1)},${y.toFixed(1)}`;}).join(' ');
+  return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
 
-  tables.forEach((t, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'tab' + (i === 0 ? ' active' : '');
-    btn.textContent = t;
-    btn.onclick = () => switchTable(t, btn);
+/* ═══════════════════════════════════════════════════════════
+   AC-LASTUPLOAD: Last upload time display
+   ═══════════════════════════════════════════════════════════ */
+function setLastUpload(isoStr){
+  if(!isoStr){document.getElementById('last-upload').style.display='none';return;}
+  lastUploadTime=new Date(isoStr);
+  document.getElementById('last-upload').style.display='inline-flex';
+  updateLastUploadUI();
+  clearInterval(lastUploadTicker);
+  lastUploadTicker=setInterval(updateLastUploadUI,1000);
+}
+function updateLastUploadUI(){
+  if(!lastUploadTime)return;
+  const el=document.getElementById('last-upload');
+  const tEl=document.getElementById('lu-time');
+  const aEl=document.getElementById('lu-ago');
+  const sec=Math.round((Date.now()-lastUploadTime.getTime())/1000);
+  tEl.textContent=formatHMS(lastUploadTime);
+  aEl.textContent=`（距今 ${sec}s）`;
+  el.classList.toggle('fresh',sec<10);
+}
+function clearLastUpload(){
+  clearInterval(lastUploadTicker);lastUploadTicker=null;lastUploadTime=null;
+  document.getElementById('last-upload').style.display='none';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SECURITY: fetch user permissions from user_access table
+   ═══════════════════════════════════════════════════════════ */
+async function fetchUserTables(email=''){
+  // 1. Try user_access table (requires RLS setup in Supabase)
+  try{
+    const{data,error}=await sb.from('user_access').select('table_name');
+    if(!error&&data&&data.length){
+      const tables=data.map(r=>r.table_name).filter(t=>TABLE_LABEL[t]);
+      if(tables.length){console.log('[Auth] DB tables:',tables);return tables;}
+    }
+    console.warn('[Auth] user_access unavailable, using local fallback. Error:',error?.message||'empty');
+  }catch(e){console.warn('[Auth] user_access exception:',e.message);}
+  // 2. Fallback: local ACCESS_MAP (no extra async call needed)
+  if(!email){
+    try{const{data:{user}}=await sb.auth.getUser();email=user?.email||'';}catch(e){}
+  }
+  const tables=(ACCESS_MAP[email]||[]).filter(t=>TABLE_LABEL[t]);
+  console.log('[Auth] fallback tables for',email,':',tables);
+  return tables;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AC-LOGIN-01/02: Login flow - always show login page first
+   ═══════════════════════════════════════════════════════════ */
+function loadRemembered(){
+  const em=localStorage.getItem('rm_email'),pw=localStorage.getItem('rm_pass');
+  if(em){document.getElementById('email').value=em;document.getElementById('remember').checked=true;}
+  if(pw){try{document.getElementById('password').value=atob(pw);}catch(e){}}
+}
+
+async function checkExistingSession(){
+  const{data:{session}}=await sb.auth.getSession();
+  if(session?.user?.email){
+    // Show resume banner — do NOT auto-showDashboard (AC-LOGIN-01)
+    resumeSession_data=session;
+    document.getElementById('session-email-display').textContent=session.user.email;
+    document.getElementById('session-banner').style.display='block';
+  }
+}
+
+async function resumeSession(){
+  if(!resumeSession_data)return;
+  const email=resumeSession_data.user.email;
+  const tables=await fetchUserTables(email);
+  if(!tables.length){
+    showLoginError('此帳號無可存取的機構，請聯絡管理員。Email: '+email);
+    return;
+  }
+  showDashboard(email,tables);
+}
+
+function dismissResume(){
+  resumeSession_data=null;
+  document.getElementById('session-banner').style.display='none';
+  // Also sign out silently so refreshing won't re-show banner
+  sb.auth.signOut({scope:'global'}).catch(()=>{});
+}
+
+function showLoginError(msg){
+  const el=document.getElementById('login-error');
+  el.textContent=msg;el.style.display='block';
+}
+
+async function doLogin(){
+  const email=document.getElementById('email').value.trim();
+  const pass=document.getElementById('password').value;
+  const remember=document.getElementById('remember').checked;
+  const errEl=document.getElementById('login-error');
+  const btn=document.getElementById('btn-login');
+  errEl.style.display='none';
+  if(!email||!pass){showLoginError('請填寫 Email 和密碼');return;}
+  btn.disabled=true;btn.textContent='登入中…';
+  const{data,error}=await sb.auth.signInWithPassword({email,password:pass});
+  if(error){showLoginError('登入失敗：'+error.message);btn.disabled=false;btn.textContent='登入';return;}
+  const tables=await fetchUserTables(email);
+  if(!tables.length){
+    await sb.auth.signOut({scope:'global'});
+    showLoginError('此帳號無可存取的機構，請聯絡管理員。Email: '+email);
+    btn.disabled=false;btn.textContent='登入';return;
+  }
+  if(remember){localStorage.setItem('rm_email',email);localStorage.setItem('rm_pass',btoa(pass));}
+  else{localStorage.removeItem('rm_email');localStorage.removeItem('rm_pass');}
+  showDashboard(email,tables);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none')doLogin();});
+
+// AC-LOGIN-02: use scope:'global' + clear all sb- keys
+async function doLogout(){
+  clearInterval(arTimer);clearLastUpload();
+  if(rtChannel){sb.removeChannel(rtChannel);rtChannel=null;}
+  await sb.auth.signOut({scope:'global'});
+  Object.keys(localStorage).forEach(k=>{if(k.startsWith('sb-'))localStorage.removeItem(k);});
+  sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  currentTable=null;groupedCache=null;rawRowsCache=[];
+  currentMemberId='ALL';memberList=[];dailySummaryCache={};dayStats=null;resumeSession_data=null;
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('session-banner').style.display='none';
+  document.getElementById('btn-login').disabled=false;
+  document.getElementById('btn-login').textContent='登入';
+  document.getElementById('login-error').style.display='none';
+  setRtBadge(false,'離線');
+  loadRemembered();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD INIT
+   ═══════════════════════════════════════════════════════════ */
+/* ── FONT SIZE ── */
+const FS_LEVELS=[
+  {label:'A 標準',scale:1},
+  {label:'A＋ 大',scale:1.15},
+  {label:'A＋＋ 最大',scale:1.3}
+];
+let fsIdx=parseInt(localStorage.getItem('vd_fsIdx')||'0');
+function applyFontSize(){
+  const f=FS_LEVELS[fsIdx];
+  document.querySelector('.main').style.zoom=f.scale;
+  const btn=document.getElementById('btn-fontsize');
+  if(btn){btn.textContent=f.label;btn.classList.toggle('active',fsIdx>0);}
+  localStorage.setItem('vd_fsIdx',fsIdx);
+}
+function cycleFontSize(){fsIdx=(fsIdx+1)%FS_LEVELS.length;applyFontSize();}
+
+function showDashboard(email,tables){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  applyFontSize();
+  document.getElementById('user-email').textContent=email;
+  document.getElementById('user-avatar').textContent=email[0].toUpperCase();
+  const tabsEl=document.getElementById('tabs');tabsEl.innerHTML='';
+  tables.forEach((t,i)=>{
+    const btn=document.createElement('button');
+    btn.className='tab'+(i===0?' active':'');
+    btn.innerHTML=`<span class="tab-dot"></span>${TABLE_LABEL[t]||t}`;
+    btn.onclick=()=>switchTable(t,btn);
     tabsEl.appendChild(btn);
   });
-
-  if (tables.length > 0) {
-    switchTable(tables[0], tabsEl.querySelector('.tab'));
-  }
+  currentDate=todayStr();currentMonth=monthStr();
+  if(tables.length)switchTable(tables[0],tabsEl.querySelector('.tab'));
+  setAutoRefresh();
 }
 
-// ==========================================
-// 切換表
-// ==========================================
-function switchTable(tableName, btnEl) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  if (btnEl) btnEl.classList.add('active');
-  currentTable = tableName;
+function switchTable(name,btnEl){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  if(btnEl)btnEl.classList.add('active');
+  currentTable=name;currentPage=1;groupedCache=null;rawRowsCache=[];
+  currentMemberId='ALL';memberList=[];dailySummaryCache={};dayStats=null;
+  clearLastUpload();
+  updateContextLabel();
+  subscribeRealtime(name);
   loadCurrentTable();
 }
 
-// ==========================================
-// 載入資料
-// ==========================================
-async function loadCurrentTable() {
-  if (!currentTable) return;
+/* ── Context label ── */
+function updateContextLabel(){
+  document.getElementById('ctx-table').textContent=TABLE_LABEL[currentTable]||currentTable||'—';
+  document.getElementById('ctx-member').textContent=currentMemberId==='ALL'?'全部':currentMemberId;
+  document.getElementById('btn-account').classList.toggle('has-filter',currentMemberId!=='ALL');
+}
 
-  const content = document.getElementById('table-content');
-  const countEl = document.getElementById('row-count');
+/* ═══════════════════════════════════════════════════════════
+   ACCOUNT SIDEBAR
+   ═══════════════════════════════════════════════════════════ */
+function openAccountSidebar(){document.getElementById('acct-search').value='';renderMemberList(memberList);document.getElementById('acct-overlay').classList.add('open');}
+function closeAccountSidebar(){document.getElementById('acct-overlay').classList.remove('open');}
+function renderMemberList(list){
+  const el=document.getElementById('acct-list');
+  let html=`<div class="acct-item${currentMemberId==='ALL'?' active':''}" onclick="setMember('ALL')"><span class="acct-dot all"></span><span class="acct-name">全部帳號</span><span class="acct-check">✓</span></div>`;
+  list.forEach(id=>{html+=`<div class="acct-item${currentMemberId===id?' active':''}" onclick="setMember('${id}')"><span class="acct-dot"></span><span class="acct-name">${id}</span><span class="acct-check">✓</span></div>`;});
+  if(!list.length)html+=`<div style="padding:20px 12px;font-size:13px;color:var(--text-dim)">尚無帳號資料<br>載入當天資料後自動更新，<br>或點上方「掃描本月」</div>`;
+  el.innerHTML=html;
+}
+function filterMemberList(q){renderMemberList(memberList.filter(id=>id.toLowerCase().includes(q.toLowerCase())));}
+function setMember(id){currentMemberId=id;closeAccountSidebar();updateContextLabel();currentPage=1;groupedCache=null;rawRowsCache=[];dailySummaryCache={};clearLastUpload();loadCurrentTable();}
+function updateMemberList(){memberList=[...new Set(rawRowsCache.map(r=>r.member_id).filter(Boolean))].sort();renderMemberList(memberList);}
+async function scanMonthMembers(){
+  const btn=document.getElementById('acct-scan-btn');
+  btn.textContent='掃描中…';btn.disabled=true;
+  const[yr,mo]=currentMonth.split('-').map(Number);
+  const start=`${currentMonth}-01T00:00:00`,end=`${currentMonth}-${p2(new Date(yr,mo,0).getDate())}T23:59:59`;
+  let q=sb.from(currentTable).select('member_id').gte('date_minute',start).lte('date_minute',end).limit(5000);
+  const{data}=await q;
+  if(data){memberList=[...new Set(data.map(r=>r.member_id).filter(Boolean))].sort();renderMemberList(memberList);}
+  btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 掃描本月所有帳號';
+  btn.disabled=false;
+}
 
-  content.innerHTML = '<div class="loading">載入中</div>';
-  countEl.textContent = '';
-
-  const { data, error } = await sb
-    .from(currentTable)
-    .select('*')
-    .order('date_minute', { ascending: false })
-    .limit(500);
-
-  if (error) {
-    content.innerHTML = `<div class="no-data">查詢失敗：${error.message}</div>`;
-    return;
+/* ═══════════════════════════════════════════════════════════
+   TREND PANEL
+   ═══════════════════════════════════════════════════════════ */
+function setTrendTab(tab){trendTab=tab;document.getElementById('ttab-hb').classList.toggle('active',tab==='hb');document.getElementById('ttab-hbbr').classList.toggle('active',tab==='hbbr');renderTrendPanel();}
+function setHbBreathRange(r){hbBreathRange=r;document.querySelectorAll('.trend-range-btn').forEach(b=>b.classList.toggle('active',b.dataset.range===r));renderTrendPanel();}
+async function renderTrendPanel(){
+  const panel=document.getElementById('trend-panel'),body=document.getElementById('trend-body');
+  panel.style.display='block';
+  if(trendTab==='hb')await renderHbTrend(body);
+  else await renderHbBreathTrend(body);
+}
+async function renderHbTrend(body){
+  if(currentView==='day'){
+    const minuteRows=groupedCache?Object.values(groupedCache).flat().sort((a,b)=>a.time.localeCompare(b.time)):[];
+    if(!minuteRows.length){body.innerHTML='<div class="trend-empty">無資料</div>';return;}
+    body.innerHTML=trendSVG([{label:'心跳',color:'#7aaa96',values:minuteRows.map(r=>r.heartbeat)}],minuteRows.map(r=>r.time.slice(11,16)));
+  } else {
+    const[yr,mo]=currentMonth.split('-').map(Number);const days=new Date(yr,mo,0).getDate();
+    const labels=[],hbVals=[];
+    for(let d=1;d<=days;d++){const ds=`${yr}-${p2(mo)}-${p2(d)}`;labels.push(p2(d));const c=dailySummaryCache[ds];hbVals.push(c?c.avgHb:null);}
+    body.innerHTML=trendSVG([{label:'日均心跳',color:'#7aaa96',values:hbVals}],labels);
   }
-
-  if (!data || data.length === 0) {
-    content.innerHTML = '<div class="no-data">此資料表目前沒有資料</div>';
-    countEl.textContent = '0 筆資料';
-    return;
+}
+async function renderHbBreathTrend(body){
+  let rangeHtml=`<div class="trend-range-btns"><button class="trend-range-btn${hbBreathRange==='day'?' active':''}" data-range="day" onclick="setHbBreathRange('day')">一天</button><button class="trend-range-btn${hbBreathRange==='week'?' active':''}" data-range="week" onclick="setHbBreathRange('week')">一週</button><button class="trend-range-btn${hbBreathRange==='month'?' active':''}" data-range="month" onclick="setHbBreathRange('month')">一個月</button></div>`;
+  if(hbBreathRange==='day'){
+    const minuteRows=groupedCache?Object.values(groupedCache).flat().sort((a,b)=>a.time.localeCompare(b.time)):[];
+    if(!minuteRows.length){body.innerHTML=rangeHtml+'<div class="trend-empty">無資料</div>';return;}
+    const labels=minuteRows.map(r=>r.time.slice(11,16));
+    body.innerHTML=rangeHtml+trendSVG([{label:'心跳',color:'#7aaa96',values:minuteRows.map(r=>r.heartbeat)},{label:'呼吸',color:'#bf7a45',values:minuteRows.map(r=>r.breath)}],labels);
+  } else if(hbBreathRange==='week'){
+    const hbVals=[],brVals=[],labels=[];
+    for(let i=6;i>=0;i--){
+      const d=new Date(currentDate+'T00:00:00');d.setDate(d.getDate()-i);
+      const ds=`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;
+      labels.push(`${p2(d.getMonth()+1)}/${p2(d.getDate())}`);
+      if(!dailySummaryCache.hasOwnProperty(ds)){const rows=await fetchDaySummary(currentTable,ds);dailySummaryCache[ds]=rows&&rows.length?{avgHb:avg(rows.map(r=>r.heartbeat)),avgBr:avg(rows.map(r=>r.breath)),avgSbp:avg(rows.map(r=>r.sbp)),avgDbp:avg(rows.map(r=>r.dbp)),avgTemp:avg(rows.map(r=>r.temp))}:null;}
+      const c=dailySummaryCache[ds];hbVals.push(c?c.avgHb:null);brVals.push(c?c.avgBr:null);
+    }
+    body.innerHTML=rangeHtml+trendSVG([{label:'心跳',color:'#7aaa96',values:hbVals},{label:'呼吸',color:'#bf7a45',values:brVals}],labels);
+  } else {
+    const[yr,mo]=currentMonth.split('-').map(Number);const days=new Date(yr,mo,0).getDate();
+    const hbVals=[],brVals=[],labels=[];
+    for(let d=1;d<=days;d++){const ds=`${yr}-${p2(mo)}-${p2(d)}`;labels.push(p2(d));const c=dailySummaryCache[ds];hbVals.push(c?c.avgHb:null);brVals.push(c?c.avgBr:null);}
+    body.innerHTML=rangeHtml+trendSVG([{label:'心跳',color:'#7aaa96',values:hbVals},{label:'呼吸',color:'#bf7a45',values:brVals}],labels);
   }
+}
 
-  countEl.textContent = `${data.length} 筆資料（最新 500 筆）`;
+/* ═══════════════════════════════════════════════════════════
+   VIEW / NAV / SEARCH
+   ═══════════════════════════════════════════════════════════ */
+function setView(v){currentView=v;document.getElementById('view-day-btn').classList.toggle('active',v==='day');document.getElementById('view-month-btn').classList.toggle('active',v==='month');currentPage=1;updateDateDisplay();loadCurrentTable();}
+function updateDateDisplay(){document.getElementById('date-display').textContent=currentView==='day'?currentDate:currentMonth;}
+function navPrev(){if(currentView==='day'){const d=new Date(currentDate+'T00:00:00');d.setDate(d.getDate()-1);currentDate=`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;}else{const[y,m]=currentMonth.split('-').map(Number);const d=new Date(y,m-2,1);currentMonth=`${d.getFullYear()}-${p2(d.getMonth()+1)}`;}currentPage=1;loadCurrentTable();}
+function navNext(){if(currentView==='day'){const d=new Date(currentDate+'T00:00:00');d.setDate(d.getDate()+1);currentDate=`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;}else{const[y,m]=currentMonth.split('-').map(Number);const d=new Date(y,m,1);currentMonth=`${d.getFullYear()}-${p2(d.getMonth()+1)}`;}currentPage=1;loadCurrentTable();}
+function goToday(){currentDate=todayStr();currentMonth=monthStr();currentPage=1;loadCurrentTable();}
+function openSearch(){document.getElementById('search-overlay').classList.add('open');document.getElementById('search-input').focus();}
+function closeSearch(){document.getElementById('search-overlay').classList.remove('open');}
+function quickDate(delta){const d=new Date();d.setDate(d.getDate()+delta);document.getElementById('search-input').value=`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;}
+function quickMonth(delta){document.getElementById('search-input').value=monthStr(delta);}
+function doSearch(){const raw=document.getElementById('search-input').value.trim();if(!raw)return;if(/^\d{4}-\d{2}-\d{2}$/.test(raw)){currentDate=raw;currentView='day';document.getElementById('view-day-btn').classList.add('active');document.getElementById('view-month-btn').classList.remove('active');}else if(/^\d{4}-\d{2}$/.test(raw)){currentMonth=raw;currentView='month';document.getElementById('view-day-btn').classList.remove('active');document.getElementById('view-month-btn').classList.add('active');}else{alert('格式不對，請輸入 YYYY-MM-DD 或 YYYY-MM');return;}currentPage=1;closeSearch();loadCurrentTable();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSearch();closeAccountSidebar();}});
 
-  let html = '<table><thead><tr>';
-  COLUMNS.forEach(c => { html += `<th>${c.label}</th>`; });
-  html += '</tr></thead><tbody>';
+/* ═══════════════════════════════════════════════════════════
+   AUTO REFRESH
+   ═══════════════════════════════════════════════════════════ */
+function setAutoRefresh(){arInterval=parseInt(document.getElementById('refresh-interval').value)||0;clearInterval(arTimer);document.getElementById('refresh-countdown').textContent='';if(arInterval>0)startCountdown();}
+function startCountdown(){arCountdown=arInterval;updateCountdownUI();arTimer=setInterval(()=>{arCountdown--;updateCountdownUI();if(arCountdown<=0){arCountdown=arInterval;const isToday=(currentView==='day'&&currentDate===todayStr())||(currentView==='month'&&currentMonth===monthStr());if(isToday)silentRefresh();}},1000);}
+function updateCountdownUI(){const el=document.getElementById('refresh-countdown');el.textContent=arInterval?arCountdown+'s':'';}
 
-  data.forEach(row => {
-    html += '<tr>';
-    COLUMNS.forEach(c => {
-      let val = row[c.key];
-      if (val === null || val === undefined) {
-        val = '<span style="color:var(--text-dim)">—</span>';
-      } else if (c.key === 'date_minute' || c.key === 'received_at') {
-        val = formatTime(val);
-      } else if (c.key === 'temp' && val !== null) {
-        val = parseFloat(val).toFixed(1) + '°C';
-      }
-      html += `<td>${val}</td>`;
+/* ═══════════════════════════════════════════════════════════
+   REALTIME
+   ═══════════════════════════════════════════════════════════ */
+function subscribeRealtime(table){
+  if(rtChannel){sb.removeChannel(rtChannel);rtChannel=null;}
+  setRtBadge(false,'連線中…');
+  rtChannel=sb.channel('rt-'+table)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table},handleRealtimeInsert)
+    .subscribe(status=>{
+      if(status==='SUBSCRIBED')setRtBadge(true,'即時');
+      if(status==='CLOSED')setRtBadge(false,'離線');
+      if(status==='CHANNEL_ERROR')setRtBadge(false,'錯誤');
     });
-    html += '</tr>';
+}
+function setRtBadge(active,label){const badge=document.getElementById('rt-badge'),dot=document.getElementById('rt-dot'),lbl=document.getElementById('rt-label');badge.classList.toggle('active',active);dot.classList.toggle('pulse',active);lbl.textContent=label;}
+function handleRealtimeInsert(payload){
+  if(currentView!=='day')return;
+  const row=payload.new;
+  if(!row||!row.date_minute||row.date_minute.slice(0,10)!==currentDate)return;
+  if(currentMemberId!=='ALL'&&row.member_id!==currentMemberId)return;
+  rawRowsCache.push(row);
+  updateMemberList();
+  // AC-LASTUPLOAD-02: update on realtime INSERT
+  setLastUpload(row.date_minute);
+  const minuteRows=aggregateToMinutes(rawRowsCache);
+  groupedCache=groupByHour(minuteRows);
+  dayStats=computeDayStats(minuteRows);
+  renderPage();
+  renderTrendPanel();
+  setTimeout(()=>{const tb=document.querySelector('.data-table tbody');if(tb&&tb.firstElementChild)tb.firstElementChild.classList.add('row-new');},50);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FETCH
+   ═══════════════════════════════════════════════════════════ */
+async function fetchDay(table,date,silent=false){
+  const start=date+'T00:00:00',end=date+'T23:59:59.999';
+  let all=[],page=0;const ps=1000;
+  const pfill=document.querySelector('.progress-bar-fill'),plabel=document.querySelector('.progress-label');
+  while(true){
+    // AC-ACTION-01: include action in select
+    let q=sb.from(table).select('date_minute,heartbeat,temp,breath,sbp,dbp,pulse,step,calorie,action,member_id')
+      .gte('date_minute',start).lte('date_minute',end).order('date_minute',{ascending:true}).range(page*ps,(page+1)*ps-1);
+    if(currentMemberId!=='ALL')q=q.eq('member_id',currentMemberId);
+    const{data,error}=await q;
+    if(error||!data||!data.length)break;
+    all=all.concat(data);
+    if(!silent&&pfill){pfill.style.width=Math.min(Math.round(all.length/900),95)+'%';if(plabel)plabel.textContent=`載入中… 已取得 ${all.length.toLocaleString()} 筆`;}
+    if(data.length<ps)break;page++;
+  }
+  if(!silent&&pfill)pfill.style.width='100%';
+  return all;
+}
+async function fetchDaySummary(table,date){
+  const start=date+'T00:00:00',end=date+'T23:59:59.999';
+  let q=sb.from(table).select('date_minute,heartbeat,temp,sbp,dbp,breath').gte('date_minute',start).lte('date_minute',end).limit(3000);
+  if(currentMemberId!=='ALL')q=q.eq('member_id',currentMemberId);
+  const{data,error}=await q;
+  if(error||!data)return null;
+  return data;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DAY VIEW
+   ═══════════════════════════════════════════════════════════ */
+async function loadDayView(){
+  const content=document.getElementById('table-content'),countEl=document.getElementById('row-count'),pagWrap=document.getElementById('pagination-wrap');
+  countEl.style.visibility='hidden';pagWrap.innerHTML='';groupedCache=null;rawRowsCache=[];dayStats=null;clearLastUpload();
+  content.innerHTML=`<div class="progress-wrap"><div class="progress-label">載入中…</div><div class="progress-bar-bg"><div class="progress-bar-fill"></div></div><div class="progress-note">正在取得 ${currentDate}${currentMemberId!=='ALL'?' ('+currentMemberId+')':''} 的資料</div></div>`;
+  const rawRows=await fetchDay(currentTable,currentDate);
+  if(!rawRows.length){content.innerHTML=`<div class="state-card">📭 ${currentDate} 沒有資料</div>`;countEl.style.visibility='visible';countEl.innerHTML='共 <strong>0</strong> 筆';document.getElementById('trend-panel').style.display='none';return;}
+  rawRowsCache=rawRows;
+  updateMemberList();
+  // AC-LASTUPLOAD-01: get max date_minute from rawRows
+  const maxDm=rawRows.reduce((m,r)=>r.date_minute>m?r.date_minute:m,rawRows[0].date_minute);
+  setLastUpload(maxDm);
+  const minuteRows=aggregateToMinutes(rawRows);
+  groupedCache=groupByHour(minuteRows);
+  dayStats=computeDayStats(minuteRows);
+  const hourKeys=Object.keys(groupedCache).sort();
+  totalPages=Math.ceil(hourKeys.length/HOURS_PER_PAGE);
+  if(currentPage>totalPages)currentPage=totalPages;
+  countEl.style.visibility='visible';
+  countEl.innerHTML=`原始 <strong>${rawRows.length.toLocaleString()}</strong> 筆 → 合併 <strong>${minuteRows.length.toLocaleString()}</strong> 分鐘`;
+  renderPage();
+  renderTrendPanel();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MONTH VIEW — AC-UI-MONTH-01: add breath avg, reorder stats
+   ═══════════════════════════════════════════════════════════ */
+async function loadMonthView(){
+  const content=document.getElementById('table-content'),countEl=document.getElementById('row-count'),pagWrap=document.getElementById('pagination-wrap');
+  countEl.style.visibility='hidden';pagWrap.innerHTML='';content.innerHTML='';clearLastUpload();
+  const[yr,mo]=currentMonth.split('-').map(Number);
+  const daysInMonth=new Date(yr,mo,0).getDate();
+  const grid=document.createElement('div');grid.className='month-grid';content.appendChild(grid);
+  const cardMap={};
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${yr}-${p2(mo)}-${p2(d)}`;
+    const card=document.createElement('div');card.className='day-card loading-day';
+    card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">載入中</div><div class="day-stat-val" style="color:var(--text-light)">…</div></div></div>`;
+    grid.appendChild(card);cardMap[ds]=card;
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${yr}-${p2(mo)}-${p2(d)}`;
+    const card=cardMap[ds];
+    const rows=await fetchDaySummary(currentTable,ds);
+    card.classList.remove('loading-day');
+    if(!rows||!rows.length){card.classList.add('no-data');card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">無資料</div></div></div>`;dailySummaryCache[ds]=null;continue;}
+    const aHb=avg(rows.map(r=>r.heartbeat));
+    const aBr=avg(rows.map(r=>r.breath));
+    const aSbp=avg(rows.map(r=>r.sbp));
+    const aDbp=avg(rows.map(r=>r.dbp));
+    const aTemp=avg(rows.map(r=>r.temp));
+    dailySummaryCache[ds]={avgHb:aHb,avgBr:aBr,avgSbp:aSbp,avgDbp:aDbp,avgTemp:aTemp};
+    const hbLvl=anomalyLevel('heartbeat',aHb),sbpLvl=anomalyLevel('sbp',aSbp);
+    // Order: 心跳 → 呼吸 → 收縮壓 → 體溫
+    const statsHtml=[
+      aHb!==null?`<div class="day-stat"><div class="day-stat-label">❤️ 心跳 avg</div><div class="day-stat-val${hbLvl!=='neutral'?' is-'+hbLvl:''}">${aHb}</div></div>`:'',
+      `<div class="day-stat"><div class="day-stat-label">🫁 呼吸 avg</div><div class="day-stat-val">${aBr!==null?aBr:'—'}</div></div>`,
+      aSbp!==null?`<div class="day-stat"><div class="day-stat-label">🩺 收縮壓 avg</div><div class="day-stat-val${sbpLvl!=='neutral'?' is-'+sbpLvl:''}">${aSbp}</div></div>`:'',
+      aTemp!==null?`<div class="day-stat"><div class="day-stat-label"> 🌡 體溫 avg</div><div class="day-stat-val">${aTemp}°C</div></div>`:'',
+    ].join('');
+    card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats">${statsHtml}</div><div class="day-card-footer"><span>${rows.length.toLocaleString()} 筆</span><span style="color:var(--mint-mid);font-weight:600;">查看詳細 →</span></div>`;
+    card.onclick=()=>{currentDate=ds;setView('day');};
+  }
+  countEl.style.visibility='visible';
+  countEl.innerHTML=`${currentMonth} 月份・<strong>${daysInMonth}</strong> 天`;
+  renderTrendPanel();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DAY STATS (AC-VAR-01)
+   ═══════════════════════════════════════════════════════════ */
+
+  function computeDayStats(minuteRows){
+  const hbVals = minuteRows.map(r=>r.heartbeat).filter(v=>v!==null&&!isNaN(parseFloat(v))).map(Number);
+  const brVals = minuteRows.map(r=>r.breath).filter(v=>v!==null&&!isNaN(parseFloat(v))).map(Number);
+  const tpVals = minuteRows.map(r=>r.temp).filter(v=>v!==null&&!isNaN(parseFloat(v))).map(Number);
+  const avgOf = arr => arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length*10)/10 : null;
+  return {
+    maxHb:   hbVals.length ? Math.max(...hbVals) : null,
+    minHb:   hbVals.length ? Math.min(...hbVals) : null,
+    maxBr:   brVals.length ? Math.max(...brVals) : null,
+    minBr:   brVals.length ? Math.min(...brVals) : null,
+    avgHb:   avgOf(hbVals),   stdHb:   stdOf(hbVals),
+    avgBr:   avgOf(brVals),   stdBr:   stdOf(brVals),
+    avgTemp: avgOf(tpVals),   stdTemp: stdOf(tpVals),
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AC-ACTION-01: Aggregation — action uses MODE not avg
+   ═══════════════════════════════════════════════════════════ */
+function aggregateToMinutes(rows){
+  const buckets={};
+  rows.forEach(r=>{
+    const d=new Date(r.date_minute);
+    const key=`${r.date_minute.slice(0,11)}${p2(d.getHours())}:${p2(d.getMinutes())}`;
+    if(!buckets[key])buckets[key]={time:r.date_minute.slice(0,11)+p2(d.getHours())+':'+p2(d.getMinutes())+':00',rows:[]};
+    buckets[key].rows.push(r);
+  });
+  const af=(arr,f)=>{const n=arr.map(r=>parseFloat(r[f])).filter(v=>!isNaN(v));if(!n.length)return null;return Math.round(n.reduce((a,b)=>a+b,0)/n.length*10)/10;};
+  return Object.values(buckets).map(b=>({
+    time:b.time,count:b.rows.length,
+    heartbeat:af(b.rows,'heartbeat'),temp:af(b.rows,'temp'),
+    breath:af(b.rows,'breath'),sbp:af(b.rows,'sbp'),
+    dbp:af(b.rows,'dbp'),pulse:af(b.rows,'pulse'),
+    step:af(b.rows,'step'),calorie:af(b.rows,'calorie'),
+    // AC-ACTION-01: use mode (眾數)
+    action:modeOf(b.rows.map(r=>r.action)),
+  }));
+}
+function groupByHour(minuteRows){const hours={};minuteRows.forEach(r=>{const hk=r.time.slice(11,13);if(!hours[hk])hours[hk]=[];hours[hk].push(r);});return hours;}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER PAGE
+   AC-UI-DAY-01: add 🫁 breath avg to hour-stats
+   AC-VAR-01: show std in date-vitals
+   ═══════════════════════════════════════════════════════════ */
+function renderPage(){
+  if(!groupedCache)return;
+  const content=document.getElementById('table-content'),pagWrap=document.getElementById('pagination-wrap');
+  const hourKeys=Object.keys(groupedCache).sort();
+  const start=(currentPage-1)*HOURS_PER_PAGE;
+  const pageHours=hourKeys.slice(start,start+HOURS_PER_PAGE);
+  content.innerHTML='';
+  let theadHtml='<tr>';AGG_COLS.forEach(c=>{theadHtml+=`<th>${c.label}</th>`;});theadHtml+='</tr>';
+  const totalMins=hourKeys.reduce((s,hk)=>s+groupedCache[hk].length,0);
+
+
+  // Date vitals: max/min + avg±std
+  let vitalsHtml='';
+  if(dayStats){
+    const{maxHb,minHb,maxBr,minBr,avgHb,stdHb,avgBr,stdBr,avgTemp,stdTemp}=dayStats;
+    const fmt=(avg,std)=>avg!==null?`${avg} <span style="opacity:.55;font-weight:400">±${std??'—'}</span>`:'—';
+    if(maxHb!==null)vitalsHtml+=`<div class="date-vital"><span>❤️</span><strong>${minHb}–${maxHb}</strong></div>`;
+    vitalsHtml+=`<div class="date-vital"><span>🫁</span><strong>${maxBr!==null?minBr+'–'+maxBr:'—'}</strong></div>`;
+    vitalsHtml+=`<div class="date-vital std"><span>📊 波動</span><strong>❤️ ${fmt(avgHb,stdHb)} &nbsp;🫁 ${fmt(avgBr,stdBr)} &nbsp;🌡 ${fmt(avgTemp,stdTemp)}</strong></div>`;
+  }
+
+  const dateCard=document.createElement('div');dateCard.className='date-card open';
+  let hourCardsHtml='';
+  pageHours.forEach((hk,hi)=>{
+    const rows=groupedCache[hk];const nextH=p2(parseInt(hk)+1);
+    const aHb=avg(rows.map(r=>r.heartbeat));
+    const aSbp=avg(rows.map(r=>r.sbp));
+    const aDbp=avg(rows.map(r=>r.dbp));
+    const aTemp=avg(rows.map(r=>r.temp));
+    const aBr=avg(rows.map(r=>r.breath));  // AC-UI-DAY-01
+    const hbLvl=anomalyLevel('heartbeat',aHb),sbpLvl=anomalyLevel('sbp',aSbp);
+    // AC-UI-DAY-01: always show 🫁 chip, display '—' if null
+    const statsHtml=[
+      aHb!==null?`<div class="stat-chip"><span>❤️</span><span class="stat-val${hbLvl!=='neutral'?' is-'+hbLvl:''}">${aHb}</span></div>`:'',
+      `<div class="stat-chip"><span>🫁</span><span class="stat-val">${aBr!==null?aBr:'—'}</span></div>`,
+      aSbp!==null?`<div class="stat-chip"><span>🩺</span><span class="stat-val${sbpLvl!=='neutral'?' is-'+sbpLvl:''}">${aSbp}</span></div>`:'',
+      aDbp!==null?`<div class="stat-chip"><span>💙</span><span class="stat-val">${aDbp}</span></div>`:'',
+      aTemp!==null?`<div class="stat-chip"><span>🌡</span><span class="stat-val">${aTemp}°C</span></div>`:'',
+    ].join('');
+    const spk=sparkline(rows.map(r=>r.heartbeat),'#7aaa96');
+    let tbodyHtml='';
+    rows.forEach(r=>{
+      tbodyHtml+='<tr>';
+      AGG_COLS.forEach(c=>{
+        let val=r[c.key],cell;
+        if(c.key==='time') cell=`<span class="val-neutral">${formatMinute(val)}</span>`;
+        else if(c.key==='count') cell=`<span class="val-count">${val}</span>`;
+        else if(c.key==='action') cell=val===null||val===undefined?'<span class="val-dim">—</span>':`<span class="val-neutral">${val}</span>`;
+        else if(val===null||val===undefined) cell='<span class="val-dim">—</span>';
+        else if(c.badge){const lvl=anomalyLevel(c.key,val);const disp=c.key==='temp'?parseFloat(val).toFixed(1)+'°C':val;cell=lvl==='neutral'?`<span class="val-neutral">${disp}</span>`:`<span class="val-badge val-${lvl}">${disp}</span>`;}
+        else cell=`<span class="val-neutral">${val}</span>`;
+        tbodyHtml+=`<td>${cell}</td>`;
+      });
+      tbodyHtml+='</tr>';
+    });
+    const isOpen=hi===0?' open':'';
+    hourCardsHtml+=`<div class="hour-card${isOpen}"><div class="hour-header" onclick="this.parentElement.classList.toggle('open')"><div class="hour-label">${hk}:00–${nextH}:00</div><div class="hour-count">${rows.length} 分</div><div class="hour-stats">${statsHtml}</div><svg class="hour-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div><div class="hour-body"><div class="sparkline-area"><div class="spark-item"><div class="spark-label">心跳趨勢</div>${spk}</div></div><div class="data-table-wrap"><table class="data-table"><thead>${theadHtml}</thead><tbody>${tbodyHtml}</tbody></table></div></div></div>`;
   });
 
-  html += '</tbody></table>';
-  content.innerHTML = html;
+  dateCard.innerHTML=`<div class="date-header" onclick="this.parentElement.classList.toggle('open')"><div class="date-header-left"><div class="date-icon">📅</div><div class="date-info"><div class="date-label">${currentDate}${currentMemberId!=='ALL'?' · '+currentMemberId:''}</div><div class="date-meta">${hourKeys.length} 個時段・${totalMins.toLocaleString()} 分鐘紀錄</div><div class="date-vitals">${vitalsHtml}</div></div></div><svg class="date-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div><div class="date-body">${hourCardsHtml}</div>`;
+  content.appendChild(dateCard);
+  renderPagination(pagWrap,hourKeys.length);
 }
 
-// ==========================================
-// 時間格式化
-// ==========================================
-function formatTime(iso) {
-  if (!iso) return '—';
-  const d = new Date(iso);
-  const pad = n => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+function renderPagination(wrap,totalHours){
+  totalPages=Math.ceil(totalHours/HOURS_PER_PAGE);wrap.innerHTML='';if(totalPages<=1)return;
+  const prev=document.createElement('button');prev.className='page-btn';prev.textContent='←';if(currentPage===1)prev.disabled=true;prev.onclick=()=>{currentPage--;renderPage();};wrap.appendChild(prev);
+  for(let i=1;i<=totalPages;i++){const btn=document.createElement('button');btn.className='page-btn'+(i===currentPage?' active':'');btn.textContent=i;btn.onclick=(p=>()=>{currentPage=p;renderPage();})(i);wrap.appendChild(btn);}
+  const info=document.createElement('span');info.className='page-info';info.textContent=`第 ${currentPage} / ${totalPages} 頁`;wrap.appendChild(info);
+  const next=document.createElement('button');next.className='page-btn';next.textContent='→';if(currentPage===totalPages)next.disabled=true;next.onclick=()=>{currentPage++;renderPage();};wrap.appendChild(next);
 }
 
-// ==========================================
-// 自動恢復 session
-// ==========================================
-(async function init() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session?.user?.email && ACCESS_MAP[session.user.email]) {
-    showDashboard(session.user.email);
-  }
-})();
+/* ── LOAD ── */
+async function loadCurrentTable(){if(!currentTable)return;updateDateDisplay();updateContextLabel();if(currentView==='day')await loadDayView();else await loadMonthView();}
+async function manualRefresh(){const btn=document.getElementById('btn-refresh');btn.classList.add('spinning');await loadCurrentTable();btn.classList.remove('spinning');}
+async function silentRefresh(){
+  if(!currentTable||currentView!=='day')return;
+  const rawRows=await fetchDay(currentTable,currentDate,true);
+  if(!rawRows.length)return;
+  rawRowsCache=rawRows;
+  const maxDm=rawRows.reduce((m,r)=>r.date_minute>m?r.date_minute:m,rawRows[0].date_minute);
+  setLastUpload(maxDm);
+  const minuteRows=aggregateToMinutes(rawRows);
+  groupedCache=groupByHour(minuteRows);
+  dayStats=computeDayStats(minuteRows);
+  renderPage();renderTrendPanel();
+  const countEl=document.getElementById('row-count');
+  countEl.style.visibility='visible';
+  countEl.innerHTML=`原始 <strong>${rawRows.length.toLocaleString()}</strong> 筆 → 聚合 <strong>${minuteRows.length.toLocaleString()}</strong> 分鐘`;
+}
+ 
+/* ═══════════════════════════════════════════════════════════
+   INIT — AC-LOGIN-01: never auto-showDashboard
+   ═══════════════════════════════════════════════════════════ */
+loadRemembered();
+checkExistingSession();  // Only shows resume banner, never auto-enters
 </script>
 </body>
 </html>
