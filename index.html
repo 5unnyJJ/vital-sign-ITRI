@@ -211,7 +211,7 @@ radial-gradient(ellipse at 80% 60%,rgba(93,145,128,.08) 0%,transparent 48%),var(
 .hour-body{display:none;border-top:1px solid var(--border-light);}
 .hour-card.open .hour-body{display:block;}
 .sparkline-area{display:flex;align-items:center;gap:28px;padding:14px 20px 11px;background:var(--surface);border-bottom:1px solid var(--border-light);overflow-x:auto;}
-.spark-item{display:flex;flex-direction:column;gap:4px;}
+.spark-item{display:flex;flex-direction:column;gap:4px;min-width:0;flex-shrink:1;}
 .spark-label{font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.6px;}
 @keyframes newrow{from{background:rgba(122,170,150,.22);}to{background:transparent;}}
 .row-new td{animation:newrow 2s ease forwards;}
@@ -264,9 +264,19 @@ radial-gradient(ellipse at 80% 60%,rgba(93,145,128,.08) 0%,transparent 48%),var(
 .progress-note{font-size:12px;color:var(--text-dim);margin-top:10px;}
 @media(max-width:800px){.topbar,.main{padding-left:16px;padding-right:16px;}.hour-stats,.sparkline-area{display:none;}.month-grid{grid-template-columns:1fr 1fr;}.trend-panel{display:none;}}
 @media(max-width:480px){.month-grid{grid-template-columns:1fr;}}
+
+/* ── CHART HOVER TOOLTIP ── */
+#chart-tooltip{position:fixed;display:none;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-md);padding:10px 14px;box-shadow:var(--shadow-md);z-index:2000;min-width:140px;pointer-events:none;}
+#chart-tooltip .tt-time{font-size:11px;color:var(--text-dim);font-weight:700;letter-spacing:.3px;margin-bottom:5px;}
+#chart-tooltip .tt-row{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:2px;}
+#chart-tooltip .tt-label{font-size:12px;color:var(--text-mid);}
+#chart-tooltip .tt-val{font-size:14px;font-weight:700;color:var(--text);}
+#chart-tooltip .tt-posture{font-size:11px;color:var(--mint-dark);background:var(--mint-xlight);border:1px solid var(--mint-light);border-radius:var(--r-sm);padding:3px 8px;margin-top:6px;text-align:center;font-weight:600;}
+.chart-overlay{position:absolute;top:0;left:0;width:100%;height:100%;cursor:crosshair;}
 </style>
 </head>
 <body>
+<div id="chart-tooltip"><div class="tt-time" id="tt-time"></div><div id="tt-rows"></div><div class="tt-posture" id="tt-posture" style="display:none"></div></div>
 
 <!--
   ═══════════════════════════════════════════════════════════════
@@ -344,7 +354,7 @@ radial-gradient(ellipse at 80% 60%,rgba(93,145,128,.08) 0%,transparent 48%),var(
       <div class="error-msg" id="login-error"></div>
       <div class="field"><label>Email</label><input type="email" id="email" placeholder="your@email.com" autocomplete="email"></div>
       <div class="field"><label>密碼</label><input type="password" id="password" placeholder="••••••••" autocomplete="current-password"></div>
-      <div class="remember-row"><input type="checkbox" id="remember"><label for="remember">記住帳號與密碼</label></div>
+      <div class="remember-row"><input type="checkbox" id="remember"><label for="remember">記住帳號</label></div>
       <button class="btn-login" id="btn-login" onclick="doLogin()">登入</button>
     </div>
   </div>
@@ -466,16 +476,7 @@ radial-gradient(ellipse at 80% 60%,rgba(93,145,128,.08) 0%,transparent 48%),var(
    ═══════════════════════════════════════════════════════════ */
 const SUPABASE_URL='https://lrrxswxvphoeyuvemvin.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxycnhzd3h2cGhvZXl1dmVtdmluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMzU1NjksImV4cCI6MjA4MzkxMTU2OX0.54qS-CTVL9XeIbNO83r8spsRrk8woyBz3u-HoRdFxHs';
-// 本地備援權限表（當 user_access 資料表尚未建立或查詢失敗時使用）
-const ACCESS_MAP={
-  'dulancliniccloud@gmail.com':['DC_data_base'],
-  'ttricloudtest001@gmail.com':['CY_data_base','YK_data_base'],
-  'kingpig4628@gmail.com':['DC_data_base','CY_data_base','YK_data_base','T1_data_base'],
-  'zywu.1487@gmail.com':['DC_data_base','CY_data_base','YK_data_base','T1_data_base'],
-  'ttrismartextilegpt@gmail.com':['DC_data_base','CY_data_base','YK_data_base','T1_data_base'],
-  'ttrismartextilegpt02@gmail.com':['DC_data_base','CY_data_base','YK_data_base','T1_data_base'],
-  'ttrismartextilegpt03@gmail.com':['DC_data_base','CY_data_base','YK_data_base','T1_data_base'],
-};
+// 權限完全由後端 user_access 資料表控制（RLS 保護），前端不存放帳號對應表
 const TABLE_LABEL={
   'DC_data_base':'都蘭診所',
   'CY_data_base':'嘉義醫院',
@@ -546,7 +547,49 @@ function anomalyLevel(key,v){if(v===null||v===undefined)return'neutral';const n=
 /* ═══════════════════════════════════════════════════════════
    TREND CHART SVG
    ═══════════════════════════════════════════════════════════ */
-function trendSVG(series,labels){
+/* ── 姿位轉換 ── */
+function actionLabel(n){
+  const m={0:'靜止',1:'走路',2:'走路',3:'慢跑',4:'慢跑',5:'快跑',6:'躺姿',7:'姿勢異常'};
+  if(n===null||n===undefined||n==='')return null;
+  const k=parseInt(n);return isNaN(k)?null:(m[k]||null);
+}
+
+/* ── 圖表 Hover Tooltip ── */
+let _chartTipData=null;
+function chartHover(e,chartId){
+  const wrapper=document.getElementById(chartId);
+  if(!wrapper)return;
+  if(!_chartTipData||_chartTipData.id!==chartId){
+    try{_chartTipData={id:chartId,...JSON.parse(wrapper.dataset.chart)};}catch{return;}
+  }
+  const d=_chartTipData;
+  if(!d.n)return;
+  const rect=e.currentTarget.getBoundingClientRect();
+  const frac=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+  const i=d.n<=1?0:Math.min(d.n-1,Math.round(frac*(d.n-1)));
+  const tt=document.getElementById('chart-tooltip');
+  document.getElementById('tt-time').textContent=d.labels[i]||'';
+  let rowsHtml='';
+  d.series.forEach(s=>{
+    const v=s.values[i];
+    const disp=(v===null||v===undefined||isNaN(parseFloat(v)))?'—':Math.round(parseFloat(v));
+    rowsHtml+=`<div class="tt-row"><span class="tt-label" style="color:${s.color}">${s.label}</span><span class="tt-val">${disp}</span></div>`;
+  });
+  document.getElementById('tt-rows').innerHTML=rowsHtml;
+  const posEl=document.getElementById('tt-posture');
+  if(d.actions&&d.actions[i]!==undefined&&d.actions[i]!==null){
+    const lbl=actionLabel(d.actions[i]);
+    if(lbl){posEl.textContent='姿位：'+lbl;posEl.style.display='block';}
+    else posEl.style.display='none';
+  } else posEl.style.display='none';
+  let tx=e.clientX+16,ty=e.clientY-44;
+  if(tx+160>window.innerWidth-8)tx=e.clientX-174;
+  if(ty<8)ty=8;
+  tt.style.left=tx+'px';tt.style.top=ty+'px';tt.style.display='block';
+}
+function chartHoverEnd(){document.getElementById('chart-tooltip').style.display='none';_chartTipData=null;}
+
+function trendSVG(series,labels,opts){
   const W=620,H=130,PL=36,PR=12,PT=18,PB=26,CW=W-PL-PR,CH=H-PT-PB;
   const allVals=series.flatMap(s=>s.values.filter(v=>v!==null&&!isNaN(v)));
   if(!allVals.length)return'<div class="trend-empty">此期間無資料</div>';
@@ -577,19 +620,21 @@ function trendSVG(series,labels){
   let legend='',lx=PL;
   series.forEach(s=>{legend+=`<line x1="${lx}" y1="${PT-6}" x2="${lx+12}" y2="${PT-6}" stroke="${s.color}" stroke-width="2" stroke-linecap="round"/>`;legend+=`<text x="${lx+16}" y="${PT-3}" font-size="10" fill="#486055" font-family="Noto Sans TC,sans-serif">${s.label}</text>`;lx+=80;});
   const gm=yS(mid);
-  return`<div class="trend-chart-wrap"><svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
+  const chartId='tc-'+(Math.random().toString(36).slice(2,8));
+  const chartData=JSON.stringify({labels,series:series.map(s=>({label:s.label,color:s.color,values:s.values})),actions:(opts&&opts.actionValues)||null,n});
+  return`<div class="trend-chart-wrap" id="${chartId}" data-chart='${chartData.replace(/'/g,"&#39;")}' style="position:relative"><svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible;display:block">
     <line x1="${PL}" y1="${PT}" x2="${PL+CW}" y2="${PT}" stroke="#e5eeea" stroke-width="1"/>
     <line x1="${PL}" y1="${gm.toFixed(1)}" x2="${PL+CW}" y2="${gm.toFixed(1)}" stroke="#e5eeea" stroke-width="0.5" stroke-dasharray="4,3"/>
     <line x1="${PL}" y1="${PT+CH}" x2="${PL+CW}" y2="${PT+CH}" stroke="#e5eeea" stroke-width="1"/>
     ${yLabs}${xLabs}${legend}${paths}
-  </svg>${hasPartial?'<div class="trend-note">部分時段無資料（斷線處）</div>':''}</div>`;
+  </svg><div class="chart-overlay" onmousemove="chartHover(event,'${chartId}')" onmouseleave="chartHoverEnd()"></div>${hasPartial?'<div class="trend-note">部分時段無資料（斷線處）</div>':''}</div>`;
 }
 function sparkline(values,stroke,w=180,h=32){
   const nums=values.map(v=>parseFloat(v)).filter(v=>!isNaN(v));
-  if(nums.length<2)return`<svg width="${w}" height="${h}"><text x="4" y="18" font-size="10" fill="#b5ccc5">—</text></svg>`;
+  if(nums.length<2)return`<svg width="100%" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="max-width:${w}px;display:block"><text x="4" y="18" font-size="10" fill="#b5ccc5">—</text></svg>`;
   const mn=Math.min(...nums),mx=Math.max(...nums),rng=mx-mn||1,p=3;
   const pts=nums.map((v,i)=>{const x=p+(i/(nums.length-1))*(w-p*2);const y=(h-p)-((v-mn)/rng)*(h-p*2)+p/2;return`${x.toFixed(1)},${y.toFixed(1)}`;}).join(' ');
-  return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  return`<svg width="100%" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="max-width:${w}px;display:block"><polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -622,31 +667,26 @@ function clearLastUpload(){
    SECURITY: fetch user permissions from user_access table
    ═══════════════════════════════════════════════════════════ */
 async function fetchUserTables(email=''){
-  // 1. Try user_access table (requires RLS setup in Supabase)
+  // 權限從後端 user_access 資料表讀取（RLS 確保只能看到自己的行）
   try{
     const{data,error}=await sb.from('user_access').select('table_name');
     if(!error&&data&&data.length){
       const tables=data.map(r=>r.table_name).filter(t=>TABLE_LABEL[t]);
       if(tables.length){console.log('[Auth] DB tables:',tables);return tables;}
     }
-    console.warn('[Auth] user_access unavailable, using local fallback. Error:',error?.message||'empty');
+    console.warn('[Auth] user_access 查詢失敗或無資料。Error:',error?.message||'empty result');
   }catch(e){console.warn('[Auth] user_access exception:',e.message);}
-  // 2. Fallback: local ACCESS_MAP (no extra async call needed)
-  if(!email){
-    try{const{data:{user}}=await sb.auth.getUser();email=user?.email||'';}catch(e){}
-  }
-  const tables=(ACCESS_MAP[email]||[]).filter(t=>TABLE_LABEL[t]);
-  console.log('[Auth] fallback tables for',email,':',tables);
-  return tables;
+  return [];
 }
 
 /* ═══════════════════════════════════════════════════════════
    AC-LOGIN-01/02: Login flow - always show login page first
    ═══════════════════════════════════════════════════════════ */
 function loadRemembered(){
-  const em=localStorage.getItem('rm_email'),pw=localStorage.getItem('rm_pass');
+  const em=localStorage.getItem('rm_email');
   if(em){document.getElementById('email').value=em;document.getElementById('remember').checked=true;}
-  if(pw){try{document.getElementById('password').value=atob(pw);}catch(e){}}
+  // 密碼不儲存，如有舊版殘留資料一併清除
+  localStorage.removeItem('rm_pass');
 }
 
 async function checkExistingSession(){
@@ -699,8 +739,9 @@ async function doLogin(){
     showLoginError('此帳號無可存取的機構，請聯絡管理員。Email: '+email);
     btn.disabled=false;btn.textContent='登入';return;
   }
-  if(remember){localStorage.setItem('rm_email',email);localStorage.setItem('rm_pass',btoa(pass));}
-  else{localStorage.removeItem('rm_email');localStorage.removeItem('rm_pass');}
+  if(remember){localStorage.setItem('rm_email',email);}
+  else{localStorage.removeItem('rm_email');}
+  localStorage.removeItem('rm_pass'); // 確保舊版密碼不殘留
   showDashboard(email,tables);
 }
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none')doLogin();});
@@ -822,7 +863,7 @@ async function renderHbTrend(body){
   if(currentView==='day'){
     const minuteRows=groupedCache?Object.values(groupedCache).flat().sort((a,b)=>a.time.localeCompare(b.time)):[];
     if(!minuteRows.length){body.innerHTML='<div class="trend-empty">無資料</div>';return;}
-    body.innerHTML=trendSVG([{label:'心跳',color:'#7aaa96',values:minuteRows.map(r=>r.heartbeat)}],minuteRows.map(r=>r.time.slice(11,16)));
+    body.innerHTML=trendSVG([{label:'心跳',color:'#7aaa96',values:minuteRows.map(r=>r.heartbeat)}],minuteRows.map(r=>r.time.slice(11,16)),{actionValues:minuteRows.map(r=>r.action)});
   } else {
     const[yr,mo]=currentMonth.split('-').map(Number);const days=new Date(yr,mo,0).getDate();
     const labels=[],hbVals=[];
@@ -836,7 +877,7 @@ async function renderHbBreathTrend(body){
     const minuteRows=groupedCache?Object.values(groupedCache).flat().sort((a,b)=>a.time.localeCompare(b.time)):[];
     if(!minuteRows.length){body.innerHTML=rangeHtml+'<div class="trend-empty">無資料</div>';return;}
     const labels=minuteRows.map(r=>r.time.slice(11,16));
-    body.innerHTML=rangeHtml+trendSVG([{label:'心跳',color:'#7aaa96',values:minuteRows.map(r=>r.heartbeat)},{label:'呼吸',color:'#bf7a45',values:minuteRows.map(r=>r.breath)}],labels);
+    body.innerHTML=rangeHtml+trendSVG([{label:'心跳',color:'#7aaa96',values:minuteRows.map(r=>r.heartbeat)},{label:'呼吸',color:'#bf7a45',values:minuteRows.map(r=>r.breath)}],labels,{actionValues:minuteRows.map(r=>r.action)});
   } else if(hbBreathRange==='week'){
     const hbVals=[],brVals=[],labels=[];
     for(let i=6;i>=0;i--){
@@ -981,12 +1022,17 @@ async function loadMonthView(){
     card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">載入中</div><div class="day-stat-val" style="color:var(--text-light)">…</div></div></div>`;
     grid.appendChild(card);cardMap[ds]=card;
   }
-  for(let d=1;d<=daysInMonth;d++){
+  // 並行發出所有日期查詢，大幅減少總等待時間
+  const fetchPromises=Array.from({length:daysInMonth},(_,i)=>{
+    const d=i+1;
     const ds=`${yr}-${p2(mo)}-${p2(d)}`;
+    return fetchDaySummary(currentTable,ds).then(rows=>({ds,rows}));
+  });
+  const results=await Promise.all(fetchPromises);
+  results.forEach(({ds,rows})=>{
     const card=cardMap[ds];
-    const rows=await fetchDaySummary(currentTable,ds);
     card.classList.remove('loading-day');
-    if(!rows||!rows.length){card.classList.add('no-data');card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">無資料</div></div></div>`;dailySummaryCache[ds]=null;continue;}
+    if(!rows||!rows.length){card.classList.add('no-data');card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">無資料</div></div></div>`;dailySummaryCache[ds]=null;return;}
     const aHb=avg(rows.map(r=>r.heartbeat));
     const aBr=avg(rows.map(r=>r.breath));
     const aSbp=avg(rows.map(r=>r.sbp));
@@ -994,7 +1040,6 @@ async function loadMonthView(){
     const aTemp=avg(rows.map(r=>r.temp));
     dailySummaryCache[ds]={avgHb:aHb,avgBr:aBr,avgSbp:aSbp,avgDbp:aDbp,avgTemp:aTemp};
     const hbLvl=anomalyLevel('heartbeat',aHb),sbpLvl=anomalyLevel('sbp',aSbp);
-    // Order: 心跳 → 呼吸 → 收縮壓 → 體溫
     const statsHtml=[
       aHb!==null?`<div class="day-stat"><div class="day-stat-label">❤️ 心跳 avg</div><div class="day-stat-val${hbLvl!=='neutral'?' is-'+hbLvl:''}">${aHb}</div></div>`:'',
       `<div class="day-stat"><div class="day-stat-label">🫁 呼吸 avg</div><div class="day-stat-val">${aBr!==null?aBr:'—'}</div></div>`,
@@ -1003,7 +1048,7 @@ async function loadMonthView(){
     ].join('');
     card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats">${statsHtml}</div><div class="day-card-footer"><span>${rows.length.toLocaleString()} 筆</span><span style="color:var(--mint-mid);font-weight:600;">查看詳細 →</span></div>`;
     card.onclick=()=>{currentDate=ds;setView('day');};
-  }
+  });
   countEl.style.visibility='visible';
   countEl.innerHTML=`${currentMonth} 月份・<strong>${daysInMonth}</strong> 天`;
   renderTrendPanel();
