@@ -537,9 +537,13 @@ function setToday() {
   document.getElementById('dlEnd').value   = t
 }
 
+function nextDateUTC(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number)
+  return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10)
+}
+
 async function fetchTableDay(table, date, subjects) {
-  const nd = new Date(date + 'T00:00:00'); nd.setDate(nd.getDate() + 1)
-  const next = nd.toISOString().slice(0,10)
+  const next = nextDateUTC(date)
   const rows = []; let offset = 0
   while (true) {
     let url = `${SUPABASE_URL}/rest/v1/${table}?select=*` +
@@ -547,9 +551,9 @@ async function fetchTableDay(table, date, subjects) {
               `&order=date_minute&limit=${PAGE_SIZE}&offset=${offset}`
     if (subjects.length) url += `&member_id=in.(${subjects.join(',')})`
     const r = await fetch(url, { headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + accessToken } })
-    if (!r.ok) throw new Error(`HTTP ${r.status}`)
     const chunk = await r.json()
-    if (!chunk.length) break
+    if (!r.ok) throw new Error(chunk?.message || `HTTP ${r.status}`)
+    if (!Array.isArray(chunk) || chunk.length === 0) break
     rows.push(...chunk)
     if (chunk.length < PAGE_SIZE) break
     offset += PAGE_SIZE
@@ -573,8 +577,15 @@ function triggerDownload(rows, filename) {
 }
 
 function dateList(start, end) {
-  const days = [], cur = new Date(start + 'T00:00:00'), last = new Date(end + 'T00:00:00')
-  while (cur <= last) { days.push(cur.toISOString().slice(0,10)); cur.setDate(cur.getDate()+1) }
+  const days = []
+  const [sy, sm, sd] = start.split('-').map(Number)
+  const [ey, em, ed] = end.split('-').map(Number)
+  let cur = new Date(Date.UTC(sy, sm - 1, sd))
+  const last = new Date(Date.UTC(ey, em - 1, ed))
+  while (cur <= last) {
+    days.push(cur.toISOString().slice(0, 10))
+    cur.setUTCDate(cur.getUTCDate() + 1)
+  }
   return days
 }
 
