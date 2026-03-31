@@ -350,6 +350,16 @@ table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
 
       <!-- SELECT -->
       <div class="op-panel active" id="panel-select">
+        <div class="card" style="background:var(--sky-light);border-color:#bae6fd;padding:1rem 1.25rem;margin-bottom:1rem">
+          <div style="font-size:12px;font-weight:600;color:#0284c7;margin-bottom:.5rem">💡 SELECT 說明 &nbsp;<button class="btn-sm" style="font-size:11.5px;padding:4px 12px" onclick="fillSelectExample()">填入範例</button></div>
+          <div style="font-size:12.5px;color:#0369a1;line-height:1.9">
+            ・<b>COLUMNS</b>：填欲查詢欄位（逗號分隔），留空代表全部欄位<br>
+            ・<b>LIMIT</b>：最多回傳幾筆，預設 20<br>
+            ・<b>FILTER</b>：條件篩選，格式為 <code style="background:#e0f2fe;padding:1px 5px;border-radius:4px">欄位=運算子.值</code><br>
+            &nbsp;&nbsp;常用運算子：<code style="background:#e0f2fe;padding:1px 5px;border-radius:4px">eq</code>（等於）、<code style="background:#e0f2fe;padding:1px 5px;border-radius:4px">gt</code>（大於）、<code style="background:#e0f2fe;padding:1px 5px;border-radius:4px">lt</code>（小於）、<code style="background:#e0f2fe;padding:1px 5px;border-radius:4px">like</code>（模糊比對）<br>
+            &nbsp;&nbsp;範例：<code style="background:#e0f2fe;padding:1px 5px;border-radius:4px">member_id=eq.CY001</code> 或 <code style="background:#e0f2fe;padding:1px 5px;border-radius:4px">date_minute=gte.2026-01-01</code>
+          </div>
+        </div>
         <div class="card">
           <div class="filter-row" style="margin-bottom:1rem">
             <div class="field-row" style="flex:2">
@@ -373,6 +383,15 @@ table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
 
       <!-- INSERT -->
       <div class="op-panel" id="panel-insert">
+        <div class="card" style="background:var(--green-light);border-color:#a7f3d0;padding:1rem 1.25rem;margin-bottom:1rem">
+          <div style="font-size:12px;font-weight:600;color:#065f46;margin-bottom:.5rem">💡 INSERT 說明 &nbsp;<button class="btn-sm" style="font-size:11.5px;padding:4px 12px" onclick="fillInsertExample()">填入範例</button></div>
+          <div style="font-size:12.5px;color:#047857;line-height:1.9">
+            ・輸入 <b>JSON 格式</b>的資料，系統會將它寫入所選資料表<br>
+            ・<b>單筆</b>：<code style="background:#d1fae5;padding:1px 5px;border-radius:4px">{"member_id": "CY001", "heart_rate": 72}</code><br>
+            ・<b>多筆</b>：<code style="background:#d1fae5;padding:1px 5px;border-radius:4px">[{"member_id": "CY001", ...}, {"member_id": "CY002", ...}]</code><br>
+            ・欄位名稱必須與資料表欄位完全一致（區分大小寫）
+          </div>
+        </div>
         <div class="card">
           <div class="field-row">
             <label class="field-label">JSON 資料（單筆或陣列）</label>
@@ -386,6 +405,15 @@ table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
 
       <!-- UPDATE -->
       <div class="op-panel" id="panel-update">
+        <div class="card" style="background:var(--amber-light);border-color:#fde68a;padding:1rem 1.25rem;margin-bottom:1rem">
+          <div style="font-size:12px;font-weight:600;color:#92400e;margin-bottom:.5rem">💡 UPDATE 說明 &nbsp;<button class="btn-sm" style="font-size:11.5px;padding:4px 12px" onclick="fillUpdateExample()">填入範例</button></div>
+          <div style="font-size:12.5px;color:#b45309;line-height:1.9">
+            ・先填寫 <b>條件（WHERE）</b>，用來指定要更新哪些資料列 ⚠️ <b>必填，否則整張表都會被更新！</b><br>
+            ・再填寫 <b>更新內容 JSON</b>，格式同 INSERT<br>
+            ・範例：條件填 <code style="background:#fef3c7;padding:1px 5px;border-radius:4px">id=eq.42</code>，內容填 <code style="background:#fef3c7;padding:1px 5px;border-radius:4px">{"heart_rate": 80}</code><br>
+            ・這樣就會把 id 為 42 的那筆資料的 heart_rate 欄位改成 80
+          </div>
+        </div>
         <div class="card">
           <div class="field-row">
             <label class="field-label">條件（WHERE）— 必填</label>
@@ -693,6 +721,23 @@ function renderResult(containerId, res, data) {
     body = `<div class="result-box">${JSON.stringify(data,null,2)}</div>`
   }
   el.innerHTML = `<div class="result-hdr">${badge}${count}</div>${body}`
+}
+
+// ─── Example fillers ─────────────────────────────
+function fillSelectExample() {
+  document.getElementById('selColumns').value = 'member_id, date_minute, heart_rate'
+  document.getElementById('selLimit').value   = '10'
+  document.getElementById('selFilter').value  = 'member_id=eq.CY001'
+}
+function fillInsertExample() {
+  document.getElementById('insJson').value = JSON.stringify(
+    [{"member_id":"CY001","date_minute":"2026-01-15T09:00:00","heart_rate":72},
+     {"member_id":"CY001","date_minute":"2026-01-15T09:01:00","heart_rate":74}],
+    null, 2)
+}
+function fillUpdateExample() {
+  document.getElementById('updFilter').value = 'id=eq.1'
+  document.getElementById('updJson').value   = JSON.stringify({"heart_rate": 80}, null, 2)
 }
 
 // ─── SELECT ───────────────────────────────────────
