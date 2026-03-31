@@ -236,6 +236,32 @@ table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
 }
 .dt tr:hover td { background: var(--primary-light); }
 
+/* ── Confirm Modal ──────────────────────────────── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(15,23,42,.45);
+  z-index: 100; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--white); border-radius: 14px; padding: 1.75rem 1.75rem 1.5rem;
+  width: 420px; max-width: 94vw; box-shadow: 0 20px 60px rgba(0,0,0,.18);
+  animation: modalIn .18s ease;
+}
+@keyframes modalIn { from { transform: translateY(-12px); opacity:0; } to { transform: none; opacity:1; } }
+.modal-icon { font-size: 28px; margin-bottom: .6rem; }
+.modal-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: .5rem; }
+.modal-body { font-size: 13px; color: var(--text2); line-height: 1.8; margin-bottom: 1.25rem; }
+.modal-body code { background: var(--bg); border: 1px solid var(--border); padding: 2px 7px; border-radius: 5px; font-family: 'Consolas', monospace; font-size: 12px; color: var(--text); }
+.modal-body pre { background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 10px 12px; font-family: 'Consolas', monospace; font-size: 11.5px; color: var(--text2); max-height: 140px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; margin-top: 8px; }
+.modal-btns { display: flex; gap: 10px; justify-content: flex-end; }
+.modal-cancel { padding: 9px 20px; background: var(--bg); border: 1.5px solid var(--border2); border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--text2); cursor: pointer; font-family: var(--font); }
+.modal-cancel:hover { border-color: var(--text3); }
+.modal-confirm { padding: 9px 22px; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: white; cursor: pointer; font-family: var(--font); }
+.modal-confirm.green { background: var(--green); }
+.modal-confirm.green:hover { background: var(--green-hover); }
+.modal-confirm.amber { background: var(--amber); }
+.modal-confirm.amber:hover { background: #d97706; }
+
 /* ── Misc ───────────────────────────────────────── */
 .filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .filter-row .field-row { flex: 1; min-width: 130px; margin-bottom: 0; }
@@ -395,7 +421,7 @@ table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
         <div class="card">
           <div class="field-row">
             <label class="field-label">JSON 資料（單筆或陣列）</label>
-            <textarea id="insJson" rows="5" placeholder='{"member_id": "CY001", "value": 72}'></textarea>
+            <textarea id="insJson" rows="5" placeholder='{"member_id": "CY001", "heartbeat": 72}'></textarea>
             <div class="field-hint">單筆：{"key":"value"} &nbsp;|&nbsp; 多筆：[{"key":"v1"}, {"key":"v2"}]</div>
           </div>
           <button class="btn-run" onclick="runInsert()">執行寫入</button>
@@ -411,7 +437,7 @@ table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
             ・先填寫 <b>條件（WHERE）</b>，用來指定要更新哪些資料列 ⚠️ <b>必填，否則整張表都會被更新！</b><br>
             ・再填寫 <b>更新內容 JSON</b>，格式同 INSERT<br>
             ・範例：條件填 <code style="background:#fef3c7;padding:1px 5px;border-radius:4px">id=eq.42</code>，內容填 <code style="background:#fef3c7;padding:1px 5px;border-radius:4px">{"heartbeat": 80}</code><br>
-            ・這樣就會把 id 為 42 的那筆資料的 heart_rate 欄位改成 80
+            ・這樣就會把 id 為 42 的那筆資料的 heartbeat 欄位改成 80
           </div>
         </div>
         <div class="card">
@@ -432,6 +458,19 @@ table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
     </div><!-- /tab-dbops -->
   </div><!-- /content -->
 </div><!-- /appView -->
+
+<!-- ═══ Confirm Modal ══════════════════════════════ -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <div class="modal-icon" id="modalIcon">⚠️</div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-body"  id="modalBody"></div>
+    <div class="modal-btns">
+      <button class="modal-cancel"          onclick="closeModal()">取消</button>
+      <button class="modal-confirm" id="modalConfirmBtn" onclick="modalConfirmCb && modalConfirmCb()">確認執行</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // ─── 常數 ────────────────────────────────────────
@@ -706,22 +745,52 @@ function parseFilter(str) {
 function renderResult(containerId, res, data) {
   const el = document.getElementById(containerId)
   const ok = res.ok
-  const isArr = Array.isArray(data)
   const badge = `<span class="rbadge ${ok?'rbadge-ok':'rbadge-err'}">${ok?'SUCCESS':'ERROR'} ${res.status}</span>`
+
+  // 失敗：永遠顯示錯誤 JSON，不顯示筆數
+  if (!ok) {
+    const msg = Array.isArray(data) ? data[0] : data
+    const hint = msg?.hint ? `<br><b>建議：</b>${msg.hint}` : ''
+    const body = `<div class="result-box log-err">${msg?.message || JSON.stringify(msg,null,2)}${hint}</div>`
+    el.innerHTML = `<div class="result-hdr">${badge}</div>${body}`
+    return
+  }
+
+  const isArr = Array.isArray(data)
   const count = isArr ? `<span class="rcount">${data.length} 筆</span>` : ''
   let body
-  if (ok && isArr && data.length > 0) {
+  if (isArr && data.length > 0) {
     const keys = Object.keys(data[0])
     body = `<div class="tbl-wrap"><table class="dt"><thead><tr>${keys.map(k=>`<th>${k}</th>`).join('')}</tr></thead><tbody>${
       data.map(row=>`<tr>${keys.map(k=>`<td title="${String(row[k]??'')}">${row[k]??'—'}</td>`).join('')}</tr>`).join('')
     }</tbody></table></div>`
-  } else if (ok && isArr && data.length === 0) {
-    body = `<div class="result-box">✓ 成功，無符合資料（0 筆）</div>`
+  } else if (isArr && data.length === 0) {
+    body = `<div class="result-box" style="color:var(--text3)">✓ 成功，回傳 0 筆（操作已套用）</div>`
   } else {
     body = `<div class="result-box">${JSON.stringify(data,null,2)}</div>`
   }
   el.innerHTML = `<div class="result-hdr">${badge}${count}</div>${body}`
 }
+
+// ─── Confirm Modal ───────────────────────────────
+let modalConfirmCb = null
+function showModal({ icon, title, body, confirmText, confirmClass, onConfirm }) {
+  document.getElementById('modalIcon').textContent        = icon || '⚠️'
+  document.getElementById('modalTitle').textContent       = title
+  document.getElementById('modalBody').innerHTML          = body
+  const btn = document.getElementById('modalConfirmBtn')
+  btn.textContent = confirmText || '確認執行'
+  btn.className   = 'modal-confirm ' + (confirmClass || 'green')
+  modalConfirmCb  = () => { closeModal(); onConfirm() }
+  document.getElementById('confirmModal').classList.add('open')
+}
+function closeModal() {
+  document.getElementById('confirmModal').classList.remove('open')
+  modalConfirmCb = null
+}
+document.getElementById('confirmModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('confirmModal')) closeModal()
+})
 
 // ─── Example fillers ─────────────────────────────
 function fillSelectExample() {
@@ -756,36 +825,61 @@ async function runSelect() {
 }
 
 // ─── INSERT ───────────────────────────────────────
-async function runInsert() {
+function runInsert() {
   const table = document.getElementById('dbTable').value
   let payload
   try { payload = JSON.parse(document.getElementById('insJson').value) }
-  catch(e) { alert('JSON 格式錯誤：' + e.message); return }
+  catch(e) { alert('JSON 格式錯誤：\n' + e.message); return }
+
+  const rows = Array.isArray(payload) ? payload : [payload]
+  showModal({
+    icon: '📝',
+    title: `確定要寫入資料？`,
+    body: `即將寫入 <b>${rows.length}</b> 筆資料到資料表：<code>${table}</code><pre>${JSON.stringify(rows.slice(0,3), null, 2)}${rows.length>3?'\n...（共 '+rows.length+' 筆）':''}</pre>`,
+    confirmText: `確認寫入 ${rows.length} 筆`,
+    confirmClass: 'green',
+    onConfirm: () => doInsert(table, payload)
+  })
+}
+async function doInsert(table, payload) {
   const el = document.getElementById('ins-result')
   el.innerHTML = `<div class="result-box" style="color:var(--text3)">寫入中...</div>`
   try {
     const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, { method:'POST', headers: apiHeaders(), body: JSON.stringify(payload) })
-    const d = await r.json()
+    const text = await r.text()
+    const d = text ? JSON.parse(text) : []
     renderResult('ins-result', r, Array.isArray(d) ? d : [d])
-  } catch(e) { el.innerHTML = `<div class="result-box">${e.message}</div>` }
+  } catch(e) { el.innerHTML = `<div class="result-box log-err">${e.message}</div>` }
 }
 
 // ─── UPDATE ───────────────────────────────────────
-async function runUpdate() {
+function runUpdate() {
   const table  = document.getElementById('dbTable').value
   const filter = document.getElementById('updFilter').value.trim()
-  if (!filter) { alert('請填入 WHERE 條件，避免更新整張表'); return }
+  if (!filter) { alert('⚠️ 請填入 WHERE 條件，否則整張資料表都會被更新！'); return }
   let payload
   try { payload = JSON.parse(document.getElementById('updJson').value) }
-  catch(e) { alert('JSON 格式錯誤：' + e.message); return }
+  catch(e) { alert('JSON 格式錯誤：\n' + e.message); return }
+
+  showModal({
+    icon: '⚠️',
+    title: `確定要更新資料？`,
+    body: `資料表：<code>${table}</code><br>條件（WHERE）：<code>${filter}</code><br>更新內容：<pre>${JSON.stringify(payload, null, 2)}</pre><span style="color:var(--red);font-size:12px;font-weight:600">所有符合條件的資料列都會被修改，此操作無法還原！</span>`,
+    confirmText: '確認更新',
+    confirmClass: 'amber',
+    onConfirm: () => doUpdate(table, filter, payload)
+  })
+}
+async function doUpdate(table, filter, payload) {
   const el = document.getElementById('upd-result')
   el.innerHTML = `<div class="result-box" style="color:var(--text3)">更新中...</div>`
   try {
     const f = filter.replace(/\s+/g,'&')
     const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${f}`, { method:'PATCH', headers: apiHeaders(), body: JSON.stringify(payload) })
-    const d = await r.json()
+    const text = await r.text()
+    const d = text ? JSON.parse(text) : []
     renderResult('upd-result', r, Array.isArray(d) ? d : [d])
-  } catch(e) { el.innerHTML = `<div class="result-box">${e.message}</div>` }
+  } catch(e) { el.innerHTML = `<div class="result-box log-err">${e.message}</div>` }
 }
 </script>
 </body>
