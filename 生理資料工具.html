@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生理資料工具</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #f1f5f9;
+  --white:    #ffffff;
+  --border:   #e2e8f0;
+  --border2:  #cbd5e1;
+  --text:     #1e293b;
+  --text2:    #475569;
+  --text3:    #94a3b8;
+  --primary:       #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: #eef2ff;
+  --green:       #10b981;
+  --green-hover: #059669;
+  --green-light: #ecfdf5;
+  --red:       #ef4444;
+  --red-light: #fef2f2;
+  --amber:       #f59e0b;
+  --amber-light: #fffbeb;
+  --sky:       #0ea5e9;
+  --sky-light: #f0f9ff;
+  --shadow:    0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.09);
+  --radius:    10px;
+  --font: 'Inter', system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+
+/* ── Login ─────────────────────────────────────── */
+#loginView {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(145deg, #e0e7ff 0%, #f1f5f9 60%);
+}
+.login-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 16px; padding: 2.5rem 2.25rem; width: 360px;
+  box-shadow: var(--shadow-md);
+}
+.login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 1.75rem; }
+.login-logo .icon-wrap {
+  width: 38px; height: 38px; background: var(--primary-light); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.login-logo-text { font-size: 17px; font-weight: 600; color: var(--text); }
+.login-logo-sub { font-size: 12px; color: var(--text3); }
+.login-field { margin-bottom: 1rem; }
+.login-field label { display: block; font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 6px; }
+.login-field input {
+  width: 100%; padding: 10px 12px; border: 1.5px solid var(--border2);
+  border-radius: 8px; font-size: 14px; font-family: var(--font); color: var(--text);
+  outline: none; transition: border-color .15s, box-shadow .15s; background: var(--white);
+}
+.login-field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+.btn-login {
+  width: 100%; padding: 11px; background: var(--primary); color: white;
+  border: none; border-radius: 8px; font-size: 14px; font-weight: 600;
+  font-family: var(--font); cursor: pointer; transition: background .15s; margin-top: .5rem;
+}
+.btn-login:hover { background: var(--primary-hover); }
+.btn-login:disabled { opacity: .55; cursor: not-allowed; }
+.login-error { font-size: 12.5px; color: var(--red); margin-top: 10px; min-height: 18px; text-align: center; }
+
+/* ── App Shell ─────────────────────────────────── */
+#appView { display: none; }
+.topbar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  height: 54px; padding: 0 1.75rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 20;
+  box-shadow: 0 1px 0 var(--border);
+}
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+.topbar-icon { width: 30px; height: 30px; background: var(--primary-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.topbar-title { font-size: 15px; font-weight: 600; color: var(--text); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.user-chip {
+  font-size: 12.5px; color: var(--text2); background: var(--bg);
+  padding: 5px 12px; border-radius: 99px; border: 1px solid var(--border);
+}
+.btn-logout {
+  font-size: 13px; color: var(--text3); background: none; border: 1px solid var(--border);
+  cursor: pointer; padding: 5px 12px; border-radius: 8px; transition: all .15s;
+  font-family: var(--font);
+}
+.btn-logout:hover { color: var(--red); border-color: var(--red); background: var(--red-light); }
+
+.content { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+/* ── Tabs ──────────────────────────────────────── */
+.tabs {
+  display: flex; gap: 4px; background: var(--border); padding: 4px;
+  border-radius: 10px; margin-bottom: 2rem; width: fit-content;
+}
+.tab {
+  padding: 8px 22px; border-radius: 7px; font-size: 14px; font-weight: 500;
+  cursor: pointer; border: none; background: none; color: var(--text2);
+  transition: all .15s; font-family: var(--font);
+}
+.tab.active { background: var(--white); color: var(--text); box-shadow: var(--shadow); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Cards ─────────────────────────────────────── */
+.card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.25rem;
+  box-shadow: var(--shadow);
+}
+.section-title {
+  font-size: 12px; font-weight: 600; color: var(--text3); letter-spacing: .06em;
+  text-transform: uppercase; margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── Checkbox pills ────────────────────────────── */
+.check-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.check-pill {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 16px; border: 1.5px solid var(--border2); border-radius: 8px;
+  cursor: pointer; transition: all .15s; user-select: none;
+  font-size: 13px; font-weight: 500; color: var(--text2);
+}
+.check-pill.on { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+.check-pill .cb {
+  width: 16px; height: 16px; border: 1.5px solid currentColor; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0;
+}
+
+/* ── Form fields ────────────────────────────────── */
+.field-row { margin-bottom: 1rem; }
+.field-row:last-child { margin-bottom: 0; }
+.field-label { font-size: 12.5px; font-weight: 500; color: var(--text2); margin-bottom: 6px; display: block; }
+.field-hint { font-size: 11.5px; color: var(--text3); margin-top: 4px; }
+
+input[type=text], input[type=password], input[type=date], textarea, select {
+  width: 100%; padding: 9px 12px; border: 1.5px solid var(--border2);
+  border-radius: 8px; font-size: 13.5px; font-family: var(--font); color: var(--text);
+  outline: none; transition: border-color .15s, box-shadow .15s; background: var(--white);
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+}
+textarea { resize: vertical; min-height: 88px; line-height: 1.65; font-family: 'Consolas', monospace; font-size: 13px; }
+select option { background: var(--white); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.date-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+.date-row .field-row { flex: 1; min-width: 130px; margin-bottom: 0; }
+
+.btn-sm {
+  padding: 9px 16px; background: var(--bg); border: 1.5px solid var(--border2);
+  border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--text2);
+  cursor: pointer; font-family: var(--font); transition: all .15s; white-space: nowrap;
+}
+.btn-sm:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+/* ── Big action buttons ─────────────────────────── */
+.btn-dl {
+  width: 100%; padding: 13px; background: var(--green); color: white;
+  border: none; border-radius: 9px; font-size: 15px; font-weight: 600;
+  font-family: var(--font); cursor: pointer; transition: background .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-dl:hover { background: var(--green-hover); }
+.btn-dl:disabled { opacity: .5; cursor: not-allowed; }
+
+.btn-run {
+  padding: 10px 24px; background: var(--primary); color: white;
+  border: none; border-radius: 8px; font-size: 14px; font-weight: 600;
+  font-family: var(--font); cursor: pointer; transition: background .15s; margin-top: 1rem;
+}
+.btn-run:hover { background: var(--primary-hover); }
+.btn-run:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ── Progress + Log ─────────────────────────────── */
+.progress-wrap { margin-top: 1rem; }
+.progress-track { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 6px; }
+.progress-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width .3s; width: 0%; }
+.progress-lbl { font-size: 11.5px; color: var(--text3); text-align: right; }
+.log-box {
+  background: #f8fafc; border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 14px; font-family: 'Consolas', monospace; font-size: 12px;
+  line-height: 1.85; max-height: 200px; overflow-y: auto; color: var(--text2); margin-top: 10px;
+}
+.log-ok   { color: #059669; }
+.log-skip { color: #d97706; }
+.log-err  { color: var(--red); }
+.log-info { color: var(--primary); font-weight: 500; }
+
+/* ── DB Ops tabs ────────────────────────────────── */
+.op-tab-bar { display: flex; gap: 6px; margin-bottom: 1.25rem; }
+.op-tab {
+  padding: 6px 18px; border-radius: 7px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: 1.5px solid var(--border2); background: var(--white);
+  color: var(--text2); transition: all .15s; font-family: var(--font);
+}
+.op-tab[data-op=select].active  { border-color: var(--sky);    background: var(--sky-light);   color: #0284c7; }
+.op-tab[data-op=insert].active  { border-color: var(--green);  background: var(--green-light);  color: #065f46; }
+.op-tab[data-op=update].active  { border-color: var(--amber);  background: var(--amber-light);  color: #92400e; }
+.op-panel { display: none; }
+.op-panel.active { display: block; }
+
+/* ── Result ─────────────────────────────────────── */
+.result-area { margin-top: 1.25rem; }
+.result-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.rbadge { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 5px; }
+.rbadge-ok  { background: var(--green-light); color: #059669; }
+.rbadge-err { background: var(--red-light);   color: var(--red); }
+.rcount { font-size: 12px; color: var(--text3); }
+.result-box {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+  font-family: 'Consolas', monospace; font-size: 12px; line-height: 1.7; color: var(--text2);
+  max-height: 300px; overflow-y: auto; white-space: pre-wrap; word-break: break-all;
+}
+
+/* ── Data table ─────────────────────────────────── */
+.tbl-wrap { overflow-x: auto; }
+table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
+.dt th {
+  text-align: left; padding: 8px 12px; background: var(--bg);
+  color: var(--text2); font-size: 11px; font-weight: 600; letter-spacing: .04em;
+  border-bottom: 1.5px solid var(--border2); white-space: nowrap; text-transform: uppercase;
+}
+.dt td {
+  padding: 8px 12px; color: var(--text); border-bottom: 1px solid var(--border);
+  max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.dt tr:hover td { background: var(--primary-light); }
+
+/* ── Misc ───────────────────────────────────────── */
+.filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.filter-row .field-row { flex: 1; min-width: 130px; margin-bottom: 0; }
+.limit-input { max-width: 90px; }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     LOGIN
+═════════════════════════════════════════════════ -->
+<div id="loginView">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="icon-wrap">💓</div>
+      <div>
+        <div class="login-logo-text">生理資料工具</div>
+        <div class="login-logo-sub">Physio Data Platform</div>
+      </div>
+    </div>
+
+    <div class="login-field">
+      <label>Email</label>
+      <input type="text" id="loginEmail" placeholder="your@email.com" autocomplete="username" />
+    </div>
+    <div class="login-field">
+      <label>密碼</label>
+      <input type="password" id="loginPw" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <button class="btn-login" id="loginBtn" onclick="doLogin()">登入</button>
+    <div class="login-error" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     APP
+═════════════════════════════════════════════════ -->
+<div id="appView">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-icon">💓</div>
+      <span class="topbar-title">生理資料工具</span>
+    </div>
+    <div class="topbar-right">
+      <span class="user-chip" id="userChip">—</span>
+      <button class="btn-logout" onclick="doLogout()">登出</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('download',this)">📥 下載資料</button>
+      <button class="tab"        onclick="switchTab('dbops',   this)">🗄 資料庫操作</button>
+    </div>
+
+    <!-- ══ TAB: 下載資料 ══════════════════════════ -->
+    <div class="tab-panel active" id="tab-download">
+
+      <div class="card">
+        <div class="section-title">選擇資料庫</div>
+        <div class="check-group" id="dbCheckGroup"><!-- 動態產生 --></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">日期範圍</div>
+        <div class="date-row">
+          <div class="field-row">
+            <label class="field-label">開始日期</label>
+            <input type="date" id="dlStart" />
+          </div>
+          <div class="field-row">
+            <label class="field-label">結束日期</label>
+            <input type="date" id="dlEnd" />
+          </div>
+          <button class="btn-sm" onclick="setToday()">今天</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">受測者 ID</div>
+        <div class="field-row" style="margin-bottom:.25rem">
+          <input type="text" id="dlSubjects" placeholder="留空 = 全部，多個以逗號分隔：CY001, CY020" />
+        </div>
+        <div class="field-hint">下載完成後，每個資料庫會各自產生一個 CSV 檔案</div>
+      </div>
+
+      <button class="btn-dl" id="dlBtn" onclick="startDownload()">▶ 開始下載</button>
+
+      <div class="progress-wrap" id="progressWrap" style="display:none">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-lbl" id="progressLbl"></div>
+        <div class="log-box" id="dlLog"></div>
+      </div>
+
+    </div><!-- /tab-download -->
+
+    <!-- ══ TAB: 資料庫操作 ════════════════════════ -->
+    <div class="tab-panel" id="tab-dbops">
+
+      <div class="card" style="padding-bottom:1.25rem">
+        <div class="section-title" style="margin-bottom:.75rem">資料表</div>
+        <select id="dbTable" style="max-width:280px"><!-- 動態產生 --></select>
+      </div>
+
+      <div class="op-tab-bar">
+        <button class="op-tab active" data-op="select" onclick="switchOp('select',this)">SELECT 查詢</button>
+        <button class="op-tab"        data-op="insert" onclick="switchOp('insert',this)">INSERT 寫入</button>
+        <button class="op-tab"        data-op="update" onclick="switchOp('update',this)">UPDATE 更新</button>
+      </div>
+
+      <!-- SELECT -->
+      <div class="op-panel active" id="panel-select">
+        <div class="card">
+          <div class="filter-row" style="margin-bottom:1rem">
+            <div class="field-row" style="flex:2">
+              <label class="field-label">COLUMNS（留空 = 全部）</label>
+              <input type="text" id="selColumns" placeholder="id, member_id, date_minute ..." />
+            </div>
+            <div class="field-row">
+              <label class="field-label">LIMIT</label>
+              <input type="text" id="selLimit" class="limit-input" value="20" />
+            </div>
+          </div>
+          <div class="field-row">
+            <label class="field-label">FILTER（選填）</label>
+            <input type="text" id="selFilter" placeholder="member_id=eq.CY001" />
+            <div class="field-hint">格式：欄位=eq.值 ／ gt.值 ／ lt.值 ／ like.字串%</div>
+          </div>
+          <button class="btn-run" onclick="runSelect()">執行查詢</button>
+        </div>
+        <div class="result-area" id="sel-result"></div>
+      </div>
+
+      <!-- INSERT -->
+      <div class="op-panel" id="panel-insert">
+        <div class="card">
+          <div class="field-row">
+            <label class="field-label">JSON 資料（單筆或陣列）</label>
+            <textarea id="insJson" rows="5" placeholder='{"member_id": "CY001", "value": 72}'></textarea>
+            <div class="field-hint">單筆：{"key":"value"} &nbsp;|&nbsp; 多筆：[{"key":"v1"}, {"key":"v2"}]</div>
+          </div>
+          <button class="btn-run" onclick="runInsert()">執行寫入</button>
+        </div>
+        <div class="result-area" id="ins-result"></div>
+      </div>
+
+      <!-- UPDATE -->
+      <div class="op-panel" id="panel-update">
+        <div class="card">
+          <div class="field-row">
+            <label class="field-label">條件（WHERE）— 必填</label>
+            <input type="text" id="updFilter" placeholder="id=eq.123" />
+            <div class="field-hint">必填，避免整張表被更新。格式同 SELECT filter。</div>
+          </div>
+          <div class="field-row" style="margin-top:.75rem">
+            <label class="field-label">更新內容 JSON</label>
+            <textarea id="updJson" rows="4" placeholder='{"value": 80}'></textarea>
+          </div>
+          <button class="btn-run" onclick="runUpdate()">執行更新</button>
+        </div>
+        <div class="result-area" id="upd-result"></div>
+      </div>
+
+    </div><!-- /tab-dbops -->
+  </div><!-- /content -->
+</div><!-- /appView -->
+
+<script>
+// ─── 常數 ────────────────────────────────────────
+const SUPABASE_URL  = "https://lrrxswxvphoeyuvemvin.supabase.co"
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxycnhzd3h2cGhvZXl1dmVtdmluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMzU1NjksImV4cCI6MjA4MzkxMTU2OX0.54qS-CTVL9XeIbNO83r8spsRrk8woyBz3u-HoRdFxHs"
+const PAGE_SIZE     = 1000
+const WARN_DAYS     = 30
+
+const ACCESS_MAP = {
+  "dulancliniccloud@gmail.com":      ["DC_data_base"],
+  "ttricloudtest001@gmail.com":      ["CY_data_base", "YK_data_base"],
+  "kingpig4628@gmail.com":           ["DC_data_base", "CY_data_base", "YK_data_base"],
+  "zywu.1487@gmail.com":             ["DC_data_base", "CY_data_base", "YK_data_base"],
+  "ttrismartextilegpt@gmail.com":    ["DC_data_base", "CY_data_base", "YK_data_base"],
+  "ttrismartextilegpt02@gmail.com":  ["DC_data_base", "CY_data_base", "YK_data_base"],
+  "ttrismartextilegpt03@gmail.com":  ["DC_data_base", "CY_data_base", "YK_data_base"],
+}
+
+// ─── State ───────────────────────────────────────
+let accessToken   = null
+let userEmail     = null
+let allowedTables = []
+let isDownloading = false
+
+// ─── Auth ────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase()
+  const pw    = document.getElementById('loginPw').value
+  const errEl = document.getElementById('loginErr')
+  const btn   = document.getElementById('loginBtn')
+
+  errEl.textContent = ''
+  if (!email || !pw) { errEl.textContent = '請輸入 Email 和密碼'; return }
+  if (!email.includes('@')) { errEl.textContent = 'Email 格式不正確'; return }
+
+  btn.disabled = true; btn.innerHTML = '<span class="spinner" style="border-top-color:white;border-color:rgba(255,255,255,.3)"></span> 登入中...'
+  try {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_ANON, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pw })
+    })
+    const d = await r.json()
+    if (!r.ok) throw new Error(d.error_description || d.msg || '帳號或密碼錯誤')
+
+    const tables = ACCESS_MAP[email] || []
+    if (!tables.length) throw new Error('此帳號無資料存取權限')
+
+    accessToken   = d.access_token
+    userEmail     = email
+    allowedTables = tables
+    initApp()
+  } catch(e) {
+    errEl.textContent = e.message
+    btn.disabled = false; btn.textContent = '登入'
+  }
+}
+
+function doLogout() {
+  fetch(`${SUPABASE_URL}/auth/v1/logout`, {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + accessToken }
+  }).catch(() => {})
+  accessToken = null; userEmail = null; allowedTables = []
+  document.getElementById('appView').style.display   = 'none'
+  document.getElementById('loginView').style.display = 'flex'
+  document.getElementById('loginPw').value = ''
+  document.getElementById('loginErr').textContent = ''
+  document.getElementById('loginBtn').disabled = false
+  document.getElementById('loginBtn').textContent = '登入'
+}
+
+document.getElementById('loginPw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin() })
+document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin() })
+
+// ─── Init app after login ─────────────────────────
+function initApp() {
+  document.getElementById('loginView').style.display = 'none'
+  document.getElementById('appView').style.display   = 'block'
+  document.getElementById('userChip').textContent    = userEmail
+
+  // Checkboxes for download tab
+  const grp = document.getElementById('dbCheckGroup')
+  grp.innerHTML = ''
+  allowedTables.forEach(t => {
+    const pill = document.createElement('label')
+    pill.className = 'check-pill on'
+    pill.dataset.table = t
+    pill.innerHTML = `<span class="cb">✓</span> ${t}`
+    pill.addEventListener('click', () => {
+      pill.classList.toggle('on')
+      pill.querySelector('.cb').textContent = pill.classList.contains('on') ? '✓' : ''
+    })
+    grp.appendChild(pill)
+  })
+
+  // Table select for DB ops
+  const sel = document.getElementById('dbTable')
+  sel.innerHTML = ''
+  allowedTables.forEach(t => {
+    const opt = document.createElement('option')
+    opt.value = t; opt.textContent = t
+    sel.appendChild(opt)
+  })
+
+  // Default dates
+  const today = new Date().toISOString().slice(0,10)
+  document.getElementById('dlStart').value = today
+  document.getElementById('dlEnd').value   = today
+}
+
+// ─── Tab switching ────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'))
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'))
+  btn.classList.add('active')
+  document.getElementById('tab-' + id).classList.add('active')
+}
+
+function switchOp(op, btn) {
+  document.querySelectorAll('.op-tab').forEach(b => b.classList.remove('active'))
+  document.querySelectorAll('.op-panel').forEach(p => p.classList.remove('active'))
+  btn.classList.add('active')
+  document.getElementById('panel-' + op).classList.add('active')
+}
+
+// ─── Download ─────────────────────────────────────
+function setToday() {
+  const t = new Date().toISOString().slice(0,10)
+  document.getElementById('dlStart').value = t
+  document.getElementById('dlEnd').value   = t
+}
+
+async function fetchTableDay(table, date, subjects) {
+  const nd = new Date(date + 'T00:00:00'); nd.setDate(nd.getDate() + 1)
+  const next = nd.toISOString().slice(0,10)
+  const rows = []; let offset = 0
+  while (true) {
+    let url = `${SUPABASE_URL}/rest/v1/${table}?select=*` +
+              `&date_minute=gte.${date}&date_minute=lt.${next}` +
+              `&order=date_minute&limit=${PAGE_SIZE}&offset=${offset}`
+    if (subjects.length) url += `&member_id=in.(${subjects.join(',')})`
+    const r = await fetch(url, { headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + accessToken } })
+    if (!r.ok) throw new Error(`HTTP ${r.status}`)
+    const chunk = await r.json()
+    if (!chunk.length) break
+    rows.push(...chunk)
+    if (chunk.length < PAGE_SIZE) break
+    offset += PAGE_SIZE
+  }
+  return rows
+}
+
+function rowsToCSV(rows) {
+  if (!rows.length) return ''
+  const keys = Object.keys(rows[0])
+  const esc  = v => { const s = v == null ? '' : String(v); return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g,'""') + '"' : s }
+  return [keys.join(','), ...rows.map(r => keys.map(k => esc(r[k])).join(','))].join('\r\n')
+}
+
+function triggerDownload(rows, filename) {
+  const bom  = '\uFEFF'
+  const blob = new Blob([bom + rowsToCSV(rows)], { type: 'text/csv;charset=utf-8' })
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a'); a.href = url; a.download = filename; a.click()
+  setTimeout(() => URL.revokeObjectURL(url), 5000)
+}
+
+function dateList(start, end) {
+  const days = [], cur = new Date(start + 'T00:00:00'), last = new Date(end + 'T00:00:00')
+  while (cur <= last) { days.push(cur.toISOString().slice(0,10)); cur.setDate(cur.getDate()+1) }
+  return days
+}
+
+async function startDownload() {
+  if (isDownloading) return
+
+  const tables = [...document.querySelectorAll('#dbCheckGroup .check-pill.on')].map(el => el.dataset.table)
+  if (!tables.length) { alert('請至少選擇一個資料庫'); return }
+
+  const start = document.getElementById('dlStart').value
+  const end   = document.getElementById('dlEnd').value
+  if (!start || !end) { alert('請選擇日期範圍'); return }
+  if (start > end)    { alert('結束日期不能早於開始日期'); return }
+  if (start > new Date().toISOString().slice(0,10)) { alert('開始日期不能是未來日期'); return }
+
+  const raw      = document.getElementById('dlSubjects').value.trim()
+  const subjects = raw ? [...new Set(raw.split(',').map(s => s.trim()).filter(Boolean))] : []
+
+  const days = dateList(start, end)
+  if (days.length > WARN_DAYS) {
+    if (!confirm(`您選擇了 ${days.length} 天 × ${tables.length} 個資料庫。\n確定要繼續下載嗎？`)) return
+  }
+
+  isDownloading = true
+  const btn = document.getElementById('dlBtn')
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> 下載中...'
+
+  const wrap = document.getElementById('progressWrap')
+  const fill = document.getElementById('progressFill')
+  const lbl  = document.getElementById('progressLbl')
+  const log  = document.getElementById('dlLog')
+  wrap.style.display = 'block'; log.innerHTML = ''
+
+  const total = tables.length * days.length; let done = 0
+  const upd = () => { const p = total ? Math.round(done/total*100) : 0; fill.style.width = p+'%'; lbl.textContent = `${done} / ${total}` }
+  const logLine = (msg, cls) => {
+    const el = document.createElement('div'); el.textContent = msg; if (cls) el.className = cls
+    log.appendChild(el); log.scrollTop = log.scrollHeight
+  }
+
+  upd()
+  logLine(`開始下載，共 ${total} 個請求`, 'log-info')
+  if (subjects.length) logLine(`受測者篩選：${subjects.join(', ')}`, 'log-info')
+
+  for (const table of tables) {
+    logLine(``, ''); logLine(`▶ ${table}`, 'log-info')
+    let allRows = []
+    for (const day of days) {
+      try {
+        const rows = await fetchTableDay(table, day, subjects)
+        allRows.push(...rows)
+        if (rows.length) logLine(`  ✓ ${day}  (${rows.length.toLocaleString()} 筆)`, 'log-ok')
+        else             logLine(`  – ${day}  無資料`, 'log-skip')
+      } catch(e) {
+        logLine(`  ✗ ${day}  錯誤：${e.message}`, 'log-err')
+      }
+      done++; upd()
+    }
+
+    if (allRows.length) {
+      const subjSuffix = subjects.length ? '_' + subjects.join('_') : ''
+      const filename   = `${table}_${start}_to_${end}${subjSuffix}.csv`
+      await new Promise(r => setTimeout(r, 300))
+      triggerDownload(allRows, filename)
+      logLine(`  → 已下載：${filename}  (${allRows.length.toLocaleString()} 筆)`, 'log-ok')
+    } else {
+      logLine(`  → 無資料，略過`, 'log-skip')
+    }
+  }
+
+  logLine(``, ''); logLine(`完成！`, 'log-ok')
+  btn.disabled = false; btn.innerHTML = '▶ 開始下載'
+  isDownloading = false
+}
+
+// ─── DB Ops helpers ───────────────────────────────
+function apiHeaders() {
+  return {
+    'apikey': SUPABASE_ANON,
+    'Authorization': 'Bearer ' + accessToken,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=representation'
+  }
+}
+
+function parseFilter(str) {
+  return str.trim() ? '&' + str.trim().replace(/\s+/g,'&') : ''
+}
+
+function renderResult(containerId, res, data) {
+  const el = document.getElementById(containerId)
+  const ok = res.ok
+  const isArr = Array.isArray(data)
+  const badge = `<span class="rbadge ${ok?'rbadge-ok':'rbadge-err'}">${ok?'SUCCESS':'ERROR'} ${res.status}</span>`
+  const count = isArr ? `<span class="rcount">${data.length} 筆</span>` : ''
+  let body
+  if (ok && isArr && data.length > 0) {
+    const keys = Object.keys(data[0])
+    body = `<div class="tbl-wrap"><table class="dt"><thead><tr>${keys.map(k=>`<th>${k}</th>`).join('')}</tr></thead><tbody>${
+      data.map(row=>`<tr>${keys.map(k=>`<td title="${String(row[k]??'')}">${row[k]??'—'}</td>`).join('')}</tr>`).join('')
+    }</tbody></table></div>`
+  } else if (ok && isArr && data.length === 0) {
+    body = `<div class="result-box">✓ 成功，無符合資料（0 筆）</div>`
+  } else {
+    body = `<div class="result-box">${JSON.stringify(data,null,2)}</div>`
+  }
+  el.innerHTML = `<div class="result-hdr">${badge}${count}</div>${body}`
+}
+
+// ─── SELECT ───────────────────────────────────────
+async function runSelect() {
+  const table  = document.getElementById('dbTable').value
+  const cols   = document.getElementById('selColumns').value.trim() || '*'
+  const limit  = document.getElementById('selLimit').value.trim()   || '20'
+  const filter = parseFilter(document.getElementById('selFilter').value)
+  const el = document.getElementById('sel-result')
+  el.innerHTML = `<div class="result-box" style="color:var(--text3)">查詢中...</div>`
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=${cols}&limit=${limit}${filter}`, { headers: apiHeaders() })
+    const d = await r.json()
+    renderResult('sel-result', r, d)
+  } catch(e) { el.innerHTML = `<div class="result-box">${e.message}</div>` }
+}
+
+// ─── INSERT ───────────────────────────────────────
+async function runInsert() {
+  const table = document.getElementById('dbTable').value
+  let payload
+  try { payload = JSON.parse(document.getElementById('insJson').value) }
+  catch(e) { alert('JSON 格式錯誤：' + e.message); return }
+  const el = document.getElementById('ins-result')
+  el.innerHTML = `<div class="result-box" style="color:var(--text3)">寫入中...</div>`
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, { method:'POST', headers: apiHeaders(), body: JSON.stringify(payload) })
+    const d = await r.json()
+    renderResult('ins-result', r, Array.isArray(d) ? d : [d])
+  } catch(e) { el.innerHTML = `<div class="result-box">${e.message}</div>` }
+}
+
+// ─── UPDATE ───────────────────────────────────────
+async function runUpdate() {
+  const table  = document.getElementById('dbTable').value
+  const filter = document.getElementById('updFilter').value.trim()
+  if (!filter) { alert('請填入 WHERE 條件，避免更新整張表'); return }
+  let payload
+  try { payload = JSON.parse(document.getElementById('updJson').value) }
+  catch(e) { alert('JSON 格式錯誤：' + e.message); return }
+  const el = document.getElementById('upd-result')
+  el.innerHTML = `<div class="result-box" style="color:var(--text3)">更新中...</div>`
+  try {
+    const f = filter.replace(/\s+/g,'&')
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${f}`, { method:'PATCH', headers: apiHeaders(), body: JSON.stringify(payload) })
+    const d = await r.json()
+    renderResult('upd-result', r, Array.isArray(d) ? d : [d])
+  } catch(e) { el.innerHTML = `<div class="result-box">${e.message}</div>` }
+}
+</script>
+</body>
+</html>
