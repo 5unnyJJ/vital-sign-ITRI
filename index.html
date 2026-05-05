@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
@@ -61,7 +61,7 @@ background-position:center center,center center;
 opacity:1;
 z-index:0;
 }
-#login-screen,#member-overview,#member-detail,#dashboard,.shared-topbar,.sidebar-drawer,.sidebar-overlay{position:relative;z-index:1;}
+#login-screen,#member-overview,#member-detail,#dashboard,#posture-screen,.shared-topbar,.sidebar-drawer,.sidebar-overlay{position:relative;z-index:1;}
 
 /* ══ LOGIN ══ */
 #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;
@@ -569,6 +569,113 @@ background-attachment:fixed;}
 .annot-card-link{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--mint-mid);font-weight:600;cursor:pointer;margin-top:8px;padding:4px 10px;background:var(--mint-xlight);border:1px solid var(--mint-light);border-radius:10px;transition:all .15s;}
 .annot-card-link:hover{background:var(--mint-light);color:var(--mint-dark);}
 .annot-empty{text-align:center;padding:32px 16px;color:var(--text-dim);font-size:14px;line-height:1.8;}
+
+/* ══ POSTURE SCREEN — shadcn-inspired ══ */
+/* Layout */
+.ps-main{padding:40px 48px 64px;max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:32px;}
+.ps-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:8px;border-bottom:1px solid var(--border-light);}
+.ps-title{font-size:26px;font-weight:800;letter-spacing:-.4px;color:var(--text);}
+.ps-subtitle{font-size:13px;color:var(--text-dim);margin-top:5px;line-height:1.6;}
+
+/* Toolbar — shadcn card feel */
+.ps-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;background:rgba(255,255,255,.9);border:1px solid var(--border);border-radius:14px;box-shadow:0 1px 4px rgba(40,70,55,.06);position:sticky;top:72px;z-index:20;backdrop-filter:blur(8px);}
+.ps-toolbar-label{font-size:12px;font-weight:600;color:var(--text-dim);white-space:nowrap;}
+.ps-date-input,.ps-select{height:38px;padding:0 12px;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;color:var(--text);outline:none;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
+.ps-date-input:focus,.ps-select:focus{border-color:var(--mint);box-shadow:0 0 0 2px rgba(122,170,150,.18);}
+
+/* Buttons */
+.ps-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;padding:0 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.ps-btn-primary{background:var(--mint);color:#fff;box-shadow:0 1px 3px rgba(122,170,150,.4);}
+.ps-btn-primary:hover{background:var(--mint-mid);}
+.ps-btn-primary:disabled{opacity:.5;cursor:not-allowed;}
+.ps-btn-sm{height:32px;padding:0 12px;font-size:12px;font-weight:600;border-radius:6px;}
+.ps-btn-ghost{background:transparent;color:var(--text-mid);border:1px solid var(--border);}
+.ps-btn-ghost:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
+
+/* Card — shadcn Card */
+.ps-card{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 3px rgba(40,70,55,.06),0 4px 12px rgba(40,70,55,.04);overflow:hidden;}
+.ps-card-header{padding:20px 24px 14px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.ps-card-title{font-size:14px;font-weight:700;color:var(--text);}
+.ps-card-desc{font-size:12px;color:var(--text-dim);margin-top:2px;}
+.ps-card-body{padding:24px;}
+.ps-card-body-flush{padding:0;}
+
+/* Stat cards strip */
+.ps-stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.ps-stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 22px;box-shadow:0 1px 3px rgba(40,70,55,.05);display:flex;flex-direction:column;gap:6px;}
+.ps-stat-label{font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.6px;}
+.ps-stat-value{font-size:32px;font-weight:800;color:var(--text);line-height:1;font-variant-numeric:tabular-nums;}
+.ps-stat-sub{font-size:12px;color:var(--text-dim);line-height:1.5;}
+.ps-stat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block;margin-right:5px;}
+
+/* Two-column grid */
+.ps-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;}
+.ps-grid-main{grid-template-columns:5fr 4fr;}
+
+/* Table — shadcn Table */
+.ps-table{width:100%;border-collapse:collapse;font-size:13px;}
+.ps-table thead tr{border-bottom:1px solid var(--border-light);}
+.ps-table thead th{padding:11px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;background:var(--bg-alt);}
+.ps-table tbody td{padding:14px 16px;border-bottom:1px solid var(--border-light);vertical-align:middle;}
+.ps-table tbody tr:last-child td{border-bottom:none;}
+.ps-table tbody tr:hover td{background:var(--mint-xlight);}
+.ps-table-num{font-variant-numeric:tabular-nums;font-weight:600;color:var(--text);}
+
+/* Badge — shadcn Badge */
+.ps-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid;}
+.ps-badge-gray{background:#f8fafc;color:#475569;border-color:#cbd5e1;}
+.ps-badge-blue{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;}
+.ps-badge-green{background:#f0fdf4;color:#15803d;border-color:#bbf7d0;}
+.ps-badge-orange{background:#fff7ed;color:#c2410c;border-color:#fed7aa;}
+.ps-badge-purple{background:#faf5ff;color:#7e22ce;border-color:#e9d5ff;}
+.ps-badge-red{background:#fef2f2;color:#b91c1c;border-color:#fecaca;}
+
+/* Progress — shadcn Progress */
+.ps-progress-wrap{margin-top:8px;}
+.ps-progress-bg{height:6px;background:#f1f5f9;border-radius:999px;overflow:hidden;}
+.ps-progress-fill{height:100%;border-radius:999px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.ps-progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-bottom:4px;}
+
+/* Donut */
+.ps-donut-row{display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
+.ps-donut-wrap{width:160px;height:160px;flex-shrink:0;}
+.ps-donut-wrap svg{width:100%;height:100%;}
+.ps-donut-legend{display:flex;flex-direction:column;gap:12px;flex:1;min-width:150px;}
+.ps-legend-item{display:flex;align-items:center;gap:10px;font-size:13px;}
+.ps-legend-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+.ps-legend-name{flex:1;color:var(--text-mid);font-weight:500;}
+.ps-legend-pct{font-size:12px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;}
+.ps-legend-min{font-size:11px;color:var(--text-dim);font-variant-numeric:tabular-nums;}
+
+/* Timeline */
+.ps-timeline-wrap{display:flex;flex-direction:column;gap:10px;}
+.ps-timeline-bar-row{position:relative;height:36px;border-radius:8px;overflow:hidden;background:#f1f5f9;}
+.ps-timeline-bar-row svg{position:absolute;inset:0;width:100%;height:100%;}
+.ps-timeline-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);padding:0 2px;}
+.ps-timeline-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.ps-timeline-legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-mid);}
+.ps-timeline-legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+
+/* States */
+.ps-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:80px 32px;color:var(--text-dim);font-size:14px;text-align:center;}
+.ps-empty-icon{font-size:40px;opacity:.35;}
+.ps-loading{display:flex;align-items:center;justify-content:center;gap:12px;padding:72px;color:var(--text-dim);font-size:14px;}
+
+/* Toggle pills for export */
+.ps-pill-group{display:flex;flex-wrap:wrap;gap:8px;}
+.ps-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px solid var(--border);border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;user-select:none;color:var(--text-mid);background:#fff;}
+.ps-pill:hover{border-color:var(--mint);background:var(--mint-xlight);color:var(--mint-dark);}
+.ps-pill.on-0{border-color:#94a3b8;background:#f8fafc;color:#475569;}
+.ps-pill.on-1,.ps-pill.on-2{border-color:#3b82f6;background:#eff6ff;color:#1d4ed8;}
+.ps-pill.on-3,.ps-pill.on-4{border-color:#22c55e;background:#f0fdf4;color:#15803d;}
+.ps-pill.on-5{border-color:#f97316;background:#fff7ed;color:#c2410c;}
+.ps-pill.on-6{border-color:#a855f7;background:#faf5ff;color:#7e22ce;}
+.ps-pill.on-7{border-color:#ef4444;background:#fef2f2;color:#b91c1c;}
+
+/* Responsive */
+@media(max-width:1024px){.ps-stats-strip{grid-template-columns:repeat(2,1fr);}.ps-grid-main{grid-template-columns:1fr;}}
+@media(max-width:700px){.ps-grid-2{grid-template-columns:1fr;}.ps-main{padding:20px 16px 40px;gap:20px;}.ps-toolbar{position:static;top:auto;}.ps-date-input,.ps-select,.ps-btn{width:100%;}.ps-title{font-size:22px;}.ps-stats-strip{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.ps-stats-strip{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -600,6 +707,9 @@ background-attachment:fixed;}
       </button>
       <button class="sidebar-nav-btn" onclick="openAnnotPanel();closeSidebar()">
         <span class="snb-icon">📝</span>醫護回報
+      </button>
+      <button class="sidebar-nav-btn" id="snb-posture" onclick="goScreen('posture')">
+        <span class="snb-icon">🧘</span>動作姿態統計
       </button>
     </div>
     <div class="sidebar-divider"></div>
@@ -853,7 +963,7 @@ background-attachment:fixed;}
         <button class="btn-add-annot" onclick="openAnnotPanel()">＋ 新增回報</button>
       </div>
       <div id="det-annot-list" class="det-annot-list"></div>
-      <div class="note-hint">回報紀錄儲存於本機，不會上傳至伺服器。</div>
+      <div class="note-hint">回報紀錄會同步到雲端，供後續查詢與交班使用。</div>
     </div>
   </div>
 </div>
@@ -920,6 +1030,34 @@ background-attachment:fixed;}
   </footer>
 </div>
 
+<!-- ══ POSTURE ANALYSIS SCREEN ══ -->
+<div id="posture-screen" style="display:none">
+  <div class="ps-main screen-shell">
+    <div class="ps-header">
+      <div>
+        <div class="ps-title">🧘 動作姿態統計</div>
+        <div class="ps-subtitle" id="ps-subtitle">選擇日期與會員後載入</div>
+      </div>
+      <button class="btn-back" onclick="goScreen('overview')">← 返回總覽</button>
+    </div>
+    <div class="ps-toolbar">
+      <span class="ps-toolbar-label">日期</span>
+      <input type="date" class="ps-date-input" id="ps-date-input">
+      <span class="ps-toolbar-label">會員</span>
+      <select class="ps-select" id="ps-member-select" style="min-width:130px">
+        <option value="ALL">全部</option>
+      </select>
+      <button class="ps-btn ps-btn-primary" id="ps-load-btn" onclick="loadPostureScreen()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        載入資料
+      </button>
+    </div>
+    <div id="ps-content">
+      <div class="ps-empty">請選擇條件後載入資料</div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ════════════════════════════════════════════════════════════
    SUPABASE INIT
@@ -930,6 +1068,8 @@ background-attachment:fixed;}
 const SUPABASE_URL='https://lrrxswxvphoeyuvemvin.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxycnhzd3h2cGhvZXl1dmVtdmluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMzU1NjksImV4cCI6MjA4MzkxMTU2OX0.54qS-CTVL9XeIbNO83r8spsRrk8woyBz3u-HoRdFxHs';
 const TABLE_LABEL={'DC_data_base':'都蘭診所','CY_data_base':'嘉義醫院','YK_data_base':'員郭醫院'};
+const ACTION_COLORS={0:'#94a3b8',1:'#3b82f6',2:'#3b82f6',3:'#22c55e',4:'#22c55e',5:'#f97316',6:'#a855f7',7:'#ef4444'};
+const ACTION_LABEL_COLOR={'靜止':'#94a3b8','走路':'#3b82f6','慢跑':'#22c55e','快跑':'#f97316','躺姿':'#a855f7','姿勢異常':'#ef4444'};
 
 const AGG_COLS=[
   {key:'time',label:'分鐘',badge:false},
@@ -967,6 +1107,12 @@ let overviewCardData={};
 let overviewTodayData={};
 let overviewAllData={};
 let overviewMode='today';
+let postureScreenDate=null;
+let postureScreenMemberId='ALL';
+let postureCheckedActions=new Set([0,1,2,3,4,5,6,7]);
+let postureScreenMinuteRows=[];
+let postureRawRowsCache=[];
+let postureRawRowsCacheKey='';
 let trendLineSet=new Set(['hb','br']); // dashboard trend panel active metrics
 
 /* ════════════════════════════════════════════════════════════
@@ -976,6 +1122,52 @@ function p2(n){return String(n).padStart(2,'0');}
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function todayStr(){const d=new Date();return`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;}
 function monthStr(offset=0){const d=new Date();d.setMonth(d.getMonth()+offset);return`${d.getFullYear()}-${p2(d.getMonth()+1)}`;}
+function memberSearchToken(value){return String(value??'').trim().replace(/\s+/g,'').toLowerCase();}
+function memberSort(a,b){return String(a).localeCompare(String(b),'zh-Hant',{numeric:true,sensitivity:'base'});}
+function uniqueMemberIds(rows){
+  const seen=new Set(),ids=[];
+  (rows||[]).forEach(r=>{
+    const raw=String(r?.member_id??'');
+    if(!raw.trim()||seen.has(raw))return;
+    seen.add(raw);
+    ids.push(raw);
+  });
+  return ids.sort(memberSort);
+}
+function mergeMemberLists(...lists){
+  const seen=new Set(),merged=[];
+  lists.flat().forEach(id=>{
+    const raw=String(id??'');
+    if(!raw.trim()||seen.has(raw))return;
+    seen.add(raw);
+    merged.push(raw);
+  });
+  return merged.sort(memberSort);
+}
+async function fetchPagedRows(table,buildQuery,pageSize=1000){
+  let all=[],page=0;
+  while(true){
+    const q=buildQuery(sb.from(table)).range(page*pageSize,(page+1)*pageSize-1);
+    const {data,error}=await q;
+    if(error)throw error;
+    if(!data?.length)break;
+    all=all.concat(data);
+    if(data.length<pageSize)break;
+    page++;
+  }
+  return all;
+}
+async function fetchAllMemberIds(table){
+  const rows=await fetchPagedRows(table,q=>q.select('member_id').order('member_id',{ascending:true}),1000);
+  return uniqueMemberIds(rows);
+}
+function normalizeTime24(value){
+  const m=String(value||'').trim().replace(/\./g,':').match(/^(\d{1,2}):(\d{1,2})$/);
+  if(!m)return'';
+  const hh=Number(m[1]),mm=Number(m[2]);
+  if(!Number.isInteger(hh)||!Number.isInteger(mm)||hh<0||hh>23||mm<0||mm>59)return'';
+  return`${p2(hh)}:${p2(mm)}`;
+}
 function formatMinute(iso){if(!iso)return'—';const d=new Date(iso);return`${p2(d.getHours())}:${p2(d.getMinutes())}`;}
 function formatHMS(d){return`${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`;}
 function avg(arr){const n=arr.map(v=>parseFloat(v)).filter(v=>!isNaN(v));if(!n.length)return null;return Math.round(n.reduce((a,b)=>a+b,0)/n.length*10)/10;}
@@ -1310,7 +1502,7 @@ async function doLogout(){
   Object.keys(localStorage).forEach(k=>{if(k.startsWith('sb-'))localStorage.removeItem(k);});
   sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
   currentTable=null;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';currentMemberId='ALL';memberList=[];dailySummaryCache={};dayStats=null;resumeSession_data=null;
-  detailMemberId=null;overviewCardData={};
+  detailMemberId=null;overviewCardData={};overviewTodayData={};overviewAllData={};
   document.getElementById('shared-topbar').style.display='none';
   ['member-overview','member-detail','dashboard'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('login-screen').style.display='flex';
@@ -1342,15 +1534,17 @@ function updateSidebarActive(){
   document.getElementById('snb-overview').classList.toggle('active',currentScreen==='overview');
   document.getElementById('snb-day').classList.toggle('active',currentScreen==='dashboard'&&currentView==='day');
   document.getElementById('snb-month').classList.toggle('active',currentScreen==='dashboard'&&currentView==='month');
+  document.getElementById('snb-posture').classList.toggle('active',currentScreen==='posture');
 }
 
 /* ════════════════════════════════════════════════════════════
    SCREEN MANAGEMENT
    ════════════════════════════════════════════════════════════ */
 function showScreen(name){
-  ['member-overview','member-detail','dashboard'].forEach(id=>{document.getElementById(id).style.display='none';});
-  document.getElementById(name==='overview'?'member-overview':name==='detail'?'member-detail':'dashboard').style.display='block';
-  currentScreen=name==='overview'?'overview':name==='detail'?'detail':'dashboard';
+  ['member-overview','member-detail','dashboard','posture-screen'].forEach(id=>{document.getElementById(id).style.display='none';});
+  const idMap={overview:'member-overview',detail:'member-detail',dashboard:'dashboard',posture:'posture-screen'};
+  document.getElementById(idMap[name]||'member-overview').style.display='block';
+  currentScreen=name;
   updateSidebarActive();closeSidebar();
   window.scrollTo(0,0);
 }
@@ -1358,12 +1552,16 @@ function showScreen(name){
 function goScreen(target,view){
   if(target==='overview'){
     showScreen('overview');
+    scanAndLoadCards();
   } else if(target==='dashboard'){
     if(view)setView(view);
     showScreen('dashboard');
     loadCurrentTable();
   } else if(target==='detail'){
     showScreen('detail');
+  } else if(target==='posture'){
+    showScreen('posture');
+    initPostureScreen();
   }
   closeSidebar();
 }
@@ -1397,98 +1595,10 @@ function switchTable(name,btnEl,firstLoad=false){
   if(btnEl)btnEl.classList.add('active');
   currentTable=name;currentPage=1;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';
   currentMemberId='ALL';memberList=[];dailySummaryCache={};dayStats=null;
-  clearLastUpload();overviewCardData={};
+  clearLastUpload();overviewCardData={};overviewTodayData={};overviewAllData={};
   subscribeRealtime(name);
   showScreen('overview');
   scanAndLoadCards();
-}
-
-/* ════════════════════════════════════════════════════════════
-   MEMBER OVERVIEW - Card loading
-   ════════════════════════════════════════════════════════════ */
-async function scanAndLoadCards(){
-  if(!currentTable)return;
-  const btn=document.getElementById('btn-scan-overview');
-  btn.disabled=true;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 掃描中…';
-  const today=currentDate||todayStr();
-  document.getElementById('ov-subtitle').textContent=today+' 掃描中…';
-  document.getElementById('ov-title').textContent=`${TABLE_LABEL[currentTable]||currentTable} · 今日會員狀態`;
-  // Show skeleton cards first
-  const grid=document.getElementById('member-grid');
-  grid.innerHTML=Array(6).fill(0).map(()=>`<div class="member-card skel-card"><div class="mc-head"><div class="mc-avatar ok skel" style="background:var(--border-light)"></div><div style="flex:1"><div class="skel skel-title"></div><div class="skel skel-sub"></div></div></div><div class="mc-vitals"><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div></div></div>`).join('');
-  // Fetch all today's data
-  const start=today+'T00:00:00',end=today+'T23:59:59.999';
-  const{data,error}=await sb.from(currentTable)
-    .select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute')
-    .gte('date_minute',start).lte('date_minute',end).limit(60000);
-  if(error||!data||!data.length){
-    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">📭</div><p>今日尚無資料</p><small>若裝置已開機請稍後重新掃描</small></div>`;
-    document.getElementById('ov-subtitle').textContent=today+' · 無資料';
-    btn.disabled=false;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 重新掃描';
-    return;
-  }
-  // Group by member
-  const groups={};
-  data.forEach(r=>{
-    if(!r.member_id)return;
-    if(!groups[r.member_id])groups[r.member_id]=[];
-    groups[r.member_id].push(r);
-  });
-  overviewCardData=groups;
-  renderOverviewCards(groups,today);
-  btn.disabled=false;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 重新掃描';
-  // 同步更新側欄帳號清單（不限日期）
-  sb.from(currentTable).select('member_id').limit(100000).then(({data:allData})=>{
-    if(allData){memberList=[...new Set(allData.map(r=>r.member_id).filter(Boolean))].sort();renderMemberList(memberList);}
-  });
-}
-
-function renderOverviewCards(groups,today){
-  const grid=document.getElementById('member-grid');
-  const members=Object.keys(groups).sort();
-  if(!members.length){
-    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">📭</div><p>今日尚無資料</p><small>若裝置已開機請稍後重新掃描</small></div>`;
-    document.getElementById('ov-subtitle').textContent=today+' · 無資料';
-    return;
-  }
-  document.getElementById('ov-subtitle').textContent=today+` · ${members.length} 位會員`;
-  let alertMembers=[];
-  grid.innerHTML=members.map(mid=>{
-    const rows=groups[mid];
-    const aHb=avg(rows.map(r=>r.heartbeat));
-    const aTemp=avg(rows.map(r=>r.temp));
-    const aSbp=avg(rows.map(r=>r.sbp));
-    const aDbp=avg(rows.map(r=>r.dbp));
-    const aBr=avg(rows.map(r=>r.breath));
-    const lastRow=rows.reduce((a,b)=>a.date_minute>b.date_minute?a:b);
-    const lastTime=lastRow.date_minute?lastRow.date_minute.slice(11,16):'—';
-    // anomaly
-    const lvHb=anomalyLevel('heartbeat',aHb),lvSbp=anomalyLevel('sbp',aSbp),lvTemp=anomalyLevel('temp',aTemp);
-    const levels=[lvHb,lvSbp,lvTemp].filter(l=>l!=='neutral');
-    const hasRed=levels.includes('red'),hasOrange=levels.includes('orange');
-    const overallStatus=hasRed?'err':'ok';
-    const cardClass=hasRed?'status-red':'';
-    const avatarClass=overallStatus;
-    const fmtVal=(v,key)=>v===null?'—':`<span class="${anomalyLevel(key,v)==='red'?'is-red':''}">${v}</span>`;
-    return`<div class="member-card ${cardClass}" onclick="openMemberDetail('${escHtml(mid)}')">
-  <div class="mc-head">
-    <div class="mc-avatar ${avatarClass}">${escHtml(mid[0]?.toUpperCase()||'?')}</div>
-    <div class="mc-info">
-      <div class="mc-id" title="${escHtml(mid)}">${escHtml(mid)}</div>
-    </div>
-  </div>
-  <div class="mc-vitals">
-    <div class="mc-vital"><div class="mc-vital-label">❤️ 心跳</div><div class="mc-vital-val ${anomalyLevel('heartbeat',aHb)==='red'?'is-red':''}">${aHb!==null?Math.round(aHb):'—'}</div></div>
-    <div class="mc-vital"><div class="mc-vital-label">🩺 收縮壓</div><div class="mc-vital-val ${anomalyLevel('sbp',aSbp)==='red'?'is-red':''}">${aSbp!==null?Math.round(aSbp):'—'}</div></div>
-    <div class="mc-vital"><div class="mc-vital-label">🌡 體溫</div><div class="mc-vital-val ${anomalyLevel('temp',aTemp)==='red'?'is-red':''}">${aTemp!==null?parseFloat(aTemp).toFixed(1)+'°C':'—'}</div></div>
-    <div class="mc-vital"><div class="mc-vital-label">🫁 呼吸</div><div class="mc-vital-val">${aBr??'—'}</div></div>
-  </div>
-  <div class="mc-footer">
-    <span class="mc-time">🕐 最後資料 <strong>${lastTime}</strong> · ${rows.length} 筆</span>
-    <span class="mc-arrow">查看詳細 →</span>
-  </div>
-</div>`;
-  }).join('');
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -1633,39 +1743,49 @@ async function scanAndLoadCards(){
   const today=currentDate||todayStr();
   const start=today+'T00:00:00',end=today+'T23:59:59.999';
 
-  // 先抓所有 member_id，再分別抓今日資料與各人最新一筆
-  const [{data:todayData,error:todayError},{data:idRows}]=await Promise.all([
-    sb.from(currentTable).select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute').gte('date_minute',start).lte('date_minute',end).limit(60000),
-    sb.from(currentTable).select('member_id').limit(100000)
-  ]);
-  const uniqueIds=[...new Set((idRows||[]).map(r=>r.member_id).filter(Boolean))].sort();
+  try{
+    const [todayData,allIds,latestRows]=await Promise.all([
+      fetchPagedRows(currentTable,q=>q
+        .select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute')
+        .gte('date_minute',start)
+        .lte('date_minute',end)
+        .order('date_minute',{ascending:true}),1000),
+      fetchAllMemberIds(currentTable),
+      fetchPagedRows(currentTable,q=>q
+        .select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute')
+        .order('date_minute',{ascending:false}),1000)
+    ]);
 
-  const todayGroups={};
-  (todayData||[]).forEach(r=>{
-    if(!r.member_id)return;
-    if(!todayGroups[r.member_id])todayGroups[r.member_id]=[];
-    todayGroups[r.member_id].push(r);
-  });
+    const todayGroups={};
+    (todayData||[]).forEach(r=>{
+      if(!r.member_id)return;
+      if(!todayGroups[r.member_id])todayGroups[r.member_id]=[];
+      todayGroups[r.member_id].push(r);
+    });
 
-  // 每位會員各抓最新一筆（確保不漏任何人）
-  const latestResults=await Promise.all(uniqueIds.map(id=>
-    sb.from(currentTable).select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute').eq('member_id',id).order('date_minute',{ascending:false}).limit(1)
-  ));
-  const allGroups={};
-  latestResults.forEach(({data})=>{
-    if(data&&data[0]&&data[0].member_id)allGroups[data[0].member_id]=[data[0]];
-  });
+    const allGroups={};
+    (latestRows||[]).forEach(r=>{
+      if(!r?.member_id||allGroups[r.member_id])return;
+      allGroups[r.member_id]=[r];
+    });
 
-  overviewTodayData=todayGroups;
-  overviewAllData=allGroups;
-  renderOverviewByMode();
+    memberList=mergeMemberLists(allIds,Object.keys(todayGroups),Object.keys(allGroups));
+    renderMemberList(memberList);
+    overviewTodayData=todayGroups;
+    overviewAllData=allGroups;
+    renderOverviewByMode();
 
-  if((todayError||!todayData?.length) && !uniqueIds.length){
-    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">📭</div><p>查無會員資料</p><small>請確認資料表是否已有量測資料，再重新掃描</small></div>`;
+    if(!todayData.length&&!memberList.length){
+      grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">📭</div><p>查無會員資料</p><small>請確認資料表是否已有量測資料，再重新掃描</small></div>`;
+      updateOverviewHeader('empty');
+    }
+  }catch(err){
+    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">⚠️</div><p>會員掃描失敗</p><small>${escHtml(err.message||String(err))}</small></div>`;
     updateOverviewHeader('empty');
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 重新掃描';
   }
-  btn.disabled=false;
-  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 重新掃描';
 }
 function renderOverviewCards(groups,today,mode='today'){
   const grid=document.getElementById('member-grid');
@@ -1730,7 +1850,7 @@ async function openMemberDetail(memberId){
   ['hb','bp','temp','br'].forEach(m=>document.getElementById('dm-'+m).classList.toggle('active',detailMetrics.has(m)));
   ['today','7d','30d'].forEach(r=>document.getElementById('dr-'+r).classList.toggle('active',r===detailRange));
   showScreen('detail');
-  renderDetAnnotList();
+  await renderDetAnnotList();
   await loadDetailChart();
   renderDetailStats(rows);
 }
@@ -1897,14 +2017,23 @@ function renderMemberList(list){
   if(!list.length)html+=`<div style="padding:20px 12px;font-size:13px;color:var(--text-dim)">尚無帳號資料<br>點上方「掃描本月」</div>`;
   el.innerHTML=html;
 }
-function filterMemberList(q){renderMemberList(memberList.filter(id=>id.toLowerCase().includes(q.toLowerCase())));}
+function filterMemberList(q){
+  const token=memberSearchToken(q);
+  if(!token){renderMemberList(memberList);return;}
+  renderMemberList(memberList.filter(id=>memberSearchToken(id).includes(token)));
+}
 function setMember(id){currentMemberId=id;closeAccountSidebar();updateContextLabel();currentPage=1;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';dailySummaryCache={};clearLastUpload();loadCurrentTable();}
-function updateMemberList(){memberList=[...new Set(rawRowsCache.map(r=>r.member_id).filter(Boolean))].sort();renderMemberList(memberList);}
+function updateMemberList(){memberList=mergeMemberLists(memberList,uniqueMemberIds(rawRowsCache));renderMemberList(memberList);}
 async function scanMonthMembers(){
   const btn=document.getElementById('acct-scan-btn');btn.textContent='掃描中…';btn.disabled=true;
-  const{data}=await sb.from(currentTable).select('member_id').limit(100000);
-  if(data){memberList=[...new Set(data.map(r=>r.member_id).filter(Boolean))].sort();renderMemberList(memberList);}
-  btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 掃描所有帳號';btn.disabled=false;
+  try{
+    memberList=mergeMemberLists(memberList,await fetchAllMemberIds(currentTable));
+    renderMemberList(memberList);
+  }catch(err){
+    alert(`掃描帳號失敗：${err.message||err}`);
+  }finally{
+    btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 掃描所有帳號';btn.disabled=false;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -1982,6 +2111,7 @@ function setView(v){
   document.getElementById('view-day-btn').classList.toggle('active',v==='day');
   document.getElementById('view-month-btn').classList.toggle('active',v==='month');
   if(v==='month'){hbBreathRange='month';hbBreathSelectedDay=null;}
+  else if(v==='day'){hbBreathRange='day';}
   currentPage=1;updateDateDisplay();updateSidebarActive();
 }
 function updateDateDisplay(){document.getElementById('date-display').textContent=currentView==='day'?currentDate:currentMonth;}
@@ -2336,23 +2466,48 @@ async function silentRefresh(){
 /* ════════════════════════════════════════════════════════════
    ANNOTATIONS (醫護回報，儲存於 localStorage)
    ════════════════════════════════════════════════════════════ */
-const ANNOT_KEY='annots_v1';
 let pendingScrollHour=null,pendingScrollMinute=null;
-
-function loadAnnotsAll(){try{return JSON.parse(localStorage.getItem(ANNOT_KEY)||'[]');}catch{return[];}}
-function saveAnnotsAll(arr){localStorage.setItem(ANNOT_KEY,JSON.stringify(arr));}
-function deleteAnnot(id){saveAnnotsAll(loadAnnotsAll().filter(a=>a.id!==id));}
-
-function getAnnotsForPanel(){
-  const arr=loadAnnotsAll();
-  const tbl=currentTable;
-  if(!tbl)return arr.sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
+function annotSeverity(cat){
+  if(cat==='裝置中斷')return 3;
+  if(cat==='裝置誤判')return 2;
+  return 1;
+}
+function buildAnnotContent(cat,text){
+  const cleanText=String(text||'').trim();
+  return cat?`[[${cat}]] ${cleanText}`:cleanText;
+}
+function parseAnnotContent(content){
+  const raw=String(content||'').trim();
+  const m=raw.match(/^\[\[(.+?)\]\]\s*(.*)$/);
+  if(!m)return{category:'觀察',text:raw};
+  return{category:m[1]||'觀察',text:m[2]||''};
+}
+function annotRecordFromRow(row){
+  const parsed=parseAnnotContent(row.content);
+  const dt=new Date(row.created_at);
+  const dateStr=Number.isNaN(dt.getTime())?(row.created_at||'').slice(0,10):`${dt.getFullYear()}-${p2(dt.getMonth()+1)}-${p2(dt.getDate())}`;
+  const timeStr=Number.isNaN(dt.getTime())?normalizeTime24((row.created_at||'').slice(11,16)):`${p2(dt.getHours())}:${p2(dt.getMinutes())}`;
+  return{id:row.id,table:row.table_name||'',memberId:row.member_id||'',date:dateStr,time:timeStr,category:parsed.category,text:parsed.text,severity:row.severity||annotSeverity(parsed.category)};
+}
+async function fetchAnnotsFromSupabase(){
+  let q=sb.from('nurse_reports')
+    .select('id,created_at,member_id,content,severity,table_name')
+    .order('created_at',{ascending:false})
+    .limit(200);
+  if(currentTable)q=q.eq('table_name',currentTable);
   const mid=detailMemberId||(currentMemberId!=='ALL'?currentMemberId:null);
-  return arr.filter(a=>a.table===tbl&&(!mid||a.memberId===mid))
+  if(mid)q=q.eq('member_id',mid);
+  const {data,error}=await q;
+  if(error)throw error;
+  return(data||[]).map(annotRecordFromRow)
     .sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
 }
+async function deleteAnnot(id){
+  const {error}=await sb.from('nurse_reports').delete().eq('id',id);
+  if(error)throw error;
+}
 
-function openAnnotPanel(){
+async function openAnnotPanel(){
   const formCol=document.getElementById('annot-form-col');
   const listCol=document.getElementById('annot-list-col');
   const today=todayStr();
@@ -2361,7 +2516,13 @@ function openAnnotPanel(){
   const preDate=currentView==='day'?currentDate:today;
   const preMember=detailMemberId||(currentMemberId!=='ALL'?currentMemberId:'');
   const tblLabel=escHtml(TABLE_LABEL[currentTable]||currentTable||'');
-  const annots=getAnnotsForPanel();
+  listCol.innerHTML='<div class="annot-empty">讀取回報中…</div>';
+  let annots=[];
+  try{
+    annots=await fetchAnnotsFromSupabase();
+  }catch(err){
+    listCol.innerHTML=`<div class="annot-empty">讀取失敗<br><small>${escHtml(err.message||String(err))}</small></div>`;
+  }
 
   const catClass=cat=>cat==='裝置誤判'?'cat-誤判':cat==='裝置中斷'?'cat-中斷':'';
   const listHtml=annots.length
@@ -2379,7 +2540,7 @@ function openAnnotPanel(){
     📍 前往此時段數據 →
   </span>
 </div>`).join('')
-    :'<div class="annot-empty">尚無回報紀錄<br><small>填寫左側表單後儲存，回報存於本機</small></div>';
+    :'<div class="annot-empty">尚無回報紀錄<br><small>填寫左側表單後儲存，回報會同步到雲端</small></div>';
 
   formCol.innerHTML=`
 <div class="annot-form-title" style="margin-bottom:14px;font-size:14px;">➕ 新增回報${tblLabel?' · '+tblLabel:''}</div>
@@ -2410,7 +2571,7 @@ function openAnnotPanel(){
   </div>
   <div class="annot-field">
     <label>時間點</label>
-    <input class="annot-input" id="annot-time" type="time" value="${escHtml(curTime)}">
+    <input class="annot-input" id="annot-time" type="time" step="60" lang="en-GB" value="${escHtml(curTime)}">
   </div>
 </div>
 <div><label style="font-size:12px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">回報說明</label>
@@ -2426,12 +2587,16 @@ ${listHtml}`;
 
 function closeAnnotPanel(){document.getElementById('annot-overlay').classList.remove('open');}
 
-function renderDetAnnotList(){
+async function renderDetAnnotList(){
   const el=document.getElementById('det-annot-list');
   if(!el)return;
-  const arr=loadAnnotsAll()
-    .filter(a=>(!currentTable||a.table===currentTable)&&(!detailMemberId||a.memberId===detailMemberId))
-    .sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
+  let arr=[];
+  try{
+    arr=await fetchAnnotsFromSupabase();
+  }catch(err){
+    el.innerHTML=`<div class="annot-empty" style="padding:20px 0 8px;">讀取失敗<br><small>${escHtml(err.message||String(err))}</small></div>`;
+    return;
+  }
   if(!arr.length){
     el.innerHTML='<div class="annot-empty" style="padding:20px 0 8px;">尚無回報紀錄<br><small>點擊「新增回報」以新增</small></div>';
     return;
@@ -2450,32 +2615,43 @@ function renderDetAnnotList(){
 </div>`).join('');
 }
 
-function deleteAnnotDet(id){
+async function deleteAnnotDet(id){
   if(!confirm('確定要刪除此回報？'))return;
-  deleteAnnot(id);
-  renderDetAnnotList();
+  try{
+    await deleteAnnot(id);
+    renderDetAnnotList();
+  }catch(err){alert(`刪除失敗：${err.message||err}`);}
 }
 
-function deleteAnnotAndRefresh(id){
+async function deleteAnnotAndRefresh(id){
   if(!confirm('確定要刪除此回報？'))return;
-  deleteAnnot(id);
-  openAnnotPanel();
-  renderDetAnnotList();
+  try{
+    await deleteAnnot(id);
+    openAnnotPanel();
+    renderDetAnnotList();
+  }catch(err){alert(`刪除失敗：${err.message||err}`);}
 }
 
-function saveAnnotFromForm(){
+async function saveAnnotFromForm(){
   const member=document.getElementById('annot-member').value.trim();
   const cat=document.getElementById('annot-cat').value;
   const date=document.getElementById('annot-date').value;
-  const time=document.getElementById('annot-time').value;
+  const time=normalizeTime24(document.getElementById('annot-time').value);
   const text=document.getElementById('annot-text').value.trim();
   if(!date||!time){alert('請填寫日期和時間');return;}
   if(!text){alert('請填寫回報說明');return;}
-  const arr=loadAnnotsAll();
-  arr.push({id:Date.now(),table:currentTable||'',memberId:member,date,time,category:cat,text});
-  saveAnnotsAll(arr);
-  openAnnotPanel();
-  renderDetAnnotList();
+  try{
+    const {error}=await sb.from('nurse_reports').insert({
+      member_id:member||'ALL',
+      table_name:currentTable||'',
+      content:buildAnnotContent(cat,text),
+      severity:annotSeverity(cat),
+      created_at:`${date}T${time}:00+08:00`
+    });
+    if(error)throw error;
+    openAnnotPanel();
+    renderDetAnnotList();
+  }catch(err){alert(`儲存失敗：${err.message||err}`);}
 }
 
 function goToAnnotTime(date,time,memberId){
@@ -2485,14 +2661,281 @@ function goToAnnotTime(date,time,memberId){
   if(memberId){currentMemberId=memberId;updateContextLabel();}
   document.getElementById('view-day-btn').classList.add('active');
   document.getElementById('view-month-btn').classList.remove('active');
-  pendingScrollHour=time.slice(0,2);
-  pendingScrollMinute=time.slice(0,5);
+  const normalizedTime=normalizeTime24(time);
+  pendingScrollHour=normalizedTime.slice(0,2);
+  pendingScrollMinute=normalizedTime.slice(0,5);
   goScreen('dashboard','day');
 }
 
 /* ════════════════════════════════════════════════════════════
    INIT
    ════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   POSTURE SCREEN
+   ════════════════════════════════════════════════════════════ */
+function initPostureScreen(){
+  const dateEl=document.getElementById('ps-date-input');
+  if(dateEl&&!dateEl.value)dateEl.value=currentDate||todayStr();
+  const selEl=document.getElementById('ps-member-select');
+  if(selEl){
+    selEl.innerHTML='<option value="ALL">全部</option>';
+    memberList.forEach(m=>{
+      const opt=document.createElement('option');
+      opt.value=m;opt.textContent=m;
+      selEl.appendChild(opt);
+    });
+    selEl.value=postureScreenMemberId||'ALL';
+  }
+}
+
+function computeActionStats(minuteRows){
+  const counts={};
+  minuteRows.forEach(r=>{
+    if(r.action!==null&&r.action!==undefined){
+      const lbl=actionLabel(r.action)||String(r.action);
+      counts[lbl]=(counts[lbl]||0)+1;
+    }
+  });
+  return counts;
+}
+
+function renderPostureDonut(counts,total){
+  const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  if(!total)return'';
+  const R=44,cx=55,cy=55,circ=2*Math.PI*R;
+  let offset=0,slices='';
+  entries.forEach(([lbl,cnt])=>{
+    const frac=cnt/total,dash=frac*circ;
+    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
+    slices+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${color}" stroke-width="18" stroke-dasharray="${dash.toFixed(2)} ${(circ-dash).toFixed(2)}" stroke-dashoffset="${(-offset).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"><title>${escHtml(lbl)}: ${cnt} 分鐘 (${Math.round(frac*100)}%)</title></circle>`;
+    offset+=dash;
+  });
+  let legend='';
+  entries.forEach(([lbl,cnt])=>{
+    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
+    const pct=Math.round(cnt/total*100);
+    legend+=`<div class="ps-legend-item">
+      <div class="ps-legend-swatch" style="background:${color}"></div>
+      <span class="ps-legend-name">${escHtml(lbl)}</span>
+      <span class="ps-legend-pct">${pct}%</span>
+      <span class="ps-legend-min">${cnt}分</span>
+    </div>`;
+  });
+  return`<div class="ps-donut-row">
+    <div class="ps-donut-wrap"><svg viewBox="0 0 110 110">${slices}
+      <text x="55" y="51" text-anchor="middle" font-size="11" fill="var(--text-mid)" font-weight="600">${total}</text>
+      <text x="55" y="64" text-anchor="middle" font-size="9" fill="var(--text-dim)">分鐘</text>
+    </svg></div>
+    <div class="ps-donut-legend">${legend}</div>
+  </div>`;
+}
+
+function renderPostureTimeline(minuteRows,counts,total){
+  if(!minuteRows.length)return'';
+  const segs=[];
+  minuteRows.forEach(r=>{
+    const t=r.time.slice(11,16);
+    const startMin=parseInt(t.slice(0,2))*60+parseInt(t.slice(3,5));
+    const lbl=actionLabel(r.action);
+    const last=segs[segs.length-1];
+    if(last&&last.lbl===lbl){last.endMin=startMin+1;last.count++;}
+    else segs.push({lbl,startMin,endMin:startMin+1,count:1});
+  });
+  let rects='';
+  segs.forEach(s=>{
+    const x=(s.startMin/1440*100).toFixed(3);
+    const w=Math.max((s.endMin-s.startMin)/1440*100,0.07).toFixed(3);
+    const color=ACTION_LABEL_COLOR[s.lbl]||'#94a3b8';
+    const h1=String(Math.floor(s.startMin/60)).padStart(2,'0')+':'+String(s.startMin%60).padStart(2,'0');
+    const h2=String(Math.floor(s.endMin/60)).padStart(2,'0')+':'+String(s.endMin%60).padStart(2,'0');
+    rects+=`<rect x="${x}%" y="0" width="${w}%" height="100%" fill="${color}" rx="0"><title>${escHtml(s.lbl||'未知')}: ${h1} ～ ${h2}（${s.count} 分）</title></rect>`;
+  });
+  // timeline legend from counts
+  const legendItems=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([lbl])=>{
+    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
+    return`<div class="ps-timeline-legend-item"><div class="ps-timeline-legend-dot" style="background:${color}"></div>${escHtml(lbl)}</div>`;
+  }).join('');
+  return`<div class="ps-timeline-wrap">
+    <div class="ps-timeline-labels"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div>
+    <div class="ps-timeline-bar-row"><svg viewBox="0 0 1440 36" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">${rects}</svg></div>
+    <div class="ps-timeline-legend">${legendItems}</div>
+  </div>`;
+}
+
+function renderPostureScreenContent(minuteRows,date){
+  const content=document.getElementById('ps-content');
+  if(!minuteRows.length){
+    content.innerHTML='<div class="ps-empty"><div class="ps-empty-icon">📭</div><div>查無資料，請調整日期或會員條件後重新載入</div></div>';
+    return;
+  }
+  const counts=computeActionStats(minuteRows);
+  const total=Object.values(counts).reduce((s,v)=>s+v,0);
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const topLbl=sorted[0]?.[0]||'—';
+  const topMin=sorted[0]?.[1]||0;
+  const activeStart=minuteRows[0].time.slice(11,16);
+  const activeEnd=minuteRows[minuteRows.length-1].time.slice(11,16);
+  const badgeClass={'靜止':'ps-badge-gray','走路':'ps-badge-blue','慢跑':'ps-badge-green','快跑':'ps-badge-orange','躺姿':'ps-badge-purple','姿勢異常':'ps-badge-red'};
+
+  // Stats strip
+  const statsStrip=`
+<div class="ps-stats-strip">
+  <div class="ps-stat-card">
+    <div class="ps-stat-label">最常見姿態</div>
+    <div style="margin:8px 0 4px"><span class="ps-badge ${badgeClass[topLbl]||'ps-badge-gray'}">${escHtml(topLbl)}</span></div>
+    <div class="ps-stat-sub">${topMin} 分鐘・佔 ${total?Math.round(topMin/total*100):0}%</div>
+  </div>
+  <div class="ps-stat-card">
+    <div class="ps-stat-label">有效分鐘數</div>
+    <div class="ps-stat-value">${minuteRows.length}</div>
+    <div class="ps-stat-sub">分鐘（已過濾暖機）</div>
+  </div>
+  <div class="ps-stat-card">
+    <div class="ps-stat-label">姿態種類</div>
+    <div class="ps-stat-value">${sorted.length}</div>
+    <div class="ps-stat-sub">種不同動作</div>
+  </div>
+  <div class="ps-stat-card">
+    <div class="ps-stat-label">活動時段</div>
+    <div style="font-size:20px;font-weight:800;color:var(--text);margin:8px 0 4px;font-variant-numeric:tabular-nums">${activeStart}</div>
+    <div class="ps-stat-sub">至 ${activeEnd}</div>
+  </div>
+</div>`;
+
+  // Table rows with progress bars
+  const tableRows=sorted.map(([lbl,cnt])=>{
+    const pct=total?((cnt/total)*100).toFixed(1):0;
+    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
+    const bc=badgeClass[lbl]||'ps-badge-gray';
+    return`<tr>
+      <td><span class="ps-badge ${bc}">
+        <span style="width:7px;height:7px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>
+        ${escHtml(lbl)}</span></td>
+      <td class="ps-table-num">${cnt}</td>
+      <td style="min-width:120px">
+        <div class="ps-progress-label"><span>${pct}%</span></div>
+        <div class="ps-progress-bg"><div class="ps-progress-fill" style="width:${pct}%;background:${color}"></div></div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  // Export pills
+  const actionDefs=[{a:0,l:'靜止'},{a:1,l:'走路'},{a:3,l:'慢跑'},{a:5,l:'快跑'},{a:6,l:'躺姿'},{a:7,l:'姿勢異常'}];
+  const pills=actionDefs.map(({a,l})=>{
+    const on=postureCheckedActions.has(a);
+    return`<label class="ps-pill${on?' on-'+a:''}" onclick="togglePostureCheck(${a},this)">
+      <input type="checkbox" style="display:none"${on?' checked':''}>${escHtml(l)}
+    </label>`;
+  }).join('');
+
+  content.innerHTML=`
+${statsStrip}
+<div class="ps-grid-2 ps-grid-main">
+  <div class="ps-card">
+    <div class="ps-card-header">
+      <div><div class="ps-card-title">姿態分佈</div><div class="ps-card-desc">各動作佔當日總時間比例</div></div>
+    </div>
+    <div class="ps-card-body">${renderPostureDonut(counts,total)}</div>
+  </div>
+  <div class="ps-card">
+    <div class="ps-card-header">
+      <div><div class="ps-card-title">詳細統計</div><div class="ps-card-desc">依時間排序</div></div>
+    </div>
+    <div class="ps-card-body-flush">
+      <table class="ps-table">
+        <thead><tr><th>姿態</th><th>分鐘</th><th>佔比</th></tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="ps-card">
+  <div class="ps-card-header">
+    <div><div class="ps-card-title">全天時間軸</div><div class="ps-card-desc">24小時活動分佈，將滑鼠移至色塊查看時段</div></div>
+  </div>
+  <div class="ps-card-body">${renderPostureTimeline(minuteRows,counts,total)}</div>
+</div>
+<div class="ps-card">
+  <div class="ps-card-header">
+    <div><div class="ps-card-title">匯出 CSV</div><div class="ps-card-desc">勾選要匯出的姿態類別</div></div>
+    <button class="ps-btn ps-btn-primary ps-btn-sm" onclick="downloadPostureCSV()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      匯出
+    </button>
+  </div>
+  <div class="ps-card-body">
+    <div class="ps-pill-group" id="ps-check-group">${pills}</div>
+  </div>
+</div>`;
+}
+
+async function loadPostureScreen(){
+  if(!currentTable){alert('請先選擇資料庫');return;}
+  const dateEl=document.getElementById('ps-date-input');
+  const selEl=document.getElementById('ps-member-select');
+  postureScreenDate=dateEl?.value||currentDate||todayStr();
+  postureScreenMemberId=selEl?.value||'ALL';
+  // Cache key 與 dayViewCacheKey() 格式一致（雙底線分隔）
+  const cacheKey=`${currentTable}__${postureScreenDate}__${postureScreenMemberId}`;
+  const btn=document.getElementById('ps-load-btn');
+  const spinSvg='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+  if(btn){btn.disabled=true;btn.innerHTML=spinSvg+' 載入中...';}
+  document.getElementById('ps-content').innerHTML=`<div class="ps-loading">${spinSvg}<span>載入中...</span></div>`;
+  let rawRows=[];
+  if(postureRawRowsCacheKey===cacheKey){
+    rawRows=postureRawRowsCache.slice();
+  }else if(dayViewRawRowsCacheKey===dayViewCacheKey()&&dayViewRawRowsCache.length&&(postureScreenMemberId==='ALL'||postureScreenMemberId===currentMemberId)){
+    rawRows=dayViewRawRowsCache.slice();
+    if(postureScreenMemberId!=='ALL')rawRows=rawRows.filter(r=>r.member_id===postureScreenMemberId);
+  }else{
+    // 暫時替換 currentMemberId 使 fetchDay 套用正確的會員篩選
+    const savedMemberId=currentMemberId;
+    currentMemberId=postureScreenMemberId;
+    rawRows=await fetchDay(currentTable,postureScreenDate,true);
+    currentMemberId=savedMemberId;
+    postureRawRowsCache=rawRows.slice();
+    postureRawRowsCacheKey=cacheKey;
+  }
+  const normalSvg='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+  if(btn){btn.disabled=false;btn.innerHTML=normalSvg+' 載入';}
+  postureScreenMinuteRows=filterWarmupMinutes(aggregateToMinutes(rawRows));
+  renderPostureScreenContent(postureScreenMinuteRows,postureScreenDate);
+  const memberLabel=postureScreenMemberId==='ALL'?'全部':postureScreenMemberId;
+  const sub=document.getElementById('ps-subtitle');
+  if(sub)sub.textContent=`${TABLE_LABEL[currentTable]||currentTable} ／ ${postureScreenDate} ／ ${memberLabel} ／ ${postureScreenMinuteRows.length} 筆`;
+}
+
+function togglePostureCheck(action,labelEl){
+  if(postureCheckedActions.has(action)){
+    postureCheckedActions.delete(action);
+    labelEl.classList.remove('on-'+action);
+    labelEl.querySelector('input').checked=false;
+  }else{
+    postureCheckedActions.add(action);
+    labelEl.classList.add('on-'+action);
+    labelEl.querySelector('input').checked=true;
+  }
+}
+
+function downloadPostureCSV(){
+  if(!postureScreenMinuteRows.length){alert('沒有資料可匯出');return;}
+  const allowedActions=new Set();
+  postureCheckedActions.forEach(a=>allowedActions.add(a));
+  const rows=postureScreenMinuteRows.filter(r=>r.action===null||r.action===undefined||allowedActions.has(parseInt(r.action)));
+  const header='時間,會員ID,動作代碼,動作名稱\n';
+  const body=rows.map(r=>{
+    const lbl=actionLabel(r.action)||'';
+    return`${r.time},${r.member_id||''},${r.action??''},${lbl}`;
+  }).join('\n');
+  const blob=new Blob(['﻿'+header+body],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`動作姿態_${postureScreenDate}_${postureScreenMemberId}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 loadRemembered();
 checkExistingSession();
 </script>
