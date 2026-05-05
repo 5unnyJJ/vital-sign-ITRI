@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- OWASP A02: Content Security Policy — 限制腳本來源，防止 XSS 與資料注入 -->
+<!-- OWASP A02: Content Security Policy ????單靘?嚗甇?XSS ???釣??-->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<title>機構健康資料看板 v3.0</title>
+<title>璈??亙熒鞈?? v3.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<!-- OWASP A08: 固定版本防止供應鏈攻擊（升版前請先驗證） -->
+<!-- OWASP A08: ?箏???脫迫靘??????????霅? -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
 <style>
 :root{--bg:#eef4ef;--bg-alt:#f7fbf8;--surface:rgba(255,255,255,.86);--border:#d2e2d9;--border-light:#e5eeea;
@@ -63,7 +63,7 @@ z-index:0;
 }
 #login-screen,#member-overview,#member-detail,#dashboard,#posture-screen,.shared-topbar,.sidebar-drawer,.sidebar-overlay{position:relative;z-index:1;}
 
-/* ══ LOGIN ══ */
+/* ?? LOGIN ?? */
 #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;
 background:
 linear-gradient(rgba(16,27,42,.48),rgba(24,39,58,.58)),
@@ -142,7 +142,7 @@ background-attachment:fixed;}
 @media(max-width:760px){.login-decor-1,.login-decor-2,.login-decor-3,.login-decor-4,.login-decor-5{display:none;}}
 @media(max-width:700px){.screen-shell .screen-decor{display:none;}}
 
-/* ══ GLOBAL SIDEBAR DRAWER ══ */
+/* ?? GLOBAL SIDEBAR DRAWER ?? */
 .sidebar-overlay{display:none;position:fixed;inset:0;z-index:800;background:rgba(30,45,38,.22);}
 .sidebar-overlay.open{display:block;}
 .sidebar-drawer{position:fixed;top:0;left:0;bottom:0;width:240px;max-width:85vw;background:var(--surface);box-shadow:var(--shadow-md);z-index:810;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .25s ease;}
@@ -165,7 +165,7 @@ background-attachment:fixed;}
 .sidebar-refresh-row select:focus{border-color:var(--mint);}
 .sidebar-countdown{font-size:11px;color:var(--mint-mid);font-weight:700;min-width:28px;}
 
-/* ══ SHARED TOPBAR ══ */
+/* ?? SHARED TOPBAR ?? */
 .shared-topbar{position:sticky;top:0;z-index:300;display:flex;align-items:center;justify-content:space-between;height:62px;padding:0 28px;background:rgba(255,255,255,.78);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.6);box-shadow:0 8px 24px rgba(68,101,84,.08);gap:12px;overflow:hidden;}
 .topbar-left{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .btn-hamburger{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:transparent;border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text-mid);font-size:18px;cursor:pointer;transition:all .15s;flex-direction:column;gap:4px;}
@@ -193,7 +193,7 @@ background-attachment:fixed;}
 .tab.active{background:var(--mint);border-color:var(--mint);color:#fff;box-shadow:0 3px 12px rgba(122,170,150,.38);}
 .tab-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7;flex-shrink:0;}
 
-/* ══ MEMBER OVERVIEW ══ */
+/* ?? MEMBER OVERVIEW ?? */
 #member-overview{display:none;}
 .ov-main{padding:28px 32px;max-width:1400px;margin:0 auto;}
 .ov-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;gap:16px;flex-wrap:wrap;}
@@ -256,7 +256,7 @@ background-attachment:fixed;}
 .ov-empty p{font-size:15px;}
 .ov-empty small{font-size:13px;margin-top:6px;display:block;}
 
-/* ══ MEMBER DETAIL ══ */
+/* ?? MEMBER DETAIL ?? */
 #member-detail{display:none;}
 .det-main{padding:24px 32px;max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:18px;}
 .det-header{display:flex;align-items:center;gap:12px;margin-bottom:4px;flex-wrap:wrap;}
@@ -323,7 +323,7 @@ background-attachment:fixed;}
 .note-textarea:focus{border-color:var(--mint);background:#fff;box-shadow:0 0 0 3px rgba(122,170,150,.17);}
 .note-hint{font-size:11px;color:var(--text-dim);margin-top:6px;}
 
-/* ══ DASHBOARD (existing refactored) ══ */
+/* ?? DASHBOARD (existing refactored) ?? */
 #dashboard{display:none;}
 .dashboard-topbar-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
 .view-toggle{display:flex;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);}
@@ -360,7 +360,7 @@ background-attachment:fixed;}
 .btn-account:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
 .btn-account.has-filter{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
 
-/* ══ ACCOUNT SIDEBAR (dashboard) ══ */
+/* ?? ACCOUNT SIDEBAR (dashboard) ?? */
 .acct-overlay{display:none;position:fixed;inset:0;z-index:400;}
 .acct-overlay.open{display:block;}
 .acct-backdrop{position:absolute;inset:0;background:rgba(30,45,38,.18);}
@@ -386,7 +386,7 @@ background-attachment:fixed;}
 .acct-check{color:var(--mint);font-size:14px;display:none;}
 .acct-item.active .acct-check{display:block;}
 
-/* ══ SEARCH OVERLAY ══ */
+/* ?? SEARCH OVERLAY ?? */
 .search-overlay{display:none;position:fixed;inset:0;z-index:500;}
 .search-overlay.open{display:block;}
 .search-backdrop{position:absolute;inset:0;}
@@ -401,7 +401,7 @@ background-attachment:fixed;}
 .btn-search-go{width:100%;padding:11px;background:var(--mint);color:#fff;border:none;border-radius:var(--r-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .18s;}
 .btn-search-go:hover{background:var(--mint-mid);}
 
-/* ══ DASHBOARD CONTENT ══ */
+/* ?? DASHBOARD CONTENT ?? */
 .dash-main{padding:28px 32px;max-width:1500px;margin:0 auto;}
 .page-header{margin-bottom:22px;}
 .page-header h1{font-size:22px;font-weight:700;letter-spacing:-.4px;margin-bottom:3px;}
@@ -417,7 +417,7 @@ background-attachment:fixed;}
 .trend-metric-toggle{padding:4px 12px;background:var(--bg-alt);border:1.5px solid var(--border);border-radius:20px;font-size:11.5px;font-weight:600;color:var(--text-dim);font-family:inherit;cursor:pointer;transition:all .13s;display:flex;align-items:center;gap:4px;}
 .trend-metric-toggle:hover{border-color:var(--mint);color:var(--mint-dark);}
 .trend-metric-toggle.active{background:var(--mint-xlight);border-color:var(--mint);color:var(--mint-dark);}
-.trend-metric-toggle.active::before{content:'✓ ';font-size:10px;}
+.trend-metric-toggle.active::before{content:'??';font-size:10px;}
 .hb-day-sel{margin-left:auto;font-size:11px;padding:4px 10px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--text-mid);font-family:inherit;cursor:pointer;max-width:110px;}
 .hb-day-sel:focus{outline:none;border-color:var(--mint);}
 .hb-day-sel.has-day{border-color:var(--mint-mid);color:var(--mint-dark);background:var(--mint-xlight);}
@@ -523,7 +523,7 @@ background-attachment:fixed;}
 }
 @media(max-width:480px){.month-grid{grid-template-columns:1fr;}.member-grid{grid-template-columns:1fr;}}
 
-/* ══ ANNOTATION MODAL ══ */
+/* ?? ANNOTATION MODAL ?? */
 .annot-overlay{display:none;position:fixed;inset:0;z-index:600;align-items:center;justify-content:center;padding:16px;}
 .annot-overlay.open{display:flex;}
 .annot-backdrop{position:absolute;inset:0;background:rgba(20,35,28,.38);backdrop-filter:blur(3px);}
@@ -560,8 +560,8 @@ background-attachment:fixed;}
 .annot-card-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .annot-card-time{font-size:14px;font-weight:700;color:var(--text);}
 .annot-card-cat{font-size:12px;font-weight:700;padding:2px 9px;border-radius:10px;background:var(--mint-xlight);color:var(--mint-dark);border:1px solid var(--mint-light);}
-.annot-card-cat.cat-誤判{background:var(--orange-light);color:#7a4818;border-color:rgba(191,122,69,.2);}
-.annot-card-cat.cat-中斷{background:var(--red-light);color:#862624;border-color:rgba(184,84,80,.2);}
+.annot-card-cat.cat-隤文{background:var(--orange-light);color:#7a4818;border-color:rgba(191,122,69,.2);}
+.annot-card-cat.cat-銝剜{background:var(--red-light);color:#862624;border-color:rgba(184,84,80,.2);}
 .annot-card-member{font-size:12px;color:var(--text-dim);background:var(--bg-alt);padding:2px 8px;border-radius:10px;}
 .annot-card-del{background:transparent;border:none;color:var(--text-light);font-size:14px;cursor:pointer;padding:3px 6px;border-radius:var(--r-sm);transition:all .15s;flex-shrink:0;}
 .annot-card-del:hover{background:var(--red-light);color:var(--red);}
@@ -569,113 +569,103 @@ background-attachment:fixed;}
 .annot-card-link{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--mint-mid);font-weight:600;cursor:pointer;margin-top:8px;padding:4px 10px;background:var(--mint-xlight);border:1px solid var(--mint-light);border-radius:10px;transition:all .15s;}
 .annot-card-link:hover{background:var(--mint-light);color:var(--mint-dark);}
 .annot-empty{text-align:center;padding:32px 16px;color:var(--text-dim);font-size:14px;line-height:1.8;}
-
-/* ══ POSTURE SCREEN — shadcn-inspired ══ */
-/* Layout */
-.ps-main{padding:40px 48px 64px;max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:32px;}
-.ps-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:8px;border-bottom:1px solid var(--border-light);}
-.ps-title{font-size:26px;font-weight:800;letter-spacing:-.4px;color:var(--text);}
-.ps-subtitle{font-size:13px;color:var(--text-dim);margin-top:5px;line-height:1.6;}
-
-/* Toolbar — shadcn card feel */
-.ps-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;background:rgba(255,255,255,.9);border:1px solid var(--border);border-radius:14px;box-shadow:0 1px 4px rgba(40,70,55,.06);position:sticky;top:72px;z-index:20;backdrop-filter:blur(8px);}
-.ps-toolbar-label{font-size:12px;font-weight:600;color:var(--text-dim);white-space:nowrap;}
-.ps-date-input,.ps-select{height:38px;padding:0 12px;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;color:var(--text);outline:none;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
-.ps-date-input:focus,.ps-select:focus{border-color:var(--mint);box-shadow:0 0 0 2px rgba(122,170,150,.18);}
-
-/* Buttons */
-.ps-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;padding:0 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap;}
-.ps-btn-primary{background:var(--mint);color:#fff;box-shadow:0 1px 3px rgba(122,170,150,.4);}
+/* ?? Posture Panel ?? */
+.posture-panel{margin:0 0 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;}
+.posture-panel-title{font-size:12px;font-weight:700;color:var(--text-mid);text-transform:uppercase;letter-spacing:.6px;}
+.posture-panel-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.posture-panel-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.posture-donut-wrap{flex-shrink:0;width:90px;height:90px;}
+.posture-donut-wrap svg{width:90px;height:90px;overflow:visible;}
+.posture-donut-legend{flex:1;min-width:140px;display:flex;flex-direction:column;gap:5px;}
+.posture-legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text);}
+.posture-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.posture-legend-label{flex:1;color:var(--text-mid);}
+.posture-legend-val{font-weight:600;}
+.posture-timeline-wrap{width:100%;margin-top:10px;}
+.posture-timeline-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text-light);margin-bottom:3px;}
+.posture-timeline-wrap svg{width:100%;height:20px;border-radius:3px;overflow:hidden;display:block;}
+.posture-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;font-size:12px;font-weight:600;background:var(--bg-alt);border:1px solid var(--border);color:var(--text-mid);}
+.btn-nurse-open{padding:5px 12px;font-size:12px;font-weight:600;font-family:inherit;background:var(--mint-xlight);border:1.5px solid var(--mint-light);color:var(--mint-dark);border-radius:var(--r-sm);cursor:pointer;transition:all .15s;}
+.btn-nurse-open:hover{background:var(--mint-light);}
+/* Nurse report modal */
+.nurse-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;}
+.nurse-modal-overlay.open{display:flex;}
+.nurse-modal{background:#fff;border-radius:var(--r-xl);padding:26px 28px;width:400px;max-width:92vw;box-shadow:var(--shadow-md);}
+.nurse-modal h3{font-size:15px;font-weight:700;margin-bottom:14px;}
+.nurse-severity-row{display:flex;gap:8px;margin-bottom:12px;}
+.nurse-sev-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:inherit;background:transparent;cursor:pointer;transition:all .15s;}
+.nurse-sev-btn.sel-1{border-color:#3b82f6;background:#eff6ff;color:#1d4ed8;}
+.nurse-sev-btn.sel-2{border-color:#f97316;background:#fff7ed;color:#c2410c;}
+.nurse-sev-btn.sel-3{border-color:#ef4444;background:#fef2f2;color:#b91c1c;}
+.nurse-modal textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r-md);font-size:14px;font-family:inherit;resize:vertical;min-height:80px;outline:none;transition:border-color .15s;}
+.nurse-modal textarea:focus{border-color:var(--mint);}
+.nurse-modal-btns{display:flex;gap:8px;margin-top:12px;}
+.btn-nurse-submit{flex:1;padding:10px;background:var(--mint);color:#fff;border:none;border-radius:var(--r-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s;}
+.btn-nurse-submit:hover{background:var(--mint-mid);}
+.btn-nurse-submit:disabled{opacity:.55;cursor:not-allowed;}
+.btn-nurse-cancel{padding:10px 18px;background:transparent;border:1.5px solid var(--border);border-radius:var(--r-md);font-size:14px;font-family:inherit;cursor:pointer;color:var(--text-dim);transition:all .15s;}
+.btn-nurse-cancel:hover{border-color:var(--text-mid);color:var(--text);}
+.nurse-reports-wrap{margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;}
+.nurse-report-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:600;cursor:default;}
+.nrc-1{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
+.nrc-2{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;}
+.nrc-3{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
+/* ?? Posture Screen (shadcn/ui inspired) ?? */
+#posture-screen{display:none;}
+.ps-main{padding:36px 40px 48px;max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:24px;}
+.ps-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:18px;}
+.ps-title{font-size:28px;font-weight:800;letter-spacing:-.5px;}
+.ps-subtitle{font-size:14px;color:var(--text-dim);margin-top:6px;line-height:1.7;}
+.ps-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 18px;background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.72);border-radius:20px;box-shadow:0 10px 30px rgba(66,98,81,.06);position:sticky;top:76px;z-index:20;}
+.ps-date-input,.ps-select{padding:12px 15px;min-height:48px;background:#fff;border:1.5px solid var(--border);border-radius:16px;font-size:15px;font-family:inherit;color:var(--text);outline:none;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
+.ps-date-input:focus,.ps-select:focus{border-color:var(--mint);box-shadow:0 0 0 3px rgba(122,170,150,.14);}
+.ps-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;min-height:48px;border:none;border-radius:16px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;}
+.ps-btn-primary{background:var(--mint);color:#fff;box-shadow:0 2px 10px rgba(122,170,150,.35);}
 .ps-btn-primary:hover{background:var(--mint-mid);}
 .ps-btn-primary:disabled{opacity:.5;cursor:not-allowed;}
-.ps-btn-sm{height:32px;padding:0 12px;font-size:12px;font-weight:600;border-radius:6px;}
-.ps-btn-ghost{background:transparent;color:var(--text-mid);border:1px solid var(--border);}
-.ps-btn-ghost:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
-
-/* Card — shadcn Card */
-.ps-card{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 3px rgba(40,70,55,.06),0 4px 12px rgba(40,70,55,.04);overflow:hidden;}
-.ps-card-header{padding:20px 24px 14px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.ps-card-title{font-size:14px;font-weight:700;color:var(--text);}
-.ps-card-desc{font-size:12px;color:var(--text-dim);margin-top:2px;}
+.ps-btn-outline{background:transparent;color:var(--text-mid);border:1.5px solid var(--border);}
+.ps-btn-outline:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
+.ps-card{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(249,252,250,.92));border:1px solid rgba(222,233,226,.88);border-radius:24px;box-shadow:0 12px 34px rgba(66,98,81,.08);overflow:hidden;}
+.ps-card-header{padding:22px 24px 14px;border-bottom:1px solid var(--border-light);}
+.ps-card-title{font-size:13px;font-weight:800;color:var(--text-mid);text-transform:uppercase;letter-spacing:.9px;}
 .ps-card-body{padding:24px;}
-.ps-card-body-flush{padding:0;}
-
-/* Stat cards strip */
-.ps-stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-.ps-stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 22px;box-shadow:0 1px 3px rgba(40,70,55,.05);display:flex;flex-direction:column;gap:6px;}
-.ps-stat-label{font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.6px;}
-.ps-stat-value{font-size:32px;font-weight:800;color:var(--text);line-height:1;font-variant-numeric:tabular-nums;}
-.ps-stat-sub{font-size:12px;color:var(--text-dim);line-height:1.5;}
-.ps-stat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block;margin-right:5px;}
-
-/* Two-column grid */
-.ps-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;}
-.ps-grid-main{grid-template-columns:5fr 4fr;}
-
-/* Table — shadcn Table */
-.ps-table{width:100%;border-collapse:collapse;font-size:13px;}
-.ps-table thead tr{border-bottom:1px solid var(--border-light);}
-.ps-table thead th{padding:11px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;background:var(--bg-alt);}
-.ps-table tbody td{padding:14px 16px;border-bottom:1px solid var(--border-light);vertical-align:middle;}
+.ps-grid-2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:20px;align-items:start;}
+.ps-grid-hero{grid-template-columns:minmax(340px,.9fr) minmax(0,1.1fr);}
+.ps-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.ps-summary-item{padding:16px 18px;border-radius:18px;background:linear-gradient(180deg,#fff,rgba(246,251,248,.88));border:1px solid rgba(214,229,219,.9);}
+.ps-summary-label{font-size:12px;font-weight:700;letter-spacing:.4px;color:var(--text-dim);margin-bottom:8px;}
+.ps-summary-value{font-size:28px;font-weight:800;color:var(--text);line-height:1;}
+.ps-summary-sub{font-size:13px;color:var(--text-mid);margin-top:8px;line-height:1.6;}
+.ps-note{font-size:13px;color:var(--text-dim);line-height:1.7;}
+.ps-flow{display:flex;flex-direction:column;gap:18px;}
+@media(max-width:700px){.ps-grid-2{grid-template-columns:1fr;}}
+.ps-table{width:100%;border-collapse:collapse;font-size:14px;}
+.ps-table thead th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.6px;background:var(--bg-alt);border-bottom:1px solid var(--border-light);}
+.ps-table tbody td{padding:14px;border-bottom:1px solid var(--border-light);vertical-align:middle;}
 .ps-table tbody tr:last-child td{border-bottom:none;}
 .ps-table tbody tr:hover td{background:var(--mint-xlight);}
-.ps-table-num{font-variant-numeric:tabular-nums;font-weight:600;color:var(--text);}
-
-/* Badge — shadcn Badge */
-.ps-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid;}
-.ps-badge-gray{background:#f8fafc;color:#475569;border-color:#cbd5e1;}
-.ps-badge-blue{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;}
-.ps-badge-green{background:#f0fdf4;color:#15803d;border-color:#bbf7d0;}
-.ps-badge-orange{background:#fff7ed;color:#c2410c;border-color:#fed7aa;}
-.ps-badge-purple{background:#faf5ff;color:#7e22ce;border-color:#e9d5ff;}
-.ps-badge-red{background:#fef2f2;color:#b91c1c;border-color:#fecaca;}
-
-/* Progress — shadcn Progress */
-.ps-progress-wrap{margin-top:8px;}
-.ps-progress-bg{height:6px;background:#f1f5f9;border-radius:999px;overflow:hidden;}
-.ps-progress-fill{height:100%;border-radius:999px;transition:width .5s cubic-bezier(.4,0,.2,1);}
-.ps-progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-bottom:4px;}
-
-/* Donut */
-.ps-donut-row{display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
-.ps-donut-wrap{width:160px;height:160px;flex-shrink:0;}
-.ps-donut-wrap svg{width:100%;height:100%;}
-.ps-donut-legend{display:flex;flex-direction:column;gap:12px;flex:1;min-width:150px;}
-.ps-legend-item{display:flex;align-items:center;gap:10px;font-size:13px;}
-.ps-legend-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
-.ps-legend-name{flex:1;color:var(--text-mid);font-weight:500;}
-.ps-legend-pct{font-size:12px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;}
-.ps-legend-min{font-size:11px;color:var(--text-dim);font-variant-numeric:tabular-nums;}
-
-/* Timeline */
-.ps-timeline-wrap{display:flex;flex-direction:column;gap:10px;}
-.ps-timeline-bar-row{position:relative;height:36px;border-radius:8px;overflow:hidden;background:#f1f5f9;}
-.ps-timeline-bar-row svg{position:absolute;inset:0;width:100%;height:100%;}
-.ps-timeline-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);padding:0 2px;}
-.ps-timeline-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
-.ps-timeline-legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-mid);}
-.ps-timeline-legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
-
-/* States */
-.ps-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:80px 32px;color:var(--text-dim);font-size:14px;text-align:center;}
-.ps-empty-icon{font-size:40px;opacity:.35;}
-.ps-loading{display:flex;align-items:center;justify-content:center;gap:12px;padding:72px;color:var(--text-dim);font-size:14px;}
-
-/* Toggle pills for export */
-.ps-pill-group{display:flex;flex-wrap:wrap;gap:8px;}
-.ps-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px solid var(--border);border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;user-select:none;color:var(--text-mid);background:#fff;}
-.ps-pill:hover{border-color:var(--mint);background:var(--mint-xlight);color:var(--mint-dark);}
-.ps-pill.on-0{border-color:#94a3b8;background:#f8fafc;color:#475569;}
-.ps-pill.on-1,.ps-pill.on-2{border-color:#3b82f6;background:#eff6ff;color:#1d4ed8;}
-.ps-pill.on-3,.ps-pill.on-4{border-color:#22c55e;background:#f0fdf4;color:#15803d;}
-.ps-pill.on-5{border-color:#f97316;background:#fff7ed;color:#c2410c;}
-.ps-pill.on-6{border-color:#a855f7;background:#faf5ff;color:#7e22ce;}
-.ps-pill.on-7{border-color:#ef4444;background:#fef2f2;color:#b91c1c;}
-
-/* Responsive */
-@media(max-width:1024px){.ps-stats-strip{grid-template-columns:repeat(2,1fr);}.ps-grid-main{grid-template-columns:1fr;}}
-@media(max-width:700px){.ps-grid-2{grid-template-columns:1fr;}.ps-main{padding:20px 16px 40px;gap:20px;}.ps-toolbar{position:static;top:auto;}.ps-date-input,.ps-select,.ps-btn{width:100%;}.ps-title{font-size:22px;}.ps-stats-strip{grid-template-columns:1fr 1fr;}}
-@media(max-width:480px){.ps-stats-strip{grid-template-columns:1fr;}}
+.ps-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;}
+.ps-badge-gray{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
+.ps-badge-blue{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
+.ps-badge-green{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
+.ps-badge-orange{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;}
+.ps-badge-purple{background:#faf5ff;color:#7e22ce;border:1px solid #e9d5ff;}
+.ps-badge-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
+.ps-progress-bar{height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;margin-top:6px;}
+.ps-progress-fill{height:100%;border-radius:4px;transition:width .4s ease;}
+.ps-checkbox-group{display:flex;flex-wrap:wrap;gap:10px;}
+.ps-check-pill{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border:1.5px solid var(--border);border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;user-select:none;color:var(--text-mid);}
+.ps-check-pill:hover{border-color:var(--mint);background:var(--mint-xlight);}
+.ps-check-pill.checked-0{border-color:#94a3b8;background:#f8fafc;color:#475569;}
+.ps-check-pill.checked-1,.ps-check-pill.checked-2{border-color:#3b82f6;background:#eff6ff;color:#1d4ed8;}
+.ps-check-pill.checked-3,.ps-check-pill.checked-4{border-color:#22c55e;background:#f0fdf4;color:#166534;}
+.ps-check-pill.checked-5{border-color:#f97316;background:#fff7ed;color:#c2410c;}
+.ps-check-pill.checked-6{border-color:#a855f7;background:#faf5ff;color:#7e22ce;}
+.ps-check-pill.checked-7{border-color:#ef4444;background:#fef2f2;color:#b91c1c;}
+.ps-empty{text-align:center;padding:72px 32px;color:var(--text-dim);font-size:15px;}
+.ps-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:56px;color:var(--text-dim);font-size:14px;}
+@media(max-width:900px){.ps-summary-grid{grid-template-columns:1fr;}.ps-toolbar{top:70px;}}
+@media(max-width:800px){.ps-main{padding:20px 16px 28px;}.ps-toolbar{position:static;padding:14px;}.ps-date-input,.ps-select,.ps-btn{width:100%;}.ps-title{font-size:24px;}}
 </style>
 </head>
 <body>
@@ -683,51 +673,51 @@ background-attachment:fixed;}
 <!-- Chart tooltip -->
 <div id="chart-tooltip"><div class="tt-time" id="tt-time"></div><div id="tt-rows"></div><div class="tt-posture" id="tt-posture" style="display:none"></div></div>
 
-<!-- ══ GLOBAL SIDEBAR DRAWER ══ -->
+<!-- ?? GLOBAL SIDEBAR DRAWER ?? -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 <div class="sidebar-drawer" id="sidebar-drawer">
   <div class="sidebar-drw-head">
-    <span class="sidebar-drw-brand">🌿 功能選單</span>
-    <button class="sidebar-drw-close" onclick="closeSidebar()">✕</button>
+    <span class="sidebar-drw-brand">? ??詨</span>
+    <button class="sidebar-drw-close" onclick="closeSidebar()">??/button>
   </div>
   <div class="sidebar-drw-body">
     <div class="sidebar-section">
-      <div class="sidebar-section-label">導覽</div>
+      <div class="sidebar-section-label">撠汗</div>
       <button class="sidebar-nav-btn" id="snb-overview" onclick="goScreen('overview')">
-        <span class="snb-icon">🏠</span>會員總覽
+        <span class="snb-icon">??</span>?蝮質汗
       </button>
       <button class="sidebar-nav-btn" id="snb-day" onclick="goScreen('dashboard','day')">
-        <span class="snb-icon">📅</span>日視圖
+        <span class="snb-icon">??</span>?亥???
       </button>
       <button class="sidebar-nav-btn" id="snb-month" onclick="goScreen('dashboard','month')">
-        <span class="snb-icon">📆</span>月視圖
+        <span class="snb-icon">??</span>????
       </button>
       <button class="sidebar-nav-btn" onclick="openSearch();closeSidebar()">
-        <span class="snb-icon">🔍</span>查詢日期
-      </button>
-      <button class="sidebar-nav-btn" onclick="openAnnotPanel();closeSidebar()">
-        <span class="snb-icon">📝</span>醫護回報
+        <span class="snb-icon">??</span>?亥岷?交?
       </button>
       <button class="sidebar-nav-btn" id="snb-posture" onclick="goScreen('posture')">
-        <span class="snb-icon">🧘</span>動作姿態統計
+        <span class="snb-icon">??</span>憪踵???
+      </button>
+      <button class="sidebar-nav-btn" onclick="openAnnotPanel();closeSidebar()">
+        <span class="snb-icon">??</span>?怨風?
       </button>
     </div>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section">
-      <div class="sidebar-section-label">設定</div>
+      <div class="sidebar-section-label">閮剖?</div>
       <button class="sidebar-nav-btn" onclick="cycleFontSize()">
-        <span class="snb-icon">🔤</span>調整字體
+        <span class="snb-icon">?</span>隤踵摮?
       </button>
     </div>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section">
-      <div class="sidebar-section-label">自動更新</div>
+      <div class="sidebar-section-label">?芸??湔</div>
       <div class="sidebar-refresh-row">
         <select id="refresh-interval" onchange="setAutoRefresh()">
-          <option value="0">關閉</option>
-          <option value="30" selected>30 秒</option>
-          <option value="60">1 分鐘</option>
-          <option value="300">5 分鐘</option>
+          <option value="0">??</option>
+          <option value="30" selected>30 蝘?/option>
+          <option value="60">1 ??</option>
+          <option value="300">5 ??</option>
         </select>
         <span class="sidebar-countdown" id="refresh-countdown"></span>
       </div>
@@ -738,30 +728,30 @@ background-attachment:fixed;}
   </div>
 </div>
 
-<!-- ══ SEARCH OVERLAY ══ -->
+<!-- ?? SEARCH OVERLAY ?? -->
 <div class="search-overlay" id="search-overlay">
   <div class="search-backdrop" onclick="closeSearch()"></div>
   <div class="search-dialog">
-    <h3>🔍 查詢資料</h3><p>輸入日期（YYYY-MM-DD）或年月（YYYY-MM）</p>
-    <input class="search-input" id="search-input" placeholder="例：2025-06-15 或 2025-06" onkeydown="if(event.key==='Enter')doSearch()">
+    <h3>?? ?亥岷鞈?</h3><p>頛詨?交?嚗YYY-MM-DD嚗?撟湔?嚗YYY-MM嚗?/p>
+    <input class="search-input" id="search-input" placeholder="靘?2025-06-15 ??2025-06" onkeydown="if(event.key==='Enter')doSearch()">
     <div class="search-quick">
-      <button class="quick-btn" onclick="quickDate(0)">今天</button>
-      <button class="quick-btn" onclick="quickDate(-1)">昨天</button>
-      <button class="quick-btn" onclick="quickDate(-7)">一週前</button>
-      <button class="quick-btn" onclick="quickMonth(0)">本月</button>
-      <button class="quick-btn" onclick="quickMonth(-1)">上個月</button>
+      <button class="quick-btn" onclick="quickDate(0)">隞予</button>
+      <button class="quick-btn" onclick="quickDate(-1)">?典予</button>
+      <button class="quick-btn" onclick="quickDate(-7)">銝?勗?</button>
+      <button class="quick-btn" onclick="quickMonth(0)">?祆?</button>
+      <button class="quick-btn" onclick="quickMonth(-1)">銝?</button>
     </div>
-    <button class="btn-search-go" onclick="doSearch()">前往查詢</button>
+    <button class="btn-search-go" onclick="doSearch()">???亥岷</button>
   </div>
 </div>
 
-<!-- ══ ANNOTATION MODAL ══ -->
+<!-- ?? ANNOTATION MODAL ?? -->
 <div class="annot-overlay" id="annot-overlay">
   <div class="annot-backdrop" onclick="closeAnnotPanel()"></div>
   <div class="annot-modal">
     <div class="annot-modal-head">
-      <h3>📝 醫護回報</h3>
-      <button class="annot-modal-close" onclick="closeAnnotPanel()">✕</button>
+      <h3>?? ?怨風?</h3>
+      <button class="annot-modal-close" onclick="closeAnnotPanel()">??/button>
     </div>
     <div class="annot-modal-cols">
       <div class="annot-modal-form-col" id="annot-form-col"></div>
@@ -770,26 +760,26 @@ background-attachment:fixed;}
   </div>
 </div>
 
-<!-- ══ ACCOUNT SIDEBAR (dashboard member filter) ══ -->
+<!-- ?? ACCOUNT SIDEBAR (dashboard member filter) ?? -->
 <div class="acct-overlay" id="acct-overlay">
   <div class="acct-backdrop" onclick="closeAccountSidebar()"></div>
   <div class="acct-sidebar">
     <div class="acct-header">
-      <h3>👤 帳號選擇</h3>
-      <button class="acct-close" onclick="closeAccountSidebar()">✕</button>
+      <h3>? 撣唾??豢?</h3>
+      <button class="acct-close" onclick="closeAccountSidebar()">??/button>
     </div>
     <div class="acct-search-wrap">
-      <input class="acct-search" id="acct-search" placeholder="搜尋帳號…" oninput="filterMemberList(this.value)">
+      <input class="acct-search" id="acct-search" placeholder="??撣唾??? oninput="filterMemberList(this.value)">
     </div>
     <button class="acct-scan" id="acct-scan-btn" onclick="scanMonthMembers()">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      掃描所有帳號
+      ????董??
     </button>
     <div class="acct-list" id="acct-list"></div>
   </div>
 </div>
 
-<!-- ══ LOGIN ══ -->
+<!-- ?? LOGIN ?? -->
 <div id="login-screen">
   <div class="login-stage">
   <div class="botanical-floating login-decor-1"><img src="images/Snipaste_2026-04-08_17-09-20_nobg.png" alt=""></div>
@@ -799,46 +789,46 @@ background-attachment:fixed;}
   <div class="botanical-floating login-decor-5"><img src="images/Snipaste_2026-04-08_17-10-51_nobg.png" alt=""></div>
   <div class="login-wrap">
     <div class="login-aside">
-      <div class="login-brand"><h1>機構健康<br>資料看板</h1><small>Healthcare Dashboard v3.0</small></div>
+      <div class="login-brand"><h1>璈??亙熒<br>鞈??</h1><small>Healthcare Dashboard v3.0</small></div>
     </div>
     <div class="login-form">
-      <h2>歡迎回來</h2><p class="sub">請使用已授權的帳號登入</p>
+      <h2>甇∟???</h2><p class="sub">隢蝙?典歇???董???/p>
       <div class="session-banner" id="session-banner">
-        <p>偵測到已登入帳號：<span class="session-email" id="session-email-display"></span></p>
+        <p>?菜葫?啣歇?餃撣唾?嚗?span class="session-email" id="session-email-display"></span></p>
         <div class="session-btns">
-          <button class="btn-resume" onclick="resumeSession()">繼續使用</button>
-          <button class="btn-relogin" onclick="dismissResume()">重新登入</button>
+          <button class="btn-resume" onclick="resumeSession()">蝜潛?雿輻</button>
+          <button class="btn-relogin" onclick="dismissResume()">??餃</button>
         </div>
       </div>
       <div class="error-msg" id="login-error"></div>
       <div class="field"><label>Email</label><input type="email" id="email" placeholder="your@email.com" autocomplete="email"></div>
-      <div class="field"><label>密碼</label><input type="password" id="password" placeholder="••••••••" autocomplete="current-password"></div>
-      <div class="remember-row"><input type="checkbox" id="remember"><label for="remember">記住帳號</label></div>
-      <button class="btn-login" id="btn-login" onclick="doLogin()">登入</button>
+      <div class="field"><label>撖Ⅳ</label><input type="password" id="password" placeholder="?ＴＴＴＴＴＴＴ? autocomplete="current-password"></div>
+      <div class="remember-row"><input type="checkbox" id="remember"><label for="remember">閮?撣唾?</label></div>
+      <button class="btn-login" id="btn-login" onclick="doLogin()">?餃</button>
     </div>
   </div>
   </div>
 </div>
 
-<!-- ══ SHARED TOPBAR (post-login) ══ -->
+<!-- ?? SHARED TOPBAR (post-login) ?? -->
 <div class="shared-topbar screen-shell" id="shared-topbar" style="display:none">
   <div class="screen-decor decor-topbar"><img src="images/Snipaste_2026-04-08_17-10-44_nobg.png" alt=""></div>
   <div class="topbar-left">
-    <button class="btn-hamburger" onclick="openSidebar()" title="功能選單">
+    <button class="btn-hamburger" onclick="openSidebar()" title="??詨">
       <span></span><span></span><span></span>
     </button>
-    <div class="topbar-brand">🌿 健康資料看板</div>
+    <div class="topbar-brand">? ?亙熒鞈??</div>
   </div>
   <div class="topbar-tabs-area" id="tabs"></div>
   <div class="topbar-right">
-    <div class="rt-badge" id="rt-badge"><span class="rt-dot" id="rt-dot"></span><span id="rt-label">離線</span></div>
-    <button class="btn-fontsize" id="btn-fontsize" onclick="cycleFontSize()" title="調整字體大小">A 標準</button>
+    <div class="rt-badge" id="rt-badge"><span class="rt-dot" id="rt-dot"></span><span id="rt-label">?Ｙ?</span></div>
+    <button class="btn-fontsize" id="btn-fontsize" onclick="cycleFontSize()" title="隤踵摮?憭批?">A 璅?</button>
     <div class="user-chip"><div class="user-avatar" id="user-avatar">?</div><span id="user-email"></span></div>
-    <button class="btn-logout" onclick="doLogout()">登出</button>
+    <button class="btn-logout" onclick="doLogout()">?餃</button>
   </div>
 </div>
 
-<!-- ══ MEMBER OVERVIEW SCREEN ══ -->
+<!-- ?? MEMBER OVERVIEW SCREEN ?? -->
 <div id="member-overview">
   <div class="ov-main screen-shell">
     <div class="screen-decor decor-ov-1"><img src="images/Snipaste_2026-04-08_17-09-41_nobg.png" alt=""></div>
@@ -847,29 +837,29 @@ background-attachment:fixed;}
     <div class="screen-decor decor-ov-4"><img src="images/Snipaste_2026-04-08_17-09-30_nobg.png" alt=""></div>
     <div class="ov-header">
       <div class="ov-title-group">
-        <div class="ov-title" id="ov-title">今日會員狀態</div>
-        <div class="ov-subtitle" id="ov-subtitle">載入中…</div>
+        <div class="ov-title" id="ov-title">隞????/div>
+        <div class="ov-subtitle" id="ov-subtitle">頛銝凌?/div>
       </div>
       <div class="ov-header-right">
         <div class="ov-view-toggle">
-          <button class="ov-view-btn active" id="ov-mode-today" onclick="setOverviewMode('today')">今日會員</button>
-          <button class="ov-view-btn" id="ov-mode-all" onclick="setOverviewMode('all')">全部會員</button>
+          <button class="ov-view-btn active" id="ov-mode-today" onclick="setOverviewMode('today')">隞?</button>
+          <button class="ov-view-btn" id="ov-mode-all" onclick="setOverviewMode('all')">?券?</button>
         </div>
         <button class="btn-scan" id="btn-scan-overview" onclick="scanAndLoadCards()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-          重新掃描
+          ???
         </button>
       </div>
     </div>
     <!-- Alert strip -->
     <!-- Member grid -->
     <div class="member-grid" id="member-grid">
-      <div class="ov-empty"><div class="ov-empty-icon">🏥</div><p>請先選擇機構</p><small>點選上方機構標籤後自動載入</small></div>
+      <div class="ov-empty"><div class="ov-empty-icon">?</div><p>隢??豢?璈?</p><small>暺銝璈?璅惜敺????/small></div>
     </div>
   </div>
 </div>
 
-<!-- ══ MEMBER DETAIL SCREEN ══ -->
+<!-- ?? MEMBER DETAIL SCREEN ?? -->
 <div id="member-detail">
   <div class="det-main screen-shell">
     <div class="screen-decor decor-det-1"><img src="images/Snipaste_2026-04-08_17-10-07_nobg.png" alt=""></div>
@@ -878,22 +868,22 @@ background-attachment:fixed;}
     <div class="screen-decor decor-det-4"><img src="images/Snipaste_2026-04-08_17-10-17_nobg.png" alt=""></div>
     <!-- Header -->
     <div class="det-header">
-      <button class="btn-back" onclick="goScreen('overview')">← 返回總覽</button>
+      <button class="btn-back" onclick="goScreen('overview')">??餈?蝮質汗</button>
       <div class="det-member-info">
-        <div class="det-member-id" id="det-member-id">—</div>
-        <div class="det-member-sub" id="det-member-sub">—</div>
+        <div class="det-member-id" id="det-member-id">??/div>
+        <div class="det-member-sub" id="det-member-sub">??/div>
       </div>
       <button class="btn-sync-day" id="btn-sync-detail-day" onclick="syncDetailDayData()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-        同步資料
+        ?郊鞈?
       </button>
       <button class="btn-search-det" onclick="openSearchFromDetail()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        查詢
+        ?亥岷
       </button>
       <button class="btn-export" onclick="exportCSV()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        匯出 CSV
+        ?臬 CSV
       </button>
     </div>
 
@@ -901,74 +891,74 @@ background-attachment:fixed;}
     <div class="det-chart-card">
       <div class="det-chart-ctrl">
         <div class="det-metric-tabs">
-          <button class="det-metric-btn active" id="dm-hb" onclick="toggleDetMetric('hb')">❤️ 心跳</button>
-          <button class="det-metric-btn active" id="dm-bp" onclick="toggleDetMetric('bp')">🩺 血壓</button>
-          <button class="det-metric-btn active" id="dm-temp" onclick="toggleDetMetric('temp')">🌡 體溫</button>
-          <button class="det-metric-btn active" id="dm-br" onclick="toggleDetMetric('br')">🫁 呼吸</button>
+          <button class="det-metric-btn active" id="dm-hb" onclick="toggleDetMetric('hb')">?歹? 敹歲</button>
+          <button class="det-metric-btn active" id="dm-bp" onclick="toggleDetMetric('bp')">?征 銵憯?/button>
+          <button class="det-metric-btn active" id="dm-temp" onclick="toggleDetMetric('temp')">? 擃澈</button>
+          <button class="det-metric-btn active" id="dm-br" onclick="toggleDetMetric('br')">?? ?澆</button>
         </div>
         <div class="det-range-tabs">
-          <button class="det-range-btn active" id="dr-today" onclick="setDetRange('today')">今天</button>
-          <button class="det-range-btn" id="dr-7d" onclick="setDetRange('7d')">7 天</button>
-          <button class="det-range-btn" id="dr-30d" onclick="setDetRange('30d')">30 天</button>
+          <button class="det-range-btn active" id="dr-today" onclick="setDetRange('today')">隞予</button>
+          <button class="det-range-btn" id="dr-7d" onclick="setDetRange('7d')">7 憭?/button>
+          <button class="det-range-btn" id="dr-30d" onclick="setDetRange('30d')">30 憭?/button>
           <div class="det-date-pick-wrap">
             <button class="det-range-btn date-pick-btn" id="dr-custom" onclick="openDetDatePicker()">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              <span id="dr-custom-label">選日期</span>
+              <span id="dr-custom-label">?豢??/span>
             </button>
             <input type="date" id="det-date-picker" class="det-date-input" onchange="setDetCustomDate(this.value)">
           </div>
         </div>
       </div>
       <div class="det-chart-body" id="det-chart-body">
-        <div class="trend-empty">選擇會員後自動載入</div>
+        <div class="trend-empty">?豢??敺????/div>
       </div>
     </div>
 
     <!-- Stats summary -->
     <div class="det-stats-card">
-      <div class="det-stats-head" id="det-stats-head">今日數值摘要</div>
+      <div class="det-stats-head" id="det-stats-head">隞?詨潭?閬?/div>
       <div class="det-stats-grid" id="det-stats-grid">
-        <div class="det-stat-box"><div class="det-stat-label">載入中</div><div class="det-stat-val" style="color:var(--text-light)">…</div></div>
+        <div class="det-stat-box"><div class="det-stat-label">頛銝?/div><div class="det-stat-val" style="color:var(--text-light)">??/div></div>
       </div>
     </div>
 
     <!-- 4 Action buttons -->
     <div class="det-actions">
       <button class="det-action-btn" onclick="goScreen('dashboard','day')">
-        <span class="det-action-icon">📅</span>
-        <span class="det-action-label">日視圖</span>
-        <span class="det-action-sub">查看逐小時紀錄</span>
+        <span class="det-action-icon">??</span>
+        <span class="det-action-label">?亥???/span>
+        <span class="det-action-sub">?亦???????/span>
       </button>
       <button class="det-action-btn" onclick="goScreen('dashboard','month')">
-        <span class="det-action-icon">📆</span>
-        <span class="det-action-label">月視圖</span>
-        <span class="det-action-sub">查看月份趨勢</span>
+        <span class="det-action-icon">??</span>
+        <span class="det-action-label">????/span>
+        <span class="det-action-sub">?亦??遢頞典</span>
       </button>
       <button class="det-action-btn" onclick="openSearch()">
-        <span class="det-action-icon">🔍</span>
-        <span class="det-action-label">查詢歷史</span>
-        <span class="det-action-sub">指定日期查詢</span>
+        <span class="det-action-icon">??</span>
+        <span class="det-action-label">?亥岷甇瑕</span>
+        <span class="det-action-sub">???交??亥岷</span>
       </button>
       <button class="det-action-btn" onclick="exportCSV()">
-        <span class="det-action-icon">📋</span>
-        <span class="det-action-label">匯出資料</span>
-        <span class="det-action-sub">下載 CSV 檔案</span>
+        <span class="det-action-icon">??</span>
+        <span class="det-action-label">?臬鞈?</span>
+        <span class="det-action-sub">銝? CSV 瑼?</span>
       </button>
     </div>
 
     <!-- Member notes -->
     <div class="det-notes-card">
       <div class="det-notes-head">
-        <span class="det-notes-title">📝 醫護回報紀錄</span>
-        <button class="btn-add-annot" onclick="openAnnotPanel()">＋ 新增回報</button>
+        <span class="det-notes-title">?? ?怨風?蝝??/span>
+        <button class="btn-add-annot" onclick="openAnnotPanel()">嚗??啣??</button>
       </div>
       <div id="det-annot-list" class="det-annot-list"></div>
-      <div class="note-hint">回報紀錄會同步到雲端，供後續查詢與交班使用。</div>
+      <div class="note-hint">?蝝?摮?祆?嚗????唾隡箸??具?/div>
     </div>
   </div>
 </div>
 
-<!-- ══ DASHBOARD ══ -->
+<!-- ?? DASHBOARD ?? -->
 <div id="dashboard">
   <div class="dash-main screen-shell">
     <div class="screen-decor decor-dash-1"><img src="images/Snipaste_2026-04-08_17-10-51_nobg.png" alt=""></div>
@@ -978,116 +968,114 @@ background-attachment:fixed;}
     <div class="page-header">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
         <div>
-          <h1>健康資料詳細紀錄</h1>
-          <div class="context-label" id="context-label"><span id="ctx-table">—</span>／會員：<span id="ctx-member">全部</span></div>
+          <h1>?亙熒鞈?閰喟敦蝝??/h1>
+          <div class="context-label" id="context-label"><span id="ctx-table">??/span>嚗??∴?<span id="ctx-member">?券</span></div>
         </div>
-        <button class="btn-back" onclick="goScreen('overview')">← 返回總覽</button>
+        <button class="btn-back" onclick="goScreen('overview')">??餈?蝮質汗</button>
       </div>
     </div>
     <div class="dashboard-topbar-row">
       <div class="nav-bar">
         <div class="view-toggle">
-          <button class="view-btn active" id="view-day-btn" onclick="setView('day')">📅 日視圖</button>
-          <button class="view-btn" id="view-month-btn" onclick="setView('month')">📆 月視圖</button>
+          <button class="view-btn active" id="view-day-btn" onclick="setView('day')">?? ?亥???/button>
+          <button class="view-btn" id="view-month-btn" onclick="setView('month')">?? ????/button>
         </div>
         <div class="date-nav">
           <button class="date-nav-btn" onclick="navPrev()">&#8592;</button>
-          <div class="date-display" id="date-display">—</div>
+          <div class="date-display" id="date-display">??/div>
           <button class="date-nav-btn" onclick="navNext()">&#8594;</button>
-          <button class="btn-today" onclick="goToday()">今天</button>
+          <button class="btn-today" onclick="goToday()">隞予</button>
         </div>
         <button class="btn-search-nav" onclick="openSearch()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>查詢
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>?亥岷
         </button>
       </div>
     </div>
     <div class="toolbar">
-      <div class="count-badge" id="row-count" style="visibility:hidden">—</div>
+      <div class="count-badge" id="row-count" style="visibility:hidden">??/div>
       <div class="toolbar-right">
         <div class="last-upload" id="last-upload" style="display:none">
-          <span>最後上傳：</span><span class="lu-time" id="lu-time">—</span><span class="lu-ago" id="lu-ago"></span>
+          <span>?敺??喉?</span><span class="lu-time" id="lu-time">??/span><span class="lu-ago" id="lu-ago"></span>
         </div>
-        <button class="btn-account has-filter" id="btn-account" onclick="openAccountSidebar()">👤 篩選會員</button>
+        <button class="btn-account has-filter" id="btn-account" onclick="openAccountSidebar()">? 蝭拚?</button>
         <button class="btn-refresh" id="btn-refresh" onclick="manualRefresh()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>重新整理
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>??渡?
         </button>
       </div>
     </div>
     <div class="trend-panel" id="trend-panel" style="display:none">
-      <div class="trend-body" id="trend-body"><div class="trend-empty">載入資料後顯示趨勢</div></div>
+      <div class="trend-body" id="trend-body"><div class="trend-empty">頛鞈?敺＊蝷箄隅??/div></div>
     </div>
-    <div id="table-content"><div class="state-card">請選擇機構</div></div>
+    <div id="table-content"><div class="state-card">隢??瑽?/div></div>
     <div id="pagination-wrap" class="pagination"></div>
   </div>
   <footer class="site-footer">
     <span class="footer-author">JJ.LING (5unnyJJ)</span>
     <span class="footer-sep">|</span>
-    <span>機構健康資料看板 v3.0</span>
+    <span>璈??亙熒鞈?? v3.0</span>
     <span class="footer-sep">|</span>
     <a href="https://github.com/5unnyJJ/vital-signs-Dashboard_V2" target="_blank">GitHub</a>
     <span class="footer-sep">|</span>
-    <span>© 2026</span>
+    <span>穢 2026</span>
   </footer>
 </div>
 
-<!-- ══ POSTURE ANALYSIS SCREEN ══ -->
-<div id="posture-screen" style="display:none">
+<!-- ?? POSTURE ANALYSIS SCREEN ?? -->
+<div id="posture-screen">
   <div class="ps-main screen-shell">
     <div class="ps-header">
       <div>
-        <div class="ps-title">🧘 動作姿態統計</div>
-        <div class="ps-subtitle" id="ps-subtitle">選擇日期與會員後載入</div>
+        <div class="ps-title">?? ??憪踵???</div>
+        <div class="ps-subtitle" id="ps-subtitle">?豢??交????∪?頛鞈?</div>
       </div>
-      <button class="btn-back" onclick="goScreen('overview')">← 返回總覽</button>
+      <button class="btn-back" onclick="goScreen('overview')">??餈?蝮質汗</button>
     </div>
+    <!-- Toolbar -->
     <div class="ps-toolbar">
-      <span class="ps-toolbar-label">日期</span>
       <input type="date" class="ps-date-input" id="ps-date-input">
-      <span class="ps-toolbar-label">會員</span>
-      <select class="ps-select" id="ps-member-select" style="min-width:130px">
-        <option value="ALL">全部</option>
+      <select class="ps-select" id="ps-member-select" style="min-width:120px">
+        <option value="ALL">?券?</option>
       </select>
       <button class="ps-btn ps-btn-primary" id="ps-load-btn" onclick="loadPostureScreen()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-        載入資料
+        頛鞈?
       </button>
     </div>
+    <!-- Content area -->
     <div id="ps-content">
-      <div class="ps-empty">請選擇條件後載入資料</div>
+      <div class="ps-empty">隢????敺????亥???/div>
     </div>
   </div>
 </div>
 
 <script>
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    SUPABASE INIT
-   ════════════════════════════════════════════════════════════ */
-// OWASP A04: SUPABASE_ANON_KEY 為 Supabase 公開設計的前端金鑰（非 service_role key）
-// 安全性依賴 Supabase 後台的 Row Level Security (RLS) 政策 — 請確保 RLS 已啟用
-// 若 repo 為 public，此 key 可被他人看到，但在 RLS 正確設定下不會造成資料外洩
+   ???????????????????????????????????????????????????????????? */
+// OWASP A04: SUPABASE_ANON_KEY ??Supabase ?祇?閮剛???蝡舫??堆???service_role key嚗?
+// 摰?找?鞈?Supabase 敺??Row Level Security (RLS) ?輻? ??隢Ⅱ靽?RLS 撌脣???
+// ??repo ??public嚗迨 key ?航◤隞犖?嚗???RLS 甇?Ⅱ閮剖?銝???鞈?憭援
 const SUPABASE_URL='https://lrrxswxvphoeyuvemvin.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxycnhzd3h2cGhvZXl1dmVtdmluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMzU1NjksImV4cCI6MjA4MzkxMTU2OX0.54qS-CTVL9XeIbNO83r8spsRrk8woyBz3u-HoRdFxHs';
-const TABLE_LABEL={'DC_data_base':'都蘭診所','CY_data_base':'嘉義醫院','YK_data_base':'員郭醫院'};
-const ACTION_COLORS={0:'#94a3b8',1:'#3b82f6',2:'#3b82f6',3:'#22c55e',4:'#22c55e',5:'#f97316',6:'#a855f7',7:'#ef4444'};
-const ACTION_LABEL_COLOR={'靜止':'#94a3b8','走路':'#3b82f6','慢跑':'#22c55e','快跑':'#f97316','躺姿':'#a855f7','姿勢異常':'#ef4444'};
+const TABLE_LABEL={'DC_data_base':'?質閮箸?','CY_data_base':'?儔?恍','YK_data_base':'?⊿?恍'};
 
 const AGG_COLS=[
-  {key:'time',label:'分鐘',badge:false},
-  {key:'count',label:'筆數',badge:false},
-  {key:'temp',label:'體溫 avg',badge:true},
-  {key:'heartbeat',label:'心跳 avg',badge:true},
-  {key:'breath',label:'呼吸 avg',badge:false},
-  {key:'sbp',label:'收縮壓',badge:true},
-  {key:'dbp',label:'舒張壓',badge:true},
-  {key:'pulse',label:'脈搏',badge:false},
-  {key:'step',label:'步數 avg',badge:false},
-  {key:'action',label:'動作（眾數）',badge:false},
+  {key:'time',label:'??',badge:false},
+  {key:'count',label:'蝑',badge:false},
+  {key:'temp',label:'擃澈 avg',badge:true},
+  {key:'heartbeat',label:'敹歲 avg',badge:true},
+  {key:'breath',label:'?澆 avg',badge:false},
+  {key:'sbp',label:'?嗥葬憯?,badge:true},
+  {key:'dbp',label:'?撐憯?,badge:true},
+  {key:'pulse',label:'??',badge:false},
+  {key:'step',label:'甇交 avg',badge:false},
+  {key:'action',label:'??嚗?賂?',badge:false},
 ];
 const HOURS_PER_PAGE=6;
 
 let sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-/* ── STATE ── */
+/* ?? STATE ?? */
 let currentTable=null,currentDate=todayStr(),currentMonth=monthStr(),currentView='day';
 let currentPage=1,totalPages=1,groupedCache=null,rawRowsCache=[];
 let dayViewRawRowsCache=[],dayViewRawRowsCacheKey='';
@@ -1097,6 +1085,7 @@ let trendTab='hbbr',hbBreathRange='day',hbBreathSelectedDay=null;
 let dayStats=null,lastUploadTime=null,lastUploadTicker=null,resumeSession_data=null;
 // New state
 let currentScreen='overview';
+let postureScreenDate=null,postureScreenMemberId='ALL',postureCheckedActions=new Set([0,1,2,3,4,5,6,7]),postureScreenMinuteRows=[],postureRawRowsCache=[],postureRawRowsCacheKey='';
 let loadToken=0; // race condition guard for loadCurrentTable
 let detailMemberId=null,detailMetrics=new Set(['hb','bp','temp','br']),detailRange='today';
 let detailRawData=null,detailDailySummary={};
@@ -1107,29 +1096,25 @@ let overviewCardData={};
 let overviewTodayData={};
 let overviewAllData={};
 let overviewMode='today';
-let postureScreenDate=null;
-let postureScreenMemberId='ALL';
-let postureCheckedActions=new Set([0,1,2,3,4,5,6,7]);
-let postureScreenMinuteRows=[];
-let postureRawRowsCache=[];
-let postureRawRowsCacheKey='';
 let trendLineSet=new Set(['hb','br']); // dashboard trend panel active metrics
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    MATH HELPERS
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function p2(n){return String(n).padStart(2,'0');}
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function todayStr(){const d=new Date();return`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;}
 function monthStr(offset=0){const d=new Date();d.setMonth(d.getMonth()+offset);return`${d.getFullYear()}-${p2(d.getMonth()+1)}`;}
 function normalizeTime24(value){
-  const m=String(value||'').trim().replace(/\./g,':').match(/^(\d{1,2}):(\d{1,2})$/);
+  const s=String(value||'').trim().replace('.',':');
+  const m=s.match(/^(\d{1,2}):(\d{1,2})$/);
   if(!m)return'';
-  const hh=Number(m[1]),mm=Number(m[2]);
-  if(!Number.isInteger(hh)||!Number.isInteger(mm)||hh<0||hh>23||mm<0||mm>59)return'';
-  return`${p2(hh)}:${p2(mm)}`;
+  const h=Number(m[1]),min=Number(m[2]);
+  if(!Number.isInteger(h)||!Number.isInteger(min)||h<0||h>23||min<0||min>59)return'';
+  return`${p2(h)}:${p2(min)}`;
 }
-function formatMinute(iso){if(!iso)return'—';const d=new Date(iso);return`${p2(d.getHours())}:${p2(d.getMinutes())}`;}
+function dayMemberKey(table,date,memberId){return table&&date?`${table}__${date}__${memberId||'ALL'}`:'';}
+function formatMinute(iso){if(!iso)return'??;const d=new Date(iso);return`${p2(d.getHours())}:${p2(d.getMinutes())}`;}
 function formatHMS(d){return`${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`;}
 function avg(arr){const n=arr.map(v=>parseFloat(v)).filter(v=>!isNaN(v));if(!n.length)return null;return Math.round(n.reduce((a,b)=>a+b,0)/n.length*10)/10;}
 function stdOf(arr){
@@ -1146,6 +1131,134 @@ function modeOf(vals){
   v.forEach(x=>{counts[x]=(counts[x]||0)+1;if(counts[x]>maxC){maxC=counts[x];modeVal=x;}});
   return modeVal;
 }
+/* ????????????????????????????????????????????????????????????
+   POSTURE ANALYSIS
+   ???????????????????????????????????????????????????????????? */
+const ACTION_COLORS={0:'#94a3b8',1:'#3b82f6',2:'#3b82f6',3:'#22c55e',4:'#22c55e',5:'#f97316',6:'#a855f7',7:'#ef4444'};
+const ACTION_LABEL_COLOR={'?迫':'#94a3b8','韏啗楝':'#3b82f6','?Ｚ?':'#22c55e','敹怨?':'#f97316','頨箏尿':'#a855f7','憪踹?啣虜':'#ef4444'};
+function computeActionStats(minuteRows){
+  const counts={};
+  minuteRows.forEach(r=>{
+    if(r.action!==null&&r.action!==undefined){
+      const lbl=actionLabel(r.action)||String(r.action);
+      counts[lbl]=(counts[lbl]||0)+1;
+    }
+  });
+  return counts;
+}
+function renderPostureDonut(minuteRows){
+  const counts=computeActionStats(minuteRows);
+  const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const total=entries.reduce((s,[,v])=>s+v,0);
+  if(!total)return'';
+  const R=38,cx=50,cy=50,circ=2*Math.PI*R;
+  let offset=0,slices='';
+  entries.forEach(([lbl,cnt])=>{
+    const frac=cnt/total,dash=frac*circ;
+    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
+    slices+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${color}" stroke-width="14" stroke-dasharray="${dash.toFixed(2)} ${(circ-dash).toFixed(2)}" stroke-dashoffset="${(-offset).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"><title>${escHtml(lbl)}: ${cnt} ??(${Math.round(frac*100)}%)</title></circle>`;
+    offset+=dash;
+  });
+  let legend='';
+  entries.forEach(([lbl,cnt])=>{
+    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
+    legend+=`<div class="posture-legend-item"><div class="posture-legend-dot" style="background:${color}"></div><span class="posture-legend-label">${escHtml(lbl)}</span><span class="posture-legend-val">${cnt} ??/span></div>`;
+  });
+  return`<div class="posture-panel-row"><div class="posture-donut-wrap"><svg viewBox="0 0 100 100">${slices}<text x="50" y="54" text-anchor="middle" font-size="10" fill="#486055" font-weight="600">${total}??/text></svg></div><div class="posture-donut-legend">${legend}</div></div>`;
+}
+function renderPostureTimeline(minuteRows){
+  if(!minuteRows.length)return'';
+  const segs=[];
+  minuteRows.forEach(r=>{
+    const t=r.time.slice(11,16);
+    const startMin=parseInt(t.slice(0,2))*60+parseInt(t.slice(3,5));
+    const lbl=actionLabel(r.action);
+    const last=segs[segs.length-1];
+    if(last&&last.action===r.action){last.endMin=startMin+1;last.count++;}
+    else segs.push({action:r.action,lbl,startMin,endMin:startMin+1,count:1});
+  });
+  let rects='';
+  segs.forEach(s=>{
+    const x=(s.startMin/1440*100).toFixed(3);
+    const w=Math.max(((s.endMin-s.startMin)/1440*100),0.07).toFixed(3);
+    const color=ACTION_LABEL_COLOR[s.lbl]||'#94a3b8';
+    const h1=String(Math.floor(s.startMin/60)).padStart(2,'0')+':'+String(s.startMin%60).padStart(2,'0');
+    const h2=String(Math.floor(s.endMin/60)).padStart(2,'0')+':'+String(s.endMin%60).padStart(2,'0');
+    rects+=`<rect x="${x}%" y="0" width="${w}%" height="100%" fill="${color}"><title>${escHtml(s.lbl||'?')}: ${h1}??{h2} (${s.count}??</title></rect>`;
+  });
+  return`<div class="posture-timeline-wrap"><div class="posture-timeline-labels"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div><svg viewBox="0 0 1440 20" preserveAspectRatio="none">${rects}</svg></div>`;
+}
+function getCurrentPostureMode(windowSecs=15){
+  const cache=dayViewRawRowsCache.length?dayViewRawRowsCache:rawRowsCache;
+  if(!cache.length)return null;
+  const now=new Date();
+  const recent=cache.filter(r=>(now-new Date(r.date_minute))/1000<=windowSecs);
+  return modeOf(recent.map(r=>r.action));
+}
+function updateCurrentPostureBadge(){
+  const el=document.getElementById('current-posture-badge');if(!el)return;
+  const mode=getCurrentPostureMode(15);
+  if(mode===null){el.innerHTML='??;return;}
+  const lbl=actionLabel(mode)||String(mode);
+  const col=ACTION_COLORS[parseInt(mode)]||'#94a3b8';
+  el.innerHTML=`<span style="color:${col}">??/span> ${escHtml(lbl)}`;
+}
+function buildPosturePanel(minuteRows){
+  const donut=renderPostureDonut(minuteRows);
+  const timeline=renderPostureTimeline(minuteRows);
+  if(!donut&&!timeline)return'';
+  return`<div class="posture-panel"><div class="posture-panel-top"><div class="posture-panel-title">??憪踵??? <span class="posture-badge" id="current-posture-badge">??/span></div><button class="btn-nurse-open" onclick="openNurseModal()">嚗?閮?/button></div>${donut}${timeline}<div class="nurse-reports-wrap" id="nurse-reports-list"></div></div>`;
+}
+/* ?? Nurse Report ?? */
+let _nurseSelectedSeverity=1;
+function openNurseModal(){
+  if(!currentTable){alert('隢??豢?璈?敺??啣??酉');return;}
+  _nurseSelectedSeverity=1;
+  document.querySelectorAll('.nurse-sev-btn').forEach(b=>b.classList.remove('sel-1','sel-2','sel-3'));
+  document.querySelector('.nurse-sev-btn[data-sev="1"]')?.classList.add('sel-1');
+  const ta=document.getElementById('nurse-content');if(ta)ta.value='';
+  document.getElementById('nurse-modal-overlay')?.classList.add('open');
+}
+function closeNurseModal(){document.getElementById('nurse-modal-overlay')?.classList.remove('open');}
+function selectSeverity(s){
+  _nurseSelectedSeverity=s;
+  document.querySelectorAll('.nurse-sev-btn').forEach(b=>b.classList.remove('sel-1','sel-2','sel-3'));
+  document.querySelector(`.nurse-sev-btn[data-sev="${s}"]`)?.classList.add(`sel-${s}`);
+}
+async function submitNurseReport(){
+  const content=(document.getElementById('nurse-content')?.value||'').trim();
+  if(!content)return;
+  const btn=document.querySelector('.btn-nurse-submit');
+  if(btn){btn.disabled=true;btn.textContent='?銝凌?;}
+  try{
+    const {error}=await sb.from('nurse_reports').insert({
+      member_id:currentMemberId==='ALL'?'ALL':currentMemberId,
+      table_name:currentTable,
+      content,
+      severity:_nurseSelectedSeverity
+    });
+    if(error)throw error;
+    closeNurseModal();
+    fetchAndRenderNurseReports();
+  }catch(e){alert('?憭望?嚗?+e.message);}
+  finally{if(btn){btn.disabled=false;btn.textContent='?';}}
+}
+async function fetchAndRenderNurseReports(){
+  const el=document.getElementById('nurse-reports-list');if(!el)return;
+  if(!currentTable||!currentDate)return;
+  try{
+    const{data,error}=await sb.from('nurse_reports')
+      .select('id,created_at,member_id,content,severity')
+      .eq('table_name',currentTable)
+      .gte('created_at',currentDate+'T00:00:00+08:00')
+      .lte('created_at',currentDate+'T23:59:59.999+08:00')
+      .order('created_at',{ascending:false});
+    if(error||!data||!data.length){el.innerHTML='';return;}
+    const sevClass={1:'nrc-1',2:'nrc-2',3:'nrc-3'};
+    const sevLabel={1:'瘜冽?',2:'霅血?',3:'蝺?};
+    el.innerHTML=data.map(r=>`<span class="nurse-report-chip ${sevClass[r.severity]||'nrc-1'}" title="${escHtml(r.content)}">${sevLabel[r.severity]} ${r.created_at.slice(11,16)} ${escHtml(r.member_id==='ALL'?'?券?':r.member_id)} ??${escHtml(r.content.slice(0,30))}${r.content.length>30?'??:''}</span>`).join('');
+  }catch{el.innerHTML='';}
+}
 function anomalyLevel(key,v){
   if(v===null||v===undefined)return'neutral';
   const n=parseFloat(v);if(isNaN(n))return'neutral';
@@ -1158,11 +1271,11 @@ function anomalyLevel(key,v){
   }
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    TREND CHART SVG
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function actionLabel(n){
-  const m={0:'靜止',1:'走路',2:'走路',3:'慢跑',4:'慢跑',5:'快跑',6:'躺姿',7:'姿勢異常'};
+  const m={0:'?迫',1:'韏啗楝',2:'韏啗楝',3:'?Ｚ?',4:'?Ｚ?',5:'敹怨?',6:'頨箏尿',7:'憪踹?啣虜'};
   if(n===null||n===undefined||n==='')return null;
   const k=parseInt(n);return isNaN(k)?null:(m[k]||null);
 }
@@ -1177,10 +1290,10 @@ function chartHover(e,chartId){
   const tt=document.getElementById('chart-tooltip');
   document.getElementById('tt-time').textContent=d.labels[i]||'';
   let rowsHtml='';
-  d.series.forEach(s=>{const v=s.values[i];const disp=(v===null||v===undefined||isNaN(parseFloat(v)))?'—':Math.round(parseFloat(v));const safeColor=/^#[0-9a-fA-F]{3,6}$|^rgb/.test(s.color)?s.color:'#666';rowsHtml+=`<div class="tt-row"><span class="tt-label" style="color:${safeColor}">${escHtml(s.label)}</span><span class="tt-val">${disp}</span></div>`;});
+  d.series.forEach(s=>{const v=s.values[i];const disp=(v===null||v===undefined||isNaN(parseFloat(v)))?'??:Math.round(parseFloat(v));const safeColor=/^#[0-9a-fA-F]{3,6}$|^rgb/.test(s.color)?s.color:'#666';rowsHtml+=`<div class="tt-row"><span class="tt-label" style="color:${safeColor}">${escHtml(s.label)}</span><span class="tt-val">${disp}</span></div>`;});
   document.getElementById('tt-rows').innerHTML=rowsHtml;
   const posEl=document.getElementById('tt-posture');
-  if(d.actions&&d.actions[i]!==undefined&&d.actions[i]!==null){const lbl=actionLabel(d.actions[i]);if(lbl){posEl.textContent='姿位：'+lbl;posEl.style.display='block';}else posEl.style.display='none';}
+  if(d.actions&&d.actions[i]!==undefined&&d.actions[i]!==null){const lbl=actionLabel(d.actions[i]);if(lbl){posEl.textContent='憪蹂?嚗?+lbl;posEl.style.display='block';}else posEl.style.display='none';}
   else posEl.style.display='none';
   let tx=e.clientX+16,ty=e.clientY-44;
   if(tx+160>window.innerWidth-8)tx=e.clientX-174;if(ty<8)ty=8;
@@ -1210,14 +1323,14 @@ function trendSVG(series,labels,opts,hParam){
   });
   if(!dualAxis){
     const allV=series.flatMap(s=>s.values.filter(v=>v!==null&&!isNaN(v)));
-    if(!allV.length)return'<div class="trend-empty">此期間無資料</div>';
+    if(!allV.length)return'<div class="trend-empty">甇斗??鞈?</div>';
     const mn=Math.min(...allV),mx=Math.max(...allV);
     const rng=mx-mn||1;const pad=Math.max(rng*0.18,2);
     let sMn=mn-pad,sMx=mx+pad;
     const minRng=(opts&&opts.minRange>0)?opts.minRange:0;
     if(sMx-sMn<minRng){const ctr=(sMn+sMx)/2;sMn=ctr-minRng/2;sMx=ctr+minRng/2;}
     scales.forEach((_,i)=>scales[i]={mn:sMn,mx:sMx});
-  } else if(series.every(s=>s.values.every(v=>v===null||isNaN(v)))){return'<div class="trend-empty">此期間無資料</div>';}
+  } else if(series.every(s=>s.values.every(v=>v===null||isNaN(v)))){return'<div class="trend-empty">甇斗??鞈?</div>';}
   const yS=(v,si)=>{const sc=scales[si]||scales[0];const rng=sc.mx-sc.mn||1;return PT+CH-((v-sc.mn)/rng)*CH;};
   const n=labels.length;const xS=i=>PL+(n>1?i/(n-1):0.5)*CW;
   let paths='',hasPartial=false;
@@ -1281,7 +1394,7 @@ function trendSVG(series,labels,opts,hParam){
   const chartData=JSON.stringify({labels,series:series.map(s=>({label:s.label,color:s.color,values:s.values})),actions:(opts&&opts.actionValues)||null,n,dualAxis,sharedCursor,scales:scales.map(sc=>({mn:sc.mn,mx:sc.mx})),chartH:H,PT,PB});
   return`<div class="trend-chart-wrap" id="${chartId}" data-chart='${chartData.replace(/'/g,"&#39;")}' style="position:relative"><svg width="100%" viewBox="0 0 ${W} ${svgH}" style="overflow:visible;display:block">
     ${gridLines}${yLabs}${xLabs}${legend}${paths}${avgLines}${cursorEls}${avgNodes}
-  </svg><div class="chart-overlay"></div>${hasPartial?'<div class="trend-note">部分時段無資料（斷線處）</div>':''}</div>`;
+  </svg><div class="chart-overlay"></div>${hasPartial?'<div class="trend-note">?典??挾?∟????瑞???</div>':''}</div>`;
 }
 /* Cursor drag */
 let _cursorDrag=null;
@@ -1330,10 +1443,10 @@ function _cursorDragMove(e){
   const tt=document.getElementById('chart-tooltip');
   document.getElementById('tt-time').textContent=d.labels[i]||'';
   let rowsHtml='';
-  d.series.forEach(s=>{const v=s.values[i];const disp=(v===null||v===undefined||isNaN(parseFloat(v)))?'—':Math.round(parseFloat(v));const safeColor=/^#[0-9a-fA-F]{3,6}$|^rgb/.test(s.color)?s.color:'#666';rowsHtml+=`<div class="tt-row"><span class="tt-label" style="color:${safeColor}">${escHtml(s.label)}</span><span class="tt-val">${disp}</span></div>`;});
+  d.series.forEach(s=>{const v=s.values[i];const disp=(v===null||v===undefined||isNaN(parseFloat(v)))?'??:Math.round(parseFloat(v));const safeColor=/^#[0-9a-fA-F]{3,6}$|^rgb/.test(s.color)?s.color:'#666';rowsHtml+=`<div class="tt-row"><span class="tt-label" style="color:${safeColor}">${escHtml(s.label)}</span><span class="tt-val">${disp}</span></div>`;});
   document.getElementById('tt-rows').innerHTML=rowsHtml;
   const posEl=document.getElementById('tt-posture');
-  if(d.actions&&d.actions[i]!==null&&d.actions[i]!==undefined){const lbl=actionLabel(d.actions[i]);if(lbl){posEl.textContent='姿位：'+lbl;posEl.style.display='block';}else posEl.style.display='none';}
+  if(d.actions&&d.actions[i]!==null&&d.actions[i]!==undefined){const lbl=actionLabel(d.actions[i]);if(lbl){posEl.textContent='憪蹂?嚗?+lbl;posEl.style.display='block';}else posEl.style.display='none';}
   else posEl.style.display='none';
   let tx=cx+16,ty=cy2-54;
   if(tx+180>window.innerWidth-8)tx=cx-196;if(ty<8)ty=8;
@@ -1375,10 +1488,10 @@ function _avgDragMove(e){
   if(v!==null&&v!==undefined&&!isNaN(parseFloat(v)))nd.setAttribute('cy',(PT+CH-((parseFloat(v)-sc.mn)/rng)*CH).toFixed(1));
   const tt=document.getElementById('chart-tooltip');
   document.getElementById('tt-time').textContent=d.labels[i]||'';
-  let rowsHtml='';d.series.forEach(s=>{const v=s.values[i];const disp=(v===null||v===undefined||isNaN(parseFloat(v)))?'—':Math.round(parseFloat(v));rowsHtml+=`<div class="tt-row"><span class="tt-label" style="color:${s.color}">${s.label}</span><span class="tt-val">${disp}</span></div>`;});
+  let rowsHtml='';d.series.forEach(s=>{const v=s.values[i];const disp=(v===null||v===undefined||isNaN(parseFloat(v)))?'??:Math.round(parseFloat(v));rowsHtml+=`<div class="tt-row"><span class="tt-label" style="color:${s.color}">${s.label}</span><span class="tt-val">${disp}</span></div>`;});
   document.getElementById('tt-rows').innerHTML=rowsHtml;
   const posEl=document.getElementById('tt-posture');
-  if(d.actions&&d.actions[i]!==null&&d.actions[i]!==undefined){const lbl=actionLabel(d.actions[i]);if(lbl){posEl.textContent='姿位：'+lbl;posEl.style.display='block';}else posEl.style.display='none';}
+  if(d.actions&&d.actions[i]!==null&&d.actions[i]!==undefined){const lbl=actionLabel(d.actions[i]);if(lbl){posEl.textContent='憪蹂?嚗?+lbl;posEl.style.display='block';}else posEl.style.display='none';}
   else posEl.style.display='none';
   let tx=cx+16,ty=cy2-44;if(tx+160>window.innerWidth-8)tx=cx-174;if(ty<8)ty=8;
   tt.style.left=tx+'px';tt.style.top=ty+'px';tt.style.display='block';
@@ -1386,15 +1499,15 @@ function _avgDragMove(e){
 function _avgDragEnd(){_avgDrag=null;document.removeEventListener('mousemove',_avgDragMove);document.removeEventListener('mouseup',_avgDragEnd);document.removeEventListener('touchmove',_avgDragMove);document.removeEventListener('touchend',_avgDragEnd);document.getElementById('chart-tooltip').style.display='none';}
 function sparkline(values,stroke,w=180,h=32){
   const nums=values.map(v=>parseFloat(v)).filter(v=>!isNaN(v));
-  if(nums.length<2)return`<svg width="100%" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="max-width:${w}px;display:block"><text x="4" y="18" font-size="10" fill="#b5ccc5">—</text></svg>`;
+  if(nums.length<2)return`<svg width="100%" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="max-width:${w}px;display:block"><text x="4" y="18" font-size="10" fill="#b5ccc5">??/text></svg>`;
   const mn=Math.min(...nums),mx=Math.max(...nums),rng=mx-mn||1,p=3;
   const pts=nums.map((v,i)=>{const x=p+(i/(nums.length-1))*(w-p*2);const y=(h-p)-((v-mn)/rng)*(h-p*2)+p/2;return`${x.toFixed(1)},${y.toFixed(1)}`;}).join(' ');
   return`<svg width="100%" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="max-width:${w}px;display:block"><polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    LAST UPLOAD INDICATOR
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function setLastUpload(isoStr){
   if(!isoStr){document.getElementById('last-upload').style.display='none';return;}
   lastUploadTime=new Date(isoStr);document.getElementById('last-upload').style.display='inline-flex';
@@ -1404,18 +1517,18 @@ function updateLastUploadUI(){
   if(!lastUploadTime)return;
   const el=document.getElementById('last-upload'),tEl=document.getElementById('lu-time'),aEl=document.getElementById('lu-ago');
   const sec=Math.round((Date.now()-lastUploadTime.getTime())/1000);
-  tEl.textContent=formatHMS(lastUploadTime);aEl.textContent=`（距今 ${sec}s）`;el.classList.toggle('fresh',sec<10);
+  tEl.textContent=formatHMS(lastUploadTime);aEl.textContent=`嚗?隞?${sec}s嚗;el.classList.toggle('fresh',sec<10);
 }
 function clearLastUpload(){clearInterval(lastUploadTicker);lastUploadTicker=null;lastUploadTime=null;document.getElementById('last-upload').style.display='none';}
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    AUTH
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 async function fetchUserTables(){
   try{
     const{data,error}=await sb.from('user_access').select('table_name');
     if(!error&&data&&data.length){const tables=data.map(r=>r.table_name).filter(t=>TABLE_LABEL[t]);if(tables.length)return tables;}
-    console.warn('[Auth] user_access 查詢失敗：',error?.message||'empty');
+    console.warn('[Auth] user_access ?亥岷憭望?嚗?,error?.message||'empty');
   }catch(e){console.warn('[Auth] exception:',e.message);}
   return[];
 }
@@ -1431,7 +1544,7 @@ async function checkExistingSession(){
 async function resumeSession(){
   if(!resumeSession_data)return;
   const tables=await fetchUserTables();
-  if(!tables.length){showLoginError('此帳號無可存取的機構，請聯絡管理員。');return;}
+  if(!tables.length){showLoginError('甇文董??臬???璈?嚗??舐窗蝞∠??～?);return;}
   initApp(resumeSession_data.user.email,tables);
 }
 function dismissResume(){
@@ -1445,12 +1558,12 @@ async function doLogin(){
   const remember=document.getElementById('remember').checked;
   const errEl=document.getElementById('login-error');const btn=document.getElementById('btn-login');
   errEl.style.display='none';
-  if(!email||!pass){showLoginError('請填寫 Email 和密碼');return;}
-  btn.disabled=true;btn.textContent='登入中…';
+  if(!email||!pass){showLoginError('隢‵撖?Email ??蝣?);return;}
+  btn.disabled=true;btn.textContent='?餃銝凌?;
   const{data,error}=await sb.auth.signInWithPassword({email,password:pass});
-  if(error){showLoginError('登入失敗：'+error.message);btn.disabled=false;btn.textContent='登入';return;}
+  if(error){showLoginError('?餃憭望?嚗?+error.message);btn.disabled=false;btn.textContent='?餃';return;}
   const tables=await fetchUserTables();
-  if(!tables.length){await sb.auth.signOut({scope:'global'});showLoginError('此帳號無可存取的機構，請聯絡管理員。');btn.disabled=false;btn.textContent='登入';return;}
+  if(!tables.length){await sb.auth.signOut({scope:'global'});showLoginError('甇文董??臬???璈?嚗??舐窗蝞∠??～?);btn.disabled=false;btn.textContent='?餃';return;}
   if(remember)localStorage.setItem('rm_email',email);else localStorage.removeItem('rm_email');
   localStorage.removeItem('rm_pass');
   initApp(email,tables);
@@ -1463,20 +1576,20 @@ async function doLogout(){
   Object.keys(localStorage).forEach(k=>{if(k.startsWith('sb-'))localStorage.removeItem(k);});
   sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
   currentTable=null;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';currentMemberId='ALL';memberList=[];dailySummaryCache={};dayStats=null;resumeSession_data=null;
-  detailMemberId=null;overviewCardData={};overviewTodayData={};overviewAllData={};
+  detailMemberId=null;overviewCardData={};
   document.getElementById('shared-topbar').style.display='none';
   ['member-overview','member-detail','dashboard'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('session-banner').style.display='none';
-  document.getElementById('btn-login').disabled=false;document.getElementById('btn-login').textContent='登入';
+  document.getElementById('btn-login').disabled=false;document.getElementById('btn-login').textContent='?餃';
   document.getElementById('login-error').style.display='none';
-  setRtBadge(false,'離線');loadRemembered();
+  setRtBadge(false,'?Ｙ?');loadRemembered();
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    FONT SIZE
-   ════════════════════════════════════════════════════════════ */
-const FS_LEVELS=[{label:'A 標準',scale:1},{label:'A＋ 大',scale:1.15},{label:'A＋＋ 最大',scale:1.3}];
+   ???????????????????????????????????????????????????????????? */
+const FS_LEVELS=[{label:'A 璅?',scale:1},{label:'A嚗?憭?,scale:1.15},{label:'A嚗? ?憭?,scale:1.3}];
 let fsIdx=parseInt(localStorage.getItem('vd_fsIdx')||'0');
 function applyFontSize(){
   const f=FS_LEVELS[fsIdx];
@@ -1486,9 +1599,9 @@ function applyFontSize(){
 }
 function cycleFontSize(){fsIdx=(fsIdx+1)%FS_LEVELS.length;applyFontSize();closeSidebar();}
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    SIDEBAR DRAWER
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function openSidebar(){document.getElementById('sidebar-drawer').classList.add('open');document.getElementById('sidebar-overlay').classList.add('open');}
 function closeSidebar(){document.getElementById('sidebar-drawer').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('open');}
 function updateSidebarActive(){
@@ -1498,13 +1611,14 @@ function updateSidebarActive(){
   document.getElementById('snb-posture').classList.toggle('active',currentScreen==='posture');
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    SCREEN MANAGEMENT
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function showScreen(name){
-  ['member-overview','member-detail','dashboard','posture-screen'].forEach(id=>{document.getElementById(id).style.display='none';});
-  const idMap={overview:'member-overview',detail:'member-detail',dashboard:'dashboard',posture:'posture-screen'};
-  document.getElementById(idMap[name]||'member-overview').style.display='block';
+  const screenMap={'overview':'member-overview','detail':'member-detail','dashboard':'dashboard','posture':'posture-screen'};
+  Object.values(screenMap).forEach(id=>{document.getElementById(id).style.display='none';});
+  const targetId=screenMap[name]||'dashboard';
+  document.getElementById(targetId).style.display='block';
   currentScreen=name;
   updateSidebarActive();closeSidebar();
   window.scrollTo(0,0);
@@ -1513,7 +1627,6 @@ function showScreen(name){
 function goScreen(target,view){
   if(target==='overview'){
     showScreen('overview');
-    scanAndLoadCards();
   } else if(target==='dashboard'){
     if(view)setView(view);
     showScreen('dashboard');
@@ -1527,9 +1640,9 @@ function goScreen(target,view){
   closeSidebar();
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    APP INIT (after login)
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function initApp(email,tables){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('shared-topbar').style.display='flex';
@@ -1556,15 +1669,103 @@ function switchTable(name,btnEl,firstLoad=false){
   if(btnEl)btnEl.classList.add('active');
   currentTable=name;currentPage=1;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';
   currentMemberId='ALL';memberList=[];dailySummaryCache={};dayStats=null;
-  clearLastUpload();overviewCardData={};overviewTodayData={};overviewAllData={};
+  clearLastUpload();overviewCardData={};
   subscribeRealtime(name);
   showScreen('overview');
   scanAndLoadCards();
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
+   MEMBER OVERVIEW - Card loading
+   ???????????????????????????????????????????????????????????? */
+async function scanAndLoadCards(){
+  if(!currentTable)return;
+  const btn=document.getElementById('btn-scan-overview');
+  btn.disabled=true;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> ??銝凌?;
+  const today=currentDate||todayStr();
+  document.getElementById('ov-subtitle').textContent=today+' ??銝凌?;
+  document.getElementById('ov-title').textContent=`${TABLE_LABEL[currentTable]||currentTable} 繚 隞???;
+  // Show skeleton cards first
+  const grid=document.getElementById('member-grid');
+  grid.innerHTML=Array(6).fill(0).map(()=>`<div class="member-card skel-card"><div class="mc-head"><div class="mc-avatar ok skel" style="background:var(--border-light)"></div><div style="flex:1"><div class="skel skel-title"></div><div class="skel skel-sub"></div></div></div><div class="mc-vitals"><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div></div></div>`).join('');
+  // Fetch all today's data
+  const start=today+'T00:00:00',end=today+'T23:59:59.999';
+  const{data,error}=await sb.from(currentTable)
+    .select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute')
+    .gte('date_minute',start).lte('date_minute',end).limit(60000);
+  if(error||!data||!data.length){
+    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">?</div><p>隞撠鞈?</p><small>?亥?蝵桀歇??隢?敺??唳???/small></div>`;
+    document.getElementById('ov-subtitle').textContent=today+' 繚 ?∟???;
+    btn.disabled=false;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> ???';
+    return;
+  }
+  // Group by member
+  const groups={};
+  data.forEach(r=>{
+    if(!r.member_id)return;
+    if(!groups[r.member_id])groups[r.member_id]=[];
+    groups[r.member_id].push(r);
+  });
+  overviewCardData=groups;
+  renderOverviewCards(groups,today);
+  btn.disabled=false;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> ???';
+  // ?郊?湔?湔?撣唾?皜嚗????
+  sb.from(currentTable).select('member_id').limit(100000).then(({data:allData})=>{
+    if(allData){memberList=[...new Set(allData.map(r=>r.member_id).filter(Boolean))].sort();renderMemberList(memberList);}
+  });
+}
+
+function renderOverviewCards(groups,today){
+  const grid=document.getElementById('member-grid');
+  const members=Object.keys(groups).sort();
+  if(!members.length){
+    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">?</div><p>隞撠鞈?</p><small>?亥?蝵桀歇??隢?敺??唳???/small></div>`;
+    document.getElementById('ov-subtitle').textContent=today+' 繚 ?∟???;
+    return;
+  }
+  document.getElementById('ov-subtitle').textContent=today+` 繚 ${members.length} 雿??︶;
+  let alertMembers=[];
+  grid.innerHTML=members.map(mid=>{
+    const rows=groups[mid];
+    const aHb=avg(rows.map(r=>r.heartbeat));
+    const aTemp=avg(rows.map(r=>r.temp));
+    const aSbp=avg(rows.map(r=>r.sbp));
+    const aDbp=avg(rows.map(r=>r.dbp));
+    const aBr=avg(rows.map(r=>r.breath));
+    const lastRow=rows.reduce((a,b)=>a.date_minute>b.date_minute?a:b);
+    const lastTime=lastRow.date_minute?lastRow.date_minute.slice(11,16):'??;
+    // anomaly
+    const lvHb=anomalyLevel('heartbeat',aHb),lvSbp=anomalyLevel('sbp',aSbp),lvTemp=anomalyLevel('temp',aTemp);
+    const levels=[lvHb,lvSbp,lvTemp].filter(l=>l!=='neutral');
+    const hasRed=levels.includes('red'),hasOrange=levels.includes('orange');
+    const overallStatus=hasRed?'err':'ok';
+    const cardClass=hasRed?'status-red':'';
+    const avatarClass=overallStatus;
+    const fmtVal=(v,key)=>v===null?'??:`<span class="${anomalyLevel(key,v)==='red'?'is-red':''}">${v}</span>`;
+    return`<div class="member-card ${cardClass}" onclick="openMemberDetail('${escHtml(mid)}')">
+  <div class="mc-head">
+    <div class="mc-avatar ${avatarClass}">${escHtml(mid[0]?.toUpperCase()||'?')}</div>
+    <div class="mc-info">
+      <div class="mc-id" title="${escHtml(mid)}">${escHtml(mid)}</div>
+    </div>
+  </div>
+  <div class="mc-vitals">
+    <div class="mc-vital"><div class="mc-vital-label">?歹? 敹歲</div><div class="mc-vital-val ${anomalyLevel('heartbeat',aHb)==='red'?'is-red':''}">${aHb!==null?Math.round(aHb):'??}</div></div>
+    <div class="mc-vital"><div class="mc-vital-label">?征 ?嗥葬憯?/div><div class="mc-vital-val ${anomalyLevel('sbp',aSbp)==='red'?'is-red':''}">${aSbp!==null?Math.round(aSbp):'??}</div></div>
+    <div class="mc-vital"><div class="mc-vital-label">? 擃澈</div><div class="mc-vital-val ${anomalyLevel('temp',aTemp)==='red'?'is-red':''}">${aTemp!==null?parseFloat(aTemp).toFixed(1)+'簞C':'??}</div></div>
+    <div class="mc-vital"><div class="mc-vital-label">?? ?澆</div><div class="mc-vital-val">${aBr??'??}</div></div>
+  </div>
+  <div class="mc-footer">
+    <span class="mc-time">?? ?敺???<strong>${lastTime}</strong> 繚 ${rows.length} 蝑?/span>
+    <span class="mc-arrow">?亦?閰喟敦 ??/span>
+  </div>
+</div>`;
+  }).join('');
+}
+
+/* ????????????????????????????????????????????????????????????
    MEMBER DETAIL
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 async function openMemberDetail(memberId){
   detailMemberId=memberId;detailMetrics=new Set(['hb']);detailRange='today';detailRawData=null;detailDailySummary={};
   // Update header
@@ -1578,9 +1779,9 @@ async function openMemberDetail(memberId){
     const hasRed=[lvHb,lvSbp,lvTemp].includes('red'),hasOrange=[lvHb,lvSbp,lvTemp].includes('orange');
     const chip=document.getElementById('det-status-chip');
     chip.className='det-status-chip '+(hasRed?'err':'ok');
-    chip.textContent=hasRed?'⚠️ 發現異常':hasOrange?'⚡ 需注意':'✓ 狀態正常';
+    chip.textContent=hasRed?'?? ?潛?啣虜':hasOrange?'???瘜冽?':'????迤撣?;
   } else {
-    const chip=document.getElementById('det-status-chip');chip.className='det-status-chip none';chip.textContent='無今日資料';
+    const chip=document.getElementById('det-status-chip');chip.className='det-status-chip none';chip.textContent='?∩??亥???;
   }
   // Reset tabs UI
   ['hb','bp','temp','br'].forEach(m=>{document.getElementById('dm-'+m).classList.toggle('active',detailMetrics.has(m));});
@@ -1608,7 +1809,7 @@ function setDetRange(r){
   detailRange=r;
   ['today','7d','30d'].forEach(k=>{document.getElementById('dr-'+k).classList.toggle('active',k===r);});
   const customBtn=document.getElementById('dr-custom');
-  if(customBtn){customBtn.classList.remove('active');document.getElementById('dr-custom-label').textContent='選日期';}
+  if(customBtn){customBtn.classList.remove('active');document.getElementById('dr-custom-label').textContent='?豢??;}
   if(r==='today'){currentDate=todayStr();}
   loadDetailChart().then(()=>{
     if(r==='today'){renderDetailStats(detailRawData||[]);}
@@ -1618,11 +1819,11 @@ function setDetRange(r){
 
 async function loadDetailChart(){
   const body=document.getElementById('det-chart-body');
-  body.innerHTML='<div class="trend-empty">載入中…</div>';
+  body.innerHTML='<div class="trend-empty">頛銝凌?/div>';
   const today=currentDate||todayStr();
   // Helper: build stacked panels from series groups
   function buildPanels(panelList,labels){
-    if(!panelList.length){body.innerHTML='<div class="trend-empty">無資料</div>';return;}
+    if(!panelList.length){body.innerHTML='<div class="trend-empty">?∟???/div>';return;}
     const h=panelList.length===1?220:Math.max(120,Math.floor(400/panelList.length));
     if(panelList.length===1){
       body.innerHTML=trendSVG(panelList[0],labels,{sharedCursor:true},h);
@@ -1644,13 +1845,13 @@ async function loadDetailChart(){
       memberMinutes.forEach(r=>{memberByTime[r.time.slice(11,16)]=r;});
       minuteRows=dayAxisRows.map(r=>{const t=r.time.slice(11,16);return memberByTime[t]||{time:r.time,heartbeat:null,temp:null,sbp:null,dbp:null,breath:null,pulse:null,action:null};});
     }
-    if(!minuteRows.length){body.innerHTML='<div class="trend-empty">今日尚無資料</div>';return;}
+    if(!minuteRows.length){body.innerHTML='<div class="trend-empty">隞撠鞈?</div>';return;}
     const labels=minuteRows.map(r=>r.time.slice(11,16));
     const panels=[];
-    if(detailMetrics.has('hb')) panels.push([{label:'心跳 bpm',color:'#7aaa96',values:minuteRows.map(r=>r.heartbeat)}]);
-    if(detailMetrics.has('bp')) panels.push([{label:'收縮壓 mmHg',color:'#b85450',values:minuteRows.map(r=>r.sbp)},{label:'舒張壓 mmHg',color:'#bf7a45',values:minuteRows.map(r=>r.dbp)}]);
-    if(detailMetrics.has('temp')) panels.push([{label:'體溫 °C',color:'#e07b39',values:minuteRows.map(r=>r.temp)}]);
-    if(detailMetrics.has('br')) panels.push([{label:'呼吸 rpm',color:'#bf7a45',values:minuteRows.map(r=>r.breath)}]);
+    if(detailMetrics.has('hb')) panels.push([{label:'敹歲 bpm',color:'#7aaa96',values:minuteRows.map(r=>r.heartbeat)}]);
+    if(detailMetrics.has('bp')) panels.push([{label:'?嗥葬憯?mmHg',color:'#b85450',values:minuteRows.map(r=>r.sbp)},{label:'?撐憯?mmHg',color:'#bf7a45',values:minuteRows.map(r=>r.dbp)}]);
+    if(detailMetrics.has('temp')) panels.push([{label:'擃澈 簞C',color:'#e07b39',values:minuteRows.map(r=>r.temp)}]);
+    if(detailMetrics.has('br')) panels.push([{label:'?澆 rpm',color:'#bf7a45',values:minuteRows.map(r=>r.breath)}]);
     buildPanels(panels,labels);
   } else {
     const days=detailRange==='7d'?7:30;
@@ -1664,10 +1865,10 @@ async function loadDetailChart(){
     }));
     const labels=dayList.map(ds=>`${ds.slice(5,7)}/${ds.slice(8,10)}`);
     const panels=[];
-    if(detailMetrics.has('hb')) panels.push([{label:'心跳 avg',color:'#7aaa96',values:dayList.map(ds=>detailDailySummary[ds]?.avgHb??null)}]);
-    if(detailMetrics.has('bp')) panels.push([{label:'收縮壓 avg',color:'#b85450',values:dayList.map(ds=>detailDailySummary[ds]?.avgSbp??null)},{label:'舒張壓 avg',color:'#bf7a45',values:dayList.map(ds=>detailDailySummary[ds]?.avgDbp??null)}]);
-    if(detailMetrics.has('temp')) panels.push([{label:'體溫 avg',color:'#e07b39',values:dayList.map(ds=>detailDailySummary[ds]?.avgTemp??null)}]);
-    if(detailMetrics.has('br')) panels.push([{label:'呼吸 avg',color:'#bf7a45',values:dayList.map(ds=>detailDailySummary[ds]?.avgBr??null)}]);
+    if(detailMetrics.has('hb')) panels.push([{label:'敹歲 avg',color:'#7aaa96',values:dayList.map(ds=>detailDailySummary[ds]?.avgHb??null)}]);
+    if(detailMetrics.has('bp')) panels.push([{label:'?嗥葬憯?avg',color:'#b85450',values:dayList.map(ds=>detailDailySummary[ds]?.avgSbp??null)},{label:'?撐憯?avg',color:'#bf7a45',values:dayList.map(ds=>detailDailySummary[ds]?.avgDbp??null)}]);
+    if(detailMetrics.has('temp')) panels.push([{label:'擃澈 avg',color:'#e07b39',values:dayList.map(ds=>detailDailySummary[ds]?.avgTemp??null)}]);
+    if(detailMetrics.has('br')) panels.push([{label:'?澆 avg',color:'#bf7a45',values:dayList.map(ds=>detailDailySummary[ds]?.avgBr??null)}]);
     buildPanels(panels,labels);
   }
 }
@@ -1680,11 +1881,11 @@ function setOverviewMode(mode){
 }
 function updateOverviewHeader(state){
   const tableName=TABLE_LABEL[currentTable]||currentTable||'';
-  document.getElementById('ov-title').textContent=`${tableName} · ${overviewMode==='today'?'今日會員':'全部會員'}`;
+  document.getElementById('ov-title').textContent=`${tableName} 繚 ${overviewMode==='today'?'隞?':'?券?'}`;
   if(state==='loading'){
-    document.getElementById('ov-subtitle').textContent=overviewMode==='today'?'今日資料讀取中...':'全部會員資料讀取中...';
+    document.getElementById('ov-subtitle').textContent=overviewMode==='today'?'隞鞈?霈?葉...':'?券?鞈?霈?葉...';
   }else if(state==='empty'){
-    document.getElementById('ov-subtitle').textContent=overviewMode==='today'?`${todayStr()} · 今日無資料`:'目前查無會員資料';
+    document.getElementById('ov-subtitle').textContent=overviewMode==='today'?`${todayStr()} 繚 隞?∟??:'?桀??亦?鞈?';
   }
 }
 function renderOverviewByMode(){
@@ -1697,14 +1898,14 @@ async function scanAndLoadCards(){
   const btn=document.getElementById('btn-scan-overview');
   const grid=document.getElementById('member-grid');
   btn.disabled=true;
-  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 掃描中…';
+  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> ??銝凌?;
   updateOverviewHeader('loading');
   grid.innerHTML=Array(6).fill(0).map(()=>`<div class="member-card skel-card"><div class="mc-head"><div class="mc-avatar ok skel" style="background:var(--border-light)"></div><div style="flex:1"><div class="skel skel-title"></div><div class="skel skel-sub"></div></div></div><div class="mc-vitals"><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div></div></div>`).join('');
 
   const today=currentDate||todayStr();
   const start=today+'T00:00:00',end=today+'T23:59:59.999';
 
-  // 先抓所有 member_id，再分別抓今日資料與各人最新一筆
+  // ?????member_id嚗?????亥????犖??唬?蝑?
   const [{data:todayData,error:todayError},{data:idRows}]=await Promise.all([
     sb.from(currentTable).select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute').gte('date_minute',start).lte('date_minute',end).limit(60000),
     sb.from(currentTable).select('member_id').limit(100000)
@@ -1718,41 +1919,37 @@ async function scanAndLoadCards(){
     todayGroups[r.member_id].push(r);
   });
 
-  // 每位會員各抓最新數筆，優先選有數值的那一筆
+  // 瘥??????唬?蝑?蝣箔?銝?隞颱?鈭綽?
   const latestResults=await Promise.all(uniqueIds.map(id=>
-    sb.from(currentTable).select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute').eq('member_id',id).order('date_minute',{ascending:false}).limit(20)
+    sb.from(currentTable).select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute').eq('member_id',id).order('date_minute',{ascending:false}).limit(1)
   ));
   const allGroups={};
   latestResults.forEach(({data})=>{
-    if(!data||!data[0])return;
-    const best=data.find(r=>r.heartbeat!==null||r.temp!==null||r.breath!==null)||data[0];
-    if(best&&best.member_id)allGroups[best.member_id]=[best];
+    if(data&&data[0]&&data[0].member_id)allGroups[data[0].member_id]=[data[0]];
   });
 
-  memberList=uniqueIds;
-  renderMemberList(memberList);
   overviewTodayData=todayGroups;
   overviewAllData=allGroups;
   renderOverviewByMode();
 
   if((todayError||!todayData?.length) && !uniqueIds.length){
-    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">📭</div><p>查無會員資料</p><small>請確認資料表是否已有量測資料，再重新掃描</small></div>`;
+    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">?</div><p>?亦?鞈?</p><small>隢Ⅱ隤??”?臬撌脫??葫鞈?嚗????</small></div>`;
     updateOverviewHeader('empty');
   }
   btn.disabled=false;
-  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 重新掃描';
+  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> ???';
 }
 function renderOverviewCards(groups,today,mode='today'){
   const grid=document.getElementById('member-grid');
   const members=Object.keys(groups).sort();
   if(!members.length){
-    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">📭</div><p>${mode==='today'?'今日尚無會員資料':'目前查無會員資料'}</p><small>${mode==='today'?'若裝置已開機請稍後重新掃描':'請先確認是否已有歷史會員量測資料'}</small></div>`;
+    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">?</div><p>${mode==='today'?'隞撠?鞈?':'?桀??亦?鞈?'}</p><small>${mode==='today'?'?亥?蝵桀歇??隢?敺??唳???:'隢?蝣箄??臬撌脫?甇瑕??葫鞈?'}</small></div>`;
     updateOverviewHeader('empty');
     return;
   }
 
   updateOverviewHeader();
-  document.getElementById('ov-subtitle').textContent=mode==='today'?`${today} · ${members.length} 位會員`:`全部會員 · ${members.length} 位會員`;
+  document.getElementById('ov-subtitle').textContent=mode==='today'?`${today} 繚 ${members.length} 雿??︶:`?券? 繚 ${members.length} 雿??︶;
   const alertMembers=[];
 
   grid.innerHTML=members.map(mid=>{
@@ -1778,14 +1975,14 @@ function renderOverviewCards(groups,today,mode='today'){
     </div>
   </div>
   <div class="mc-vitals">
-    <div class="mc-vital"><div class="mc-vital-label">心跳</div><div class="mc-vital-val ${anomalyLevel('heartbeat',aHb)==='red'?'is-red':''}">${aHb!==null?Math.round(aHb):'--'}</div></div>
-    <div class="mc-vital"><div class="mc-vital-label">收縮壓</div><div class="mc-vital-val ${anomalyLevel('sbp',aSbp)==='red'?'is-red':''}">${aSbp!==null?Math.round(aSbp):'--'}</div></div>
-    <div class="mc-vital"><div class="mc-vital-label">體溫</div><div class="mc-vital-val ${anomalyLevel('temp',aTemp)==='red'?'is-red':''}">${aTemp!==null?parseFloat(aTemp).toFixed(1)+'°C':'--'}</div></div>
-    <div class="mc-vital"><div class="mc-vital-label">呼吸</div><div class="mc-vital-val">${aBr??'--'}</div></div>
+    <div class="mc-vital"><div class="mc-vital-label">敹歲</div><div class="mc-vital-val ${anomalyLevel('heartbeat',aHb)==='red'?'is-red':''}">${aHb!==null?Math.round(aHb):'--'}</div></div>
+    <div class="mc-vital"><div class="mc-vital-label">?嗥葬憯?/div><div class="mc-vital-val ${anomalyLevel('sbp',aSbp)==='red'?'is-red':''}">${aSbp!==null?Math.round(aSbp):'--'}</div></div>
+    <div class="mc-vital"><div class="mc-vital-label">擃澈</div><div class="mc-vital-val ${anomalyLevel('temp',aTemp)==='red'?'is-red':''}">${aTemp!==null?parseFloat(aTemp).toFixed(1)+'簞C':'--'}</div></div>
+    <div class="mc-vital"><div class="mc-vital-label">?澆</div><div class="mc-vital-val">${aBr??'--'}</div></div>
   </div>
   <div class="mc-footer">
-    <span class="mc-time">${useLatest?'最近資料':'最後更新'} <strong>${lastTime}</strong>${useLatest?'':` · ${rows.length} 筆`}</span>
-    <span class="mc-arrow">查看詳情</span>
+    <span class="mc-time">${useLatest?'?餈???:'?敺??} <strong>${lastTime}</strong>${useLatest?'':` 繚 ${rows.length} 蝑}</span>
+    <span class="mc-arrow">?亦?閰單?</span>
   </div>
 </div>`;
   }).join('');
@@ -1805,29 +2002,29 @@ async function openMemberDetail(memberId){
   ['hb','bp','temp','br'].forEach(m=>document.getElementById('dm-'+m).classList.toggle('active',detailMetrics.has(m)));
   ['today','7d','30d'].forEach(r=>document.getElementById('dr-'+r).classList.toggle('active',r===detailRange));
   showScreen('detail');
-  await renderDetAnnotList();
+  renderDetAnnotList();
   await loadDetailChart();
   renderDetailStats(rows);
 }
 async function loadDetailChart(){
   const body=document.getElementById('det-chart-body');
-  body.innerHTML='<div class="trend-empty">載入中…</div>';
+  body.innerHTML='<div class="trend-empty">頛銝凌?/div>';
   const today=currentDate||todayStr();
   const buildSeries=(source,mode)=>[
-    ...(detailMetrics.has('hb')?[{label:mode==='daily'?'心跳 avg':'心跳 bpm',color:'#7aaa96',values:source.map(r=>mode==='daily'?r?.avgHb??null:r.heartbeat)}]:[]),
+    ...(detailMetrics.has('hb')?[{label:mode==='daily'?'敹歲 avg':'敹歲 bpm',color:'#7aaa96',values:source.map(r=>mode==='daily'?r?.avgHb??null:r.heartbeat)}]:[]),
     ...(detailMetrics.has('bp')?[
-      {label:mode==='daily'?'收縮壓 ':'收縮壓 mmHg',color:'#b85450',values:source.map(r=>mode==='daily'?r?.avgSbp??null:r.sbp)},
-      {label:mode==='daily'?'舒張壓 ':'舒張壓 mmHg',color:'#bf7a45',values:source.map(r=>mode==='daily'?r?.avgDbp??null:r.dbp)}
+      {label:mode==='daily'?'?嗥葬憯?':'?嗥葬憯?mmHg',color:'#b85450',values:source.map(r=>mode==='daily'?r?.avgSbp??null:r.sbp)},
+      {label:mode==='daily'?'?撐憯?':'?撐憯?mmHg',color:'#bf7a45',values:source.map(r=>mode==='daily'?r?.avgDbp??null:r.dbp)}
     ]:[]),
-    ...(detailMetrics.has('temp')?[{label:mode==='daily'?'體溫 avg':'體溫 °C',color:'#e07b39',values:source.map(r=>mode==='daily'?r?.avgTemp??null:r.temp)}]:[]),
-    ...(detailMetrics.has('br')?[{label:mode==='daily'?'呼吸 avg':'呼吸 rpm',color:'#6f8fcb',values:source.map(r=>mode==='daily'?r?.avgBr??null:r.breath)}]:[])
+    ...(detailMetrics.has('temp')?[{label:mode==='daily'?'擃澈 avg':'擃澈 簞C',color:'#e07b39',values:source.map(r=>mode==='daily'?r?.avgTemp??null:r.temp)}]:[]),
+    ...(detailMetrics.has('br')?[{label:mode==='daily'?'?澆 avg':'?澆 rpm',color:'#6f8fcb',values:source.map(r=>mode==='daily'?r?.avgBr??null:r.breath)}]:[])
   ];
   const renderChart=(series,labels,actionValues=null)=>{
-    if(!series.length){body.innerHTML='<div class="trend-empty">請至少勾選一項指標</div>';return;}
+    if(!series.length){body.innerHTML='<div class="trend-empty">隢撠?訾???璅?/div>';return;}
     let minRange=0;
-    if(series.every(s=>s.label.includes('心跳')))minRange=60;
-    else if(series.every(s=>s.label.includes('呼吸')))minRange=20;
-    else if(series.every(s=>s.label.includes('體溫')))minRange=2;
+    if(series.every(s=>s.label.includes('敹歲')))minRange=60;
+    else if(series.every(s=>s.label.includes('?澆')))minRange=20;
+    else if(series.every(s=>s.label.includes('擃澈')))minRange=2;
     body.innerHTML=trendSVG(series,labels,{sharedCursor:true,actionValues,minRange},300);
     initCursorDragNodes();
     initAvgDragNodes();
@@ -1839,7 +2036,7 @@ async function loadDetailChart(){
       detailRawData=await getDetailMemberRawRows();
     }
     const memberMinutes=filterWarmupMinutes(aggregateToMinutes(detailRawData));
-    if(!memberMinutes.length){body.innerHTML='<div class="trend-empty">今日尚無資料</div>';return;}
+    if(!memberMinutes.length){body.innerHTML='<div class="trend-empty">隞撠鞈?</div>';return;}
     let minuteRows=memberMinutes;
     const dayAxisRows=await getDetailDayAxisMinuteRows();
     if(dayAxisRows.length){
@@ -1872,7 +2069,7 @@ async function loadDetailChart(){
 
 function renderDetailStats(rows){
   const grid=document.getElementById('det-stats-grid');
-  if(!rows||!rows.length){grid.innerHTML='<div class="det-stat-box"><div class="det-stat-label">今日無資料</div></div>';return;}
+  if(!rows||!rows.length){grid.innerHTML='<div class="det-stat-box"><div class="det-stat-label">隞?∟???/div></div>';return;}
   const aHb=avg(rows.map(r=>r.heartbeat)),stdHb=stdOf(rows.map(r=>r.heartbeat).filter(v=>v!==null&&v!==undefined));
   const aTemp=avg(rows.map(r=>r.temp)),stdTemp=stdOf(rows.map(r=>r.temp).filter(v=>v!==null&&v!==undefined));
   const aSbp=avg(rows.map(r=>r.sbp)),aDbp=avg(rows.map(r=>r.dbp));
@@ -1882,17 +2079,17 @@ function renderDetailStats(rows){
   const lvHb=anomalyLevel('heartbeat',aHb),lvSbp=anomalyLevel('sbp',aSbp),lvTemp=anomalyLevel('temp',aTemp);
   const stat=(label,val,sub,level)=>`<div class="det-stat-box"><div class="det-stat-label">${label}</div><div class="det-stat-val${level==='red'?' is-red':''}">${val}</div>${sub?`<div class="det-stat-sub">${sub}</div>`:''}</div>`;
   grid.innerHTML=[
-    aHb!==null?stat('❤️ 平均心跳',Math.round(aHb)+' bpm',stdHb!==null?` ±${Math.round(stdHb)} | 最高 ${maxHb} / 最低 ${minHb}`:'',lvHb):'',
-    aSbp!==null?stat('🩺 收縮壓',Math.round(aSbp)+' mmHg',aDbp!==null?`舒張壓平均 ${Math.round(aDbp)} mmHg`:'',lvSbp):'',
-    aTemp!==null?stat('🌡 平均體溫',parseFloat(aTemp).toFixed(1)+'°C',stdTemp!==null?` ±${stdTemp}°C`:'',lvTemp):'',
-    aBr!==null?stat('🫁 平均呼吸',Math.round(aBr)+' rpm',''):'',
-    stat('📊 今日資料',rows.length+' 筆',''),
+    aHb!==null?stat('?歹? 撟喳?敹歲',Math.round(aHb)+' bpm',stdHb!==null?` 簣${Math.round(stdHb)} | ?擃?${maxHb} / ?雿?${minHb}`:'',lvHb):'',
+    aSbp!==null?stat('?征 ?嗥葬憯?,Math.round(aSbp)+' mmHg',aDbp!==null?`?撐憯像??${Math.round(aDbp)} mmHg`:'',lvSbp):'',
+    aTemp!==null?stat('? 撟喳?擃澈',parseFloat(aTemp).toFixed(1)+'簞C',stdTemp!==null?` 簣${stdTemp}簞C`:'',lvTemp):'',
+    aBr!==null?stat('?? 撟喳??澆',Math.round(aBr)+' rpm',''):'',
+    stat('?? 隞鞈?',rows.length+' 蝑?,''),
   ].join('');
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    NOTES (localStorage)
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function noteKey(memberId){return`note_${currentTable}_${memberId}`;}
 function loadNote(memberId){return localStorage.getItem(noteKey(memberId))||'';}
 function scheduleNoteSave(){
@@ -1906,16 +2103,16 @@ function scheduleNoteSave(){
   },800);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    CSV EXPORT
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function exportCSV(){
   const data=detailMemberId?(detailRawData||[]):rawRowsCache;
   if(!data||!data.length){
-    if(!detailMemberId){alert('請先開啟會員詳細頁');return;}
-    alert('此會員今日尚無資料可匯出');return;
+    if(!detailMemberId){alert('隢????閰喟敦??);return;}
+    alert('甇斗??∩??亙??∟???臬');return;
   }
-  const headers=['時間','會員ID','心跳(bpm)','體溫(°C)','呼吸(rpm)','收縮壓(mmHg)','舒張壓(mmHg)','脈搏','步數','卡路里','動作'];
+  const headers=['??','?ID','敹歲(bpm)','擃澈(簞C)','?澆(rpm)','?嗥葬憯?mmHg)','?撐憯?mmHg)','??','甇交','?∟楝??,'??'];
   const rows=data.map(r=>[
     r.date_minute||'',r.member_id||'',
     r.heartbeat??'',r.temp!==null&&r.temp!==undefined?parseFloat(r.temp).toFixed(1):'',
@@ -1931,15 +2128,15 @@ function exportCSV(){
   URL.revokeObjectURL(url);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    CONTEXT LABEL / ACCOUNT SIDEBAR
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 async function syncDetailDayData(){
   if(!currentTable||!detailMemberId)return;
   const btn=document.getElementById('btn-sync-detail-day');
   const oldHtml=btn?btn.innerHTML:'';
   const prevMember=currentMemberId;
-  if(btn){btn.disabled=true;btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 同步中';}
+  if(btn){btn.disabled=true;btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> ?郊銝?;}
   try{
     currentMemberId='ALL';
     const rawRows=await fetchDay(currentTable,currentDate,true);
@@ -1952,39 +2149,39 @@ async function syncDetailDayData(){
     renderDetailStats(detailRawData||[]);
   }catch(err){
     console.error(err);
-    alert('同步日視圖資料失敗');
+    alert('?郊?亥????仃??);
   }finally{
     currentMemberId=prevMember;
     if(btn){btn.disabled=false;btn.innerHTML=oldHtml;}
   }
 }
 function updateContextLabel(){
-  document.getElementById('ctx-table').textContent=TABLE_LABEL[currentTable]||currentTable||'—';
-  document.getElementById('ctx-member').textContent=currentMemberId==='ALL'?'全部':currentMemberId;
+  document.getElementById('ctx-table').textContent=TABLE_LABEL[currentTable]||currentTable||'??;
+  document.getElementById('ctx-member').textContent=currentMemberId==='ALL'?'?券':currentMemberId;
   document.getElementById('btn-account').classList.toggle('has-filter',currentMemberId!=='ALL');
 }
 function openAccountSidebar(){document.getElementById('acct-search').value='';renderMemberList(memberList);document.getElementById('acct-overlay').classList.add('open');}
 function closeAccountSidebar(){document.getElementById('acct-overlay').classList.remove('open');}
 function renderMemberList(list){
   const el=document.getElementById('acct-list');
-  let html=`<div class="acct-item${currentMemberId==='ALL'?' active':''}" onclick="setMember('ALL')"><span class="acct-dot all"></span><span class="acct-name">全部帳號</span><span class="acct-check">✓</span></div>`;
-  list.forEach(id=>{const eid=escHtml(id);html+=`<div class="acct-item${currentMemberId===id?' active':''}" onclick="setMember('${eid}')"><span class="acct-dot"></span><span class="acct-name">${eid}</span><span class="acct-check">✓</span></div>`;});
-  if(!list.length)html+=`<div style="padding:20px 12px;font-size:13px;color:var(--text-dim)">尚無帳號資料<br>點上方「掃描本月」</div>`;
+  let html=`<div class="acct-item${currentMemberId==='ALL'?' active':''}" onclick="setMember('ALL')"><span class="acct-dot all"></span><span class="acct-name">?券撣唾?</span><span class="acct-check">??/span></div>`;
+  list.forEach(id=>{const eid=escHtml(id);html+=`<div class="acct-item${currentMemberId===id?' active':''}" onclick="setMember('${eid}')"><span class="acct-dot"></span><span class="acct-name">${eid}</span><span class="acct-check">??/span></div>`;});
+  if(!list.length)html+=`<div style="padding:20px 12px;font-size:13px;color:var(--text-dim)">撠撣唾?鞈?<br>暺??嫘????/div>`;
   el.innerHTML=html;
 }
 function filterMemberList(q){renderMemberList(memberList.filter(id=>id.toLowerCase().includes(q.toLowerCase())));}
 function setMember(id){currentMemberId=id;closeAccountSidebar();updateContextLabel();currentPage=1;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';dailySummaryCache={};clearLastUpload();loadCurrentTable();}
 function updateMemberList(){memberList=[...new Set(rawRowsCache.map(r=>r.member_id).filter(Boolean))].sort();renderMemberList(memberList);}
 async function scanMonthMembers(){
-  const btn=document.getElementById('acct-scan-btn');btn.textContent='掃描中…';btn.disabled=true;
+  const btn=document.getElementById('acct-scan-btn');btn.textContent='??銝凌?;btn.disabled=true;
   const{data}=await sb.from(currentTable).select('member_id').limit(100000);
   if(data){memberList=[...new Set(data.map(r=>r.member_id).filter(Boolean))].sort();renderMemberList(memberList);}
-  btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 掃描所有帳號';btn.disabled=false;
+  btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> ????董??;btn.disabled=false;
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    TREND PANEL (dashboard)
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function setHbBreathRange(r){hbBreathRange=r;document.querySelectorAll('.trend-range-btn').forEach(b=>b.classList.toggle('active',b.dataset.range===r));renderTrendPanel();}
 async function renderTrendPanel(){
   const panel=document.getElementById('trend-panel'),body=document.getElementById('trend-body');
@@ -1992,52 +2189,52 @@ async function renderTrendPanel(){
 }
 async function renderHbBreathTrend(body){
   const mkBtn=(r,l)=>`<button class="trend-range-btn${hbBreathRange===r?' active':''}" data-range="${r}" onclick="setHbBreathRange('${r}')">${l}</button>`;
-  const baseBtns=mkBtn('day','一天')+mkBtn('week','一週')+mkBtn('month','一個月');
+  const baseBtns=mkBtn('day','銝憭?)+mkBtn('week','銝??)+mkBtn('month','銝??');
   // metric toggles
   const mkMBtn=(k,l)=>`<button class="trend-metric-toggle${trendLineSet.has(k)?' active':''}" onclick="toggleTrendLine('${k}')">${l}</button>`;
-  const metricBtns=`<div class="trend-metric-btns">${mkMBtn('hb','❤️ 心跳')+mkMBtn('br','🫁 呼吸')+mkMBtn('sbp','🩺 收縮壓')+mkMBtn('temp','🌡 體溫')}</div>`;
+  const metricBtns=`<div class="trend-metric-btns">${mkMBtn('hb','?歹? 敹歲')+mkMBtn('br','?? ?澆')+mkMBtn('sbp','?征 ?嗥葬憯?)+mkMBtn('temp','? 擃澈')}</div>`;
   // build series from trendLineSet
   function mkSeries(src,mode){
     const s=[];
-    if(trendLineSet.has('hb')) s.push({label:'心跳 bpm',color:'#7aaa96',values:src.map(r=>mode==='daily'?r?.avgHb??null:r.heartbeat)});
-    if(trendLineSet.has('br')) s.push({label:'呼吸 rpm',color:'#bf7a45',values:src.map(r=>mode==='daily'?r?.avgBr??null:r.breath)});
-    if(trendLineSet.has('sbp')) s.push({label:'收縮壓 mmHg',color:'#b85450',values:src.map(r=>mode==='daily'?r?.avgSbp??null:r.sbp)});
-    if(trendLineSet.has('temp')) s.push({label:'體溫 °C',color:'#e07b39',values:src.map(r=>mode==='daily'?r?.avgTemp??null:r.temp)});
+    if(trendLineSet.has('hb')) s.push({label:'敹歲 bpm',color:'#7aaa96',values:src.map(r=>mode==='daily'?r?.avgHb??null:r.heartbeat)});
+    if(trendLineSet.has('br')) s.push({label:'?澆 rpm',color:'#bf7a45',values:src.map(r=>mode==='daily'?r?.avgBr??null:r.breath)});
+    if(trendLineSet.has('sbp')) s.push({label:'?嗥葬憯?mmHg',color:'#b85450',values:src.map(r=>mode==='daily'?r?.avgSbp??null:r.sbp)});
+    if(trendLineSet.has('temp')) s.push({label:'擃澈 簞C',color:'#e07b39',values:src.map(r=>mode==='daily'?r?.avgTemp??null:r.temp)});
     return s;
   }
   if(hbBreathRange==='day'){
     const minuteRows=groupedCache?Object.values(groupedCache).flat().sort((a,b)=>a.time.localeCompare(b.time)):[];
-    if(!minuteRows.length){body.innerHTML=`<div class="trend-range-btns">${baseBtns}</div>${metricBtns}<div class="trend-empty">無資料</div>`;return;}
+    if(!minuteRows.length){body.innerHTML=`<div class="trend-range-btns">${baseBtns}</div>${metricBtns}<div class="trend-empty">?∟???/div>`;return;}
     const labels=minuteRows.map(r=>r.time.slice(11,16));
     const series=mkSeries(minuteRows,'raw');
-    body.innerHTML=`<div class="trend-range-btns">${baseBtns}</div>${metricBtns}`+(series.length?trendSVG(series,labels,{sharedCursor:true,actionValues:minuteRows.map(r=>r.action)},280):'<div class="trend-empty">請勾選至少一項指標</div>');
+    body.innerHTML=`<div class="trend-range-btns">${baseBtns}</div>${metricBtns}`+(series.length?trendSVG(series,labels,{sharedCursor:true,actionValues:minuteRows.map(r=>r.action)},280):'<div class="trend-empty">隢?貉撠???璅?/div>');
     initCursorDragNodes();
   } else if(hbBreathRange==='week'){
     const days7=Array.from({length:7},(_,i)=>{const d=new Date(currentDate+'T00:00:00');d.setDate(d.getDate()-(6-i));return`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;});
     await Promise.all(days7.map(async ds=>{if(dailySummaryCache.hasOwnProperty(ds))return;const rows=await fetchDaySummary(currentTable,ds);dailySummaryCache[ds]=rows&&rows.length?{avgHb:avg(rows.map(r=>r.heartbeat)),avgBr:avg(rows.map(r=>r.breath)),avgSbp:avg(rows.map(r=>r.sbp)),avgDbp:avg(rows.map(r=>r.dbp)),avgTemp:avg(rows.map(r=>r.temp))}:null;}));
     const series=mkSeries(days7.map(ds=>dailySummaryCache[ds]),'daily');
-    body.innerHTML=`<div class="trend-range-btns">${baseBtns}</div>${metricBtns}`+(series.length?trendSVG(series,days7.map(ds=>`${ds.slice(5,7)}/${ds.slice(8,10)}`),{sharedCursor:true},280):'<div class="trend-empty">請勾選至少一項指標</div>');
+    body.innerHTML=`<div class="trend-range-btns">${baseBtns}</div>${metricBtns}`+(series.length?trendSVG(series,days7.map(ds=>`${ds.slice(5,7)}/${ds.slice(8,10)}`),{sharedCursor:true},280):'<div class="trend-empty">隢?貉撠???璅?/div>');
     initCursorDragNodes();
   } else {
     const[yr,mo]=currentMonth.split('-').map(Number);const days=new Date(yr,mo,0).getDate();
-    let dayOpts=`<option value="">月總覽（${days}天）</option>`;
-    for(let d=1;d<=days;d++){const ds=`${yr}-${p2(mo)}-${p2(d)}`;if(dailySummaryCache[ds])dayOpts+=`<option value="${ds}"${hbBreathSelectedDay===ds?' selected':''}>${p2(d)} 日</option>`;}
+    let dayOpts=`<option value="">?蜇閬踝?${days}憭抬?</option>`;
+    for(let d=1;d<=days;d++){const ds=`${yr}-${p2(mo)}-${p2(d)}`;if(dailySummaryCache[ds])dayOpts+=`<option value="${ds}"${hbBreathSelectedDay===ds?' selected':''}>${p2(d)} ??/option>`;}
     const hasSel=!!(hbBreathSelectedDay&&hbBreathSelectedDay.startsWith(currentMonth));
     const rangeHtml=`<div class="trend-range-btns">${baseBtns}<select class="hb-day-sel${hasSel?' has-day':''}" onchange="setHbBreathDay(this.value)">${dayOpts}</select></div>${metricBtns}`;
     if(hasSel){
-      body.innerHTML=rangeHtml+'<div class="trend-empty">載入中…</div>';
+      body.innerHTML=rangeHtml+'<div class="trend-empty">頛銝凌?/div>';
       const rows=await fetchDaySummary(currentTable,hbBreathSelectedDay);
-      if(!rows||!rows.length){body.innerHTML=rangeHtml+'<div class="trend-empty">此日無資料</div>';return;}
+      if(!rows||!rows.length){body.innerHTML=rangeHtml+'<div class="trend-empty">甇斗?∟???/div>';return;}
       const sorted=rows.sort((a,b)=>a.date_minute.localeCompare(b.date_minute));
       const labels=sorted.map(r=>r.date_minute.slice(11,16));
       const series=mkSeries(sorted,'raw');
-      body.innerHTML=rangeHtml+(series.length?trendSVG(series,labels,{sharedCursor:true},280):'<div class="trend-empty">請勾選至少一項指標</div>');
+      body.innerHTML=rangeHtml+(series.length?trendSVG(series,labels,{sharedCursor:true},280):'<div class="trend-empty">隢?貉撠???璅?/div>');
       initCursorDragNodes();
     } else {
       const dataArr=[],labels=[];
       for(let d=1;d<=days;d++){const ds=`${yr}-${p2(mo)}-${p2(d)}`;labels.push(p2(d));dataArr.push(dailySummaryCache[ds]);}
       const series=mkSeries(dataArr,'daily');
-      body.innerHTML=rangeHtml+(series.length?trendSVG(series,labels,{sharedCursor:true},280):'<div class="trend-empty">請勾選至少一項指標</div>');
+      body.innerHTML=rangeHtml+(series.length?trendSVG(series,labels,{sharedCursor:true},280):'<div class="trend-empty">隢?貉撠???璅?/div>');
       initCursorDragNodes();
     }
   }
@@ -2049,15 +2246,14 @@ function toggleTrendLine(k){
 }
 function setHbBreathDay(ds){hbBreathSelectedDay=ds||null;renderTrendPanel();}
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    VIEW / NAV / SEARCH
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function setView(v){
   currentView=v;
   document.getElementById('view-day-btn').classList.toggle('active',v==='day');
   document.getElementById('view-month-btn').classList.toggle('active',v==='month');
   if(v==='month'){hbBreathRange='month';hbBreathSelectedDay=null;}
-  else if(v==='day'){hbBreathRange='day';}
   currentPage=1;updateDateDisplay();updateSidebarActive();
 }
 function updateDateDisplay(){document.getElementById('date-display').textContent=currentView==='day'?currentDate:currentMonth;}
@@ -2088,7 +2284,7 @@ function doSearch(){
     currentMonth=raw;currentView='month';
     document.getElementById('view-day-btn').classList.remove('active');
     document.getElementById('view-month-btn').classList.add('active');
-  } else {alert('格式不對，請輸入 YYYY-MM-DD 或 YYYY-MM');return;}
+  } else {alert('?澆?銝?嚗?頛詨 YYYY-MM-DD ??YYYY-MM');return;}
   currentPage=1;closeSearch();goScreen('dashboard');
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSearch();closeAccountSidebar();closeSidebar();}});
@@ -2096,9 +2292,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSearch();close
 function updateDetStatsHead(range){
   const head=document.getElementById('det-stats-head');if(!head)return;
   const r=range||detailRange;
-  if(r==='7d'){head.textContent='近 7 天平均摘要';}
-  else if(r==='30d'){head.textContent='近 30 天平均摘要';}
-  else{const d=currentDate||todayStr();head.textContent=d===todayStr()?'今日數值摘要':`${d} 數值摘要`;}
+  if(r==='7d'){head.textContent='餈?7 憭拙像??閬?;}
+  else if(r==='30d'){head.textContent='餈?30 憭拙像??閬?;}
+  else{const d=currentDate||todayStr();head.textContent=d===todayStr()?'隞?詨潭?閬?:`${d} ?詨潭?閬;}
 }
 
 function openDetDatePicker(){
@@ -2119,23 +2315,23 @@ function setDetCustomDate(dateStr){
   loadDetailChart().then(()=>{renderDetailStats(detailRawData||[]);updateDetStatsHead('today');});
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    AUTO REFRESH
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function setAutoRefresh(){arInterval=parseInt(document.getElementById('refresh-interval').value)||0;clearInterval(arTimer);document.getElementById('refresh-countdown').textContent='';if(arInterval>0)startCountdown();}
 function startCountdown(){arCountdown=arInterval;updateCountdownUI();arTimer=setInterval(()=>{arCountdown--;updateCountdownUI();if(arCountdown<=0){arCountdown=arInterval;const isToday=(currentView==='day'&&currentDate===todayStr())||(currentView==='month'&&currentMonth===monthStr());if(isToday&&currentScreen==='dashboard')silentRefresh();}},1000);}
 function updateCountdownUI(){const el=document.getElementById('refresh-countdown');el.textContent=arInterval?arCountdown+'s':'';}
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    REALTIME
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function subscribeRealtime(table){
   if(rtChannel){sb.removeChannel(rtChannel);rtChannel=null;}
-  setRtBadge(false,'連線中…');
+  setRtBadge(false,'???銝凌?);
   rtChannel=sb.channel('rt-'+table).on('postgres_changes',{event:'INSERT',schema:'public',table},handleRealtimeInsert).subscribe(status=>{
-    if(status==='SUBSCRIBED')setRtBadge(true,'即時');
-    if(status==='CLOSED')setRtBadge(false,'離線');
-    if(status==='CHANNEL_ERROR')setRtBadge(false,'錯誤');
+    if(status==='SUBSCRIBED')setRtBadge(true,'?單?');
+    if(status==='CLOSED')setRtBadge(false,'?Ｙ?');
+    if(status==='CHANNEL_ERROR')setRtBadge(false,'?航炊');
   });
 }
 function setRtBadge(active,label){const badge=document.getElementById('rt-badge'),dot=document.getElementById('rt-dot'),lbl=document.getElementById('rt-label');badge.classList.toggle('active',active);dot.classList.toggle('pulse',active);lbl.textContent=label;}
@@ -2147,22 +2343,23 @@ function handleRealtimeInsert(payload){
   const minuteRows=filterWarmupMinutes(aggregateToMinutes(rawRowsCache));
   groupedCache=groupByHour(minuteRows);dayStats=computeDayStats(minuteRows);
   renderPage();renderTrendPanel();
+  updateCurrentPostureBadge();fetchAndRenderNurseReports();
   setTimeout(()=>{const tb=document.querySelector('.data-table tbody');if(tb&&tb.firstElementChild)tb.firstElementChild.classList.add('row-new');},50);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    FETCH
-   ════════════════════════════════════════════════════════════ */
-async function fetchDay(table,date,silent=false){
+   ???????????????????????????????????????????????????????????? */
+async function fetchDay(table,date,silent=false,memberId=currentMemberId){
   const start=date+'T00:00:00',end=date+'T23:59:59.999';
   let all=[],page=0;const ps=1000;
   const pfill=document.querySelector('.progress-bar-fill'),plabel=document.querySelector('.progress-label');
   while(true){
     let q=sb.from(table).select('date_minute,heartbeat,temp,breath,sbp,dbp,pulse,step,calorie,action,member_id').gte('date_minute',start).lte('date_minute',end).order('date_minute',{ascending:true}).range(page*ps,(page+1)*ps-1);
-    if(currentMemberId!=='ALL')q=q.eq('member_id',currentMemberId);
+    if(memberId!=='ALL')q=q.eq('member_id',memberId);
     const{data,error}=await q;if(error||!data||!data.length)break;
     all=all.concat(data);
-    if(!silent&&pfill){pfill.style.width=Math.min(Math.round(all.length/900),95)+'%';if(plabel)plabel.textContent=`載入中… 已取得 ${all.length.toLocaleString()} 筆`;}
+    if(!silent&&pfill){pfill.style.width=Math.min(Math.round(all.length/900),95)+'%';if(plabel)plabel.textContent=`頛銝凌?撌脣?敺?${all.length.toLocaleString()} 蝑;}
     if(data.length<ps)break;page++;
   }
   if(!silent&&pfill)pfill.style.width='100%';
@@ -2175,30 +2372,31 @@ async function fetchDaySummary(table,date){
   const{data,error}=await q;if(error||!data)return null;return data;
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    DAY VIEW
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 async function loadDayView(tok){
   const content=document.getElementById('table-content'),countEl=document.getElementById('row-count'),pagWrap=document.getElementById('pagination-wrap');
   countEl.style.visibility='hidden';pagWrap.innerHTML='';groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';dayStats=null;clearLastUpload();
-  content.innerHTML=`<div class="progress-wrap"><div class="progress-label">載入中…</div><div class="progress-bar-bg"><div class="progress-bar-fill"></div></div><div class="progress-note">正在取得 ${escHtml(currentDate)}${currentMemberId!=='ALL'?' ('+escHtml(currentMemberId)+')':''} 的資料</div></div>`;
+  content.innerHTML=`<div class="progress-wrap"><div class="progress-label">頛銝凌?/div><div class="progress-bar-bg"><div class="progress-bar-fill"></div></div><div class="progress-note">甇??? ${escHtml(currentDate)}${currentMemberId!=='ALL'?' ('+escHtml(currentMemberId)+')':''} ????/div></div>`;
   const rawRows=await fetchDay(currentTable,currentDate);
   if(tok!==undefined&&tok!==loadToken)return; // view switched while loading
-  if(!rawRows.length){content.innerHTML=`<div class="state-card">📭 ${currentDate} 沒有資料</div>`;countEl.style.visibility='visible';countEl.innerHTML='共 <strong>0</strong> 筆';document.getElementById('trend-panel').style.display='none';return;}
+  if(!rawRows.length){content.innerHTML=`<div class="state-card">? ${currentDate} 瘝?鞈?</div>`;countEl.style.visibility='visible';countEl.innerHTML='??<strong>0</strong> 蝑?;document.getElementById('trend-panel').style.display='none';return;}
   rawRowsCache=rawRows;dayViewRawRowsCache=rawRows.slice();dayViewRawRowsCacheKey=dayViewCacheKey();updateMemberList();
   const maxDm=rawRows.reduce((m,r)=>r.date_minute>m?r.date_minute:m,rawRows[0].date_minute);setLastUpload(maxDm);
   const minuteRows=filterWarmupMinutes(aggregateToMinutes(rawRows));groupedCache=groupByHour(minuteRows);dayStats=computeDayStats(minuteRows);
   const hourKeys=Object.keys(groupedCache).sort();totalPages=Math.ceil(hourKeys.length/HOURS_PER_PAGE);if(currentPage>totalPages)currentPage=totalPages;
   if(pendingScrollHour){const tIdx=hourKeys.findIndex(hk=>hk===pendingScrollHour);if(tIdx>=0)currentPage=Math.ceil((tIdx+1)/HOURS_PER_PAGE);}
   const warmFiltered=aggregateToMinutes(rawRows).length-minuteRows.length;
-  const warmNote=warmFiltered>0?'<span style="font-size:11px;color:var(--text-dim)">（已過濾暖機 '+warmFiltered+' 分）</span>':'';
-  countEl.style.visibility='visible';countEl.innerHTML='原始 <strong>'+rawRows.length.toLocaleString()+'</strong> 筆 → 合併 <strong>'+minuteRows.length.toLocaleString()+'</strong> 分鐘'+warmNote;
+  const warmNote=warmFiltered>0?'<span style="font-size:11px;color:var(--text-dim)">嚗歇?蕪?? '+warmFiltered+' ??</span>':'';
+  countEl.style.visibility='visible';countEl.innerHTML='?? <strong>'+rawRows.length.toLocaleString()+'</strong> 蝑????蔥 <strong>'+minuteRows.length.toLocaleString()+'</strong> ??'+warmNote;
   renderPage();renderTrendPanel();
+  updateCurrentPostureBadge();fetchAndRenderNurseReports();
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    MONTH VIEW
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 async function loadMonthView(tok){
   const content=document.getElementById('table-content'),countEl=document.getElementById('row-count'),pagWrap=document.getElementById('pagination-wrap');
   countEl.style.visibility='hidden';pagWrap.innerHTML='';content.innerHTML='';clearLastUpload();
@@ -2208,7 +2406,7 @@ async function loadMonthView(tok){
   for(let d=1;d<=daysInMonth;d++){
     const ds=`${yr}-${p2(mo)}-${p2(d)}`;
     const card=document.createElement('div');card.className='day-card loading-day';
-    card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">載入中</div><div class="day-stat-val" style="color:var(--text-light)">…</div></div></div>`;
+    card.innerHTML=`<div class="day-card-date">?? ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">頛銝?/div><div class="day-stat-val" style="color:var(--text-light)">??/div></div></div>`;
     grid.appendChild(card);cardMap[ds]=card;
   }
   const fetchPromises=Array.from({length:daysInMonth},(_,i)=>{const d=i+1;const ds=`${yr}-${p2(mo)}-${p2(d)}`;return fetchDaySummary(currentTable,ds).then(rows=>({ds,rows}));});
@@ -2216,26 +2414,26 @@ async function loadMonthView(tok){
   if(tok!==undefined&&tok!==loadToken)return; // view switched while loading
   results.forEach(({ds,rows})=>{
     const card=cardMap[ds];card.classList.remove('loading-day');
-    if(!rows||!rows.length){card.classList.add('no-data');card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">無資料</div></div></div>`;dailySummaryCache[ds]=null;return;}
+    if(!rows||!rows.length){card.classList.add('no-data');card.innerHTML=`<div class="day-card-date">?? ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">?∟???/div></div></div>`;dailySummaryCache[ds]=null;return;}
     const aHb=avg(rows.map(r=>r.heartbeat)),aBr=avg(rows.map(r=>r.breath)),aSbp=avg(rows.map(r=>r.sbp)),aDbp=avg(rows.map(r=>r.dbp)),aTemp=avg(rows.map(r=>r.temp));
     dailySummaryCache[ds]={avgHb:aHb,avgBr:aBr,avgSbp:aSbp,avgDbp:aDbp,avgTemp:aTemp};
     const hbLvl=anomalyLevel('heartbeat',aHb),sbpLvl=anomalyLevel('sbp',aSbp);
     const statsHtml=[
-      aHb!==null?`<div class="day-stat"><div class="day-stat-label">❤️ 心跳 avg</div><div class="day-stat-val${hbLvl==='red'?' is-red':''}">${Math.round(aHb)}</div></div>`:'',
-      `<div class="day-stat"><div class="day-stat-label">🫁 呼吸 avg</div><div class="day-stat-val">${aBr!==null?Math.round(aBr):'—'}</div></div>`,
-      aSbp!==null?`<div class="day-stat"><div class="day-stat-label">🩺 收縮壓 avg</div><div class="day-stat-val${sbpLvl==='red'?' is-red':''}">${Math.round(aSbp)}</div></div>`:'',
-      aTemp!==null?`<div class="day-stat"><div class="day-stat-label">🌡 體溫 avg</div><div class="day-stat-val">${parseFloat(aTemp).toFixed(1)}°C</div></div>`:'',
+      aHb!==null?`<div class="day-stat"><div class="day-stat-label">?歹? 敹歲 avg</div><div class="day-stat-val${hbLvl==='red'?' is-red':''}">${Math.round(aHb)}</div></div>`:'',
+      `<div class="day-stat"><div class="day-stat-label">?? ?澆 avg</div><div class="day-stat-val">${aBr!==null?Math.round(aBr):'??}</div></div>`,
+      aSbp!==null?`<div class="day-stat"><div class="day-stat-label">?征 ?嗥葬憯?avg</div><div class="day-stat-val${sbpLvl==='red'?' is-red':''}">${Math.round(aSbp)}</div></div>`:'',
+      aTemp!==null?`<div class="day-stat"><div class="day-stat-label">? 擃澈 avg</div><div class="day-stat-val">${parseFloat(aTemp).toFixed(1)}簞C</div></div>`:'',
     ].join('');
-    card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats">${statsHtml}</div><div class="day-card-footer"><span>${rows.length.toLocaleString()} 筆</span><span style="color:var(--mint-mid);font-weight:600;">查看詳細 →</span></div>`;
+    card.innerHTML=`<div class="day-card-date">?? ${ds}</div><div class="day-card-stats">${statsHtml}</div><div class="day-card-footer"><span>${rows.length.toLocaleString()} 蝑?/span><span style="color:var(--mint-mid);font-weight:600;">?亦?閰喟敦 ??/span></div>`;
     card.onclick=()=>{currentDate=ds;setView('day');loadCurrentTable();};
   });
-  countEl.style.visibility='visible';countEl.innerHTML=`${currentMonth} 月份・<strong>${daysInMonth}</strong> 天`;
+  countEl.style.visibility='visible';countEl.innerHTML=`${currentMonth} ?遢??strong>${daysInMonth}</strong> 憭奈;
   renderTrendPanel();
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    DAY STATS
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function computeDayStats(minuteRows){
   const hbVals=minuteRows.map(r=>r.heartbeat).filter(v=>v!==null&&!isNaN(parseFloat(v))).map(Number);
   const brVals=minuteRows.map(r=>r.breath).filter(v=>v!==null&&!isNaN(parseFloat(v))).map(Number);
@@ -2243,7 +2441,7 @@ function computeDayStats(minuteRows){
   const avgOf=arr=>arr.length?Math.round(arr.reduce((a,b)=>a+b,0)/arr.length*10)/10:null;
   return{maxHb:hbVals.length?Math.max(...hbVals):null,minHb:hbVals.length?Math.min(...hbVals):null,maxBr:brVals.length?Math.max(...brVals):null,minBr:brVals.length?Math.min(...brVals):null,avgHb:avgOf(hbVals),stdHb:stdOf(hbVals),avgBr:avgOf(brVals),stdBr:stdOf(brVals),avgTemp:avgOf(tpVals),stdTemp:stdOf(tpVals)};
 }
-/* 暖機過濾：每個連續量測段落前 2 分鐘，若聚合筆數 < 55 則視為不穩定丟棄 */
+/* ???蕪嚗?????葫畾菔??2 ??嚗??蝑 < 55 ???箔?蝛拙?銝? */
 function filterWarmupMinutes(minuteRows,warmupMin=2,stableCount=55){
   if(!minuteRows||minuteRows.length<2)return minuteRows||[];
   const gapMs=5*60*1000;const warmMs=warmupMin*60*1000;
@@ -2306,9 +2504,9 @@ async function getDetailDayAxisMinuteRows(){
   return detailDayAxisMinuteRows;
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    RENDER PAGE (dashboard day view)
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 function renderPage(){
   if(!groupedCache)return;
   const content=document.getElementById('table-content'),pagWrap=document.getElementById('pagination-wrap');
@@ -2320,10 +2518,10 @@ function renderPage(){
   let vitalsHtml='';
   if(dayStats){
     const{maxHb,minHb,maxBr,minBr,avgHb,stdHb,avgBr,stdBr,avgTemp,stdTemp}=dayStats;
-    const fmt=(a,s)=>a!==null?`${a} <span style="opacity:.55;font-weight:400">±${s??'—'}</span>`:'—';
-    if(maxHb!==null)vitalsHtml+=`<div class="date-vital"><span>❤️</span><strong>${minHb}–${maxHb}</strong></div>`;
-    vitalsHtml+=`<div class="date-vital"><span>🫁</span><strong>${maxBr!==null?minBr+'–'+maxBr:'—'}</strong></div>`;
-    vitalsHtml+=`<div class="date-vital std"><span>📊 </span><strong>❤️ ${fmt(avgHb,stdHb)} &nbsp;🫁 ${fmt(avgBr,stdBr)} &nbsp;🌡 ${fmt(avgTemp,stdTemp)}</strong></div>`;
+    const fmt=(a,s)=>a!==null?`${a} <span style="opacity:.55;font-weight:400">簣${s??'??}</span>`:'??;
+    if(maxHb!==null)vitalsHtml+=`<div class="date-vital"><span>?歹?</span><strong>${minHb}??{maxHb}</strong></div>`;
+    vitalsHtml+=`<div class="date-vital"><span>??</span><strong>${maxBr!==null?minBr+'??+maxBr:'??}</strong></div>`;
+    vitalsHtml+=`<div class="date-vital std"><span>?? </span><strong>?歹? ${fmt(avgHb,stdHb)} &nbsp;?? ${fmt(avgBr,stdBr)} &nbsp;? ${fmt(avgTemp,stdTemp)}</strong></div>`;
   }
   const dateCard=document.createElement('div');dateCard.className='date-card open';
   let hourCardsHtml='';
@@ -2332,11 +2530,11 @@ function renderPage(){
     const aHb=avg(rows.map(r=>r.heartbeat)),aSbp=avg(rows.map(r=>r.sbp)),aDbp=avg(rows.map(r=>r.dbp)),aTemp=avg(rows.map(r=>r.temp)),aBr=avg(rows.map(r=>r.breath));
     const hbLvl=anomalyLevel('heartbeat',aHb),sbpLvl=anomalyLevel('sbp',aSbp);
     const statsHtml=[
-      aHb!==null?`<div class="stat-chip"><span>❤️</span><span class="stat-val${hbLvl==='red'?' is-red':''}">${Math.round(aHb)}</span></div>`:'',
-      `<div class="stat-chip"><span>🫁</span><span class="stat-val">${aBr!==null?Math.round(aBr):'—'}</span></div>`,
-      aSbp!==null?`<div class="stat-chip"><span>🩺</span><span class="stat-val${sbpLvl==='red'?' is-red':''}">${Math.round(aSbp)}</span></div>`:'',
-      aDbp!==null?`<div class="stat-chip"><span>💙</span><span class="stat-val">${Math.round(aDbp)}</span></div>`:'',
-      aTemp!==null?`<div class="stat-chip"><span>🌡</span><span class="stat-val">${parseFloat(aTemp).toFixed(1)}°C</span></div>`:'',
+      aHb!==null?`<div class="stat-chip"><span>?歹?</span><span class="stat-val${hbLvl==='red'?' is-red':''}">${Math.round(aHb)}</span></div>`:'',
+      `<div class="stat-chip"><span>??</span><span class="stat-val">${aBr!==null?Math.round(aBr):'??}</span></div>`,
+      aSbp!==null?`<div class="stat-chip"><span>?征</span><span class="stat-val${sbpLvl==='red'?' is-red':''}">${Math.round(aSbp)}</span></div>`:'',
+      aDbp!==null?`<div class="stat-chip"><span>??</span><span class="stat-val">${Math.round(aDbp)}</span></div>`:'',
+      aTemp!==null?`<div class="stat-chip"><span>?</span><span class="stat-val">${parseFloat(aTemp).toFixed(1)}簞C</span></div>`:'',
     ].join('');
     let tbodyHtml='';
     rows.forEach(r=>{
@@ -2345,21 +2543,23 @@ function renderPage(){
         let val=r[c.key],cell;
         if(c.key==='time')cell=`<span class="val-neutral">${formatMinute(val)}</span>`;
         else if(c.key==='count')cell=`<span class="val-count">${val}</span>`;
-        else if(c.key==='action'){const lbl=actionLabel(val);cell=val===null||val===undefined?'<span class="val-dim">—</span>':`<span class="val-neutral">${lbl||val}</span>`;}
-        else if(val===null||val===undefined)cell='<span class="val-dim">—</span>';
-        else if(c.badge){const lvl=anomalyLevel(c.key,val);const disp=c.key==='temp'?parseFloat(val).toFixed(1)+'°C':Math.round(val);cell=lvl==='red'?`<span class="val-badge val-red">${disp}</span>`:`<span class="val-neutral">${disp}</span>`;}
+        else if(c.key==='action'){const lbl=actionLabel(val);cell=val===null||val===undefined?'<span class="val-dim">??/span>':`<span class="val-neutral">${lbl||val}</span>`;}
+        else if(val===null||val===undefined)cell='<span class="val-dim">??/span>';
+        else if(c.badge){const lvl=anomalyLevel(c.key,val);const disp=c.key==='temp'?parseFloat(val).toFixed(1)+'簞C':Math.round(val);cell=lvl==='red'?`<span class="val-badge val-red">${disp}</span>`:`<span class="val-neutral">${disp}</span>`;}
         else cell=`<span class="val-neutral">${val}</span>`;
         tbodyHtml+=`<td>${cell}</td>`;
       });
       tbodyHtml+='</tr>';
     });
     const isOpen=hi===0?' open':'';
-    hourCardsHtml+=`<div class="hour-card${isOpen}"><div class="hour-header" onclick="this.parentElement.classList.toggle('open')"><div class="hour-label">${hk}:00–${nextH}:00</div><div class="hour-count">${rows.length} 分</div><div class="hour-stats">${statsHtml}</div><svg class="hour-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div><div class="hour-body"><div class="data-table-wrap"><table class="data-table"><thead>${theadHtml}</thead><tbody>${tbodyHtml}</tbody></table></div></div></div>`;
+    hourCardsHtml+=`<div class="hour-card${isOpen}"><div class="hour-header" onclick="this.parentElement.classList.toggle('open')"><div class="hour-label">${hk}:00??{nextH}:00</div><div class="hour-count">${rows.length} ??/div><div class="hour-stats">${statsHtml}</div><svg class="hour-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div><div class="hour-body"><div class="data-table-wrap"><table class="data-table"><thead>${theadHtml}</thead><tbody>${tbodyHtml}</tbody></table></div></div></div>`;
   });
-  dateCard.innerHTML=`<div class="date-header" onclick="this.parentElement.classList.toggle('open')"><div class="date-header-left"><div class="date-icon">📅</div><div class="date-info"><div class="date-label">${escHtml(currentDate)}${currentMemberId!=='ALL'?' · '+escHtml(currentMemberId):''}</div><div class="date-meta">${hourKeys.length} 個時段・${totalMins.toLocaleString()} 分鐘紀錄</div><div class="date-vitals">${vitalsHtml}</div></div></div><svg class="date-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div><div class="date-body">${hourCardsHtml}</div>`;
+  const allMinuteRows=hourKeys.reduce((arr,hk)=>arr.concat(groupedCache[hk]),[]).sort((a,b)=>a.time.localeCompare(b.time));
+  const postureHtml=buildPosturePanel(allMinuteRows);
+  dateCard.innerHTML=`<div class="date-header" onclick="this.parentElement.classList.toggle('open')"><div class="date-header-left"><div class="date-icon">??</div><div class="date-info"><div class="date-label">${escHtml(currentDate)}${currentMemberId!=='ALL'?' 繚 '+escHtml(currentMemberId):''}</div><div class="date-meta">${hourKeys.length} ??畾萸${totalMins.toLocaleString()} ??蝝??/div><div class="date-vitals">${vitalsHtml}</div></div></div><svg class="date-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div><div class="date-body">${postureHtml}${hourCardsHtml}</div>`;
   content.appendChild(dateCard);
   renderPagination(pagWrap,hourKeys.length);
-  // 從醫護回報跳轉時，自動展開並捲動至目標時段
+  // 敺霅瑕??梯歲頧?嚗???蒂?脣??喟璅?畾?
   if(pendingScrollHour){
     const targetHk=pendingScrollHour;const targetMin=pendingScrollMinute;
     pendingScrollHour=null;pendingScrollMinute=null;
@@ -2388,15 +2588,15 @@ function renderPage(){
 }
 function renderPagination(wrap,totalHours){
   totalPages=Math.ceil(totalHours/HOURS_PER_PAGE);wrap.innerHTML='';if(totalPages<=1)return;
-  const prev=document.createElement('button');prev.className='page-btn';prev.textContent='←';if(currentPage===1)prev.disabled=true;prev.onclick=()=>{currentPage--;renderPage();};wrap.appendChild(prev);
+  const prev=document.createElement('button');prev.className='page-btn';prev.textContent='??;if(currentPage===1)prev.disabled=true;prev.onclick=()=>{currentPage--;renderPage();};wrap.appendChild(prev);
   for(let i=1;i<=totalPages;i++){const btn=document.createElement('button');btn.className='page-btn'+(i===currentPage?' active':'');btn.textContent=i;btn.onclick=(p=>()=>{currentPage=p;renderPage();})(i);wrap.appendChild(btn);}
-  const info=document.createElement('span');info.className='page-info';info.textContent=`第 ${currentPage} / ${totalPages} 頁`;wrap.appendChild(info);
-  const next=document.createElement('button');next.className='page-btn';next.textContent='→';if(currentPage===totalPages)next.disabled=true;next.onclick=()=>{currentPage++;renderPage();};wrap.appendChild(next);
+  const info=document.createElement('span');info.className='page-info';info.textContent=`蝚?${currentPage} / ${totalPages} ?;wrap.appendChild(info);
+  const next=document.createElement('button');next.className='page-btn';next.textContent='??;if(currentPage===totalPages)next.disabled=true;next.onclick=()=>{currentPage++;renderPage();};wrap.appendChild(next);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    LOAD / REFRESH
-   ════════════════════════════════════════════════════════════ */
+   ???????????????????????????????????????????????????????????? */
 async function loadCurrentTable(){if(!currentTable)return;const tok=++loadToken;updateDateDisplay();updateContextLabel();if(currentView==='day')await loadDayView(tok);else await loadMonthView(tok);}
 async function manualRefresh(){const btn=document.getElementById('btn-refresh');btn.classList.add('spinning');await loadCurrentTable();btn.classList.remove('spinning');}
 async function silentRefresh(){
@@ -2406,36 +2606,206 @@ async function silentRefresh(){
   const maxDm=rawRows.reduce((m,r)=>r.date_minute>m?r.date_minute:m,rawRows[0].date_minute);setLastUpload(maxDm);
   const minuteRows=filterWarmupMinutes(aggregateToMinutes(rawRows));groupedCache=groupByHour(minuteRows);dayStats=computeDayStats(minuteRows);
   renderPage();renderTrendPanel();
-  const countEl=document.getElementById('row-count');countEl.style.visibility='visible';countEl.innerHTML=`原始 <strong>${rawRows.length.toLocaleString()}</strong> 筆 → 聚合 <strong>${minuteRows.length.toLocaleString()}</strong> 分鐘`;
+  updateCurrentPostureBadge();fetchAndRenderNurseReports();
+  const countEl=document.getElementById('row-count');countEl.style.visibility='visible';countEl.innerHTML=`?? <strong>${rawRows.length.toLocaleString()}</strong> 蝑????? <strong>${minuteRows.length.toLocaleString()}</strong> ??`;
 }
 
-/* ════════════════════════════════════════════════════════════
-   ANNOTATIONS (醫護回報，儲存於 localStorage)
-   ════════════════════════════════════════════════════════════ */
+/* ????????????????????????????????????????????????????????????
+   POSTURE ANALYSIS SCREEN
+   ???????????????????????????????????????????????????????????? */
+function initPostureScreen(){
+  const dateEl=document.getElementById('ps-date-input');
+  if(dateEl&&!dateEl.value)dateEl.value=currentDate||todayStr();
+  // Populate member list
+  const sel=document.getElementById('ps-member-select');
+  if(sel){
+    sel.innerHTML='<option value="ALL">?券?</option>';
+    memberList.forEach(id=>{
+      const opt=document.createElement('option');opt.value=id;opt.textContent=id;
+      if(id===(postureScreenMemberId||currentMemberId))opt.selected=true;
+      sel.appendChild(opt);
+    });
+  }
+  const sub=document.getElementById('ps-subtitle');
+  if(sub)sub.textContent=(currentTable?TABLE_LABEL[currentTable]||currentTable:'隢??豢?璈?')+'  繚  ?豢??交?敺???;
+}
+async function loadPostureScreen(){
+  if(!currentTable){alert('隢??其??寞?蝐日??瑽?);return;}
+  const dateEl=document.getElementById('ps-date-input');
+  const selEl=document.getElementById('ps-member-select');
+  postureScreenDate=dateEl?.value||currentDate||todayStr();
+  postureScreenMemberId=selEl?.value||'ALL';
+  const cacheKey=dayMemberKey(currentTable,postureScreenDate,postureScreenMemberId);
+  const btn=document.getElementById('ps-load-btn');
+  if(btn){btn.disabled=true;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 頛銝凌?;}
+  const content=document.getElementById('ps-content');
+  content.innerHTML='<div class="ps-loading"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>鞈?頛銝凌?/div>';
+  let rawRows=[];
+  if(postureRawRowsCacheKey===cacheKey){
+    rawRows=postureRawRowsCache.slice();
+  }else if(dayViewRawRowsCacheKey===cacheKey&&dayViewRawRowsCache.length){
+    rawRows=dayViewRawRowsCache.slice();
+  }else{
+    rawRows=await fetchDay(currentTable,postureScreenDate,true,postureScreenMemberId);
+    postureRawRowsCache=rawRows.slice();
+    postureRawRowsCacheKey=cacheKey;
+  }
+  postureScreenMinuteRows=filterWarmupMinutes(aggregateToMinutes(rawRows));
+  if(btn){btn.disabled=false;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 頛鞈?';}
+  renderPostureScreenContent(postureScreenMinuteRows,postureScreenDate);
+  const sub=document.getElementById('ps-subtitle');
+  if(sub)sub.textContent=`${TABLE_LABEL[currentTable]||currentTable} 繚 ${postureScreenDate} 繚 ${postureScreenMemberId==='ALL'?'?券?':postureScreenMemberId} 繚 ${postureScreenMinuteRows.length} ??`;
+}
+function renderPostureScreenContent(minuteRows,date){
+  const content=document.getElementById('ps-content');
+  if(!minuteRows.length){
+    content.innerHTML='<div class="ps-empty">甇斗?鞈?</div>';
+    return;
+  }
+  // Compute stats
+  const counts=computeActionStats(minuteRows);
+  const total=Object.values(counts).reduce((s,v)=>s+v,0);
+  const donutHtml=renderPostureDonut(minuteRows);
+  const timelineHtml=renderPostureTimeline(minuteRows);
+  const sortedCounts=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const topPosture=sortedCounts[0]?.[0]||'-';
+  const topMinutes=sortedCounts[0]?.[1]||0;
+  const postureKinds=sortedCounts.length;
+  const activeWindow=minuteRows.length?minuteRows[0].time.slice(11,16)+' - '+minuteRows[minuteRows.length-1].time.slice(11,16):'-';
+  // Stats table
+  const postureBadgeClass={'?迫':'ps-badge-gray','韏啗楝':'ps-badge-blue','?Ｚ?':'ps-badge-green','敹怨?':'ps-badge-orange','頨箏尿':'ps-badge-purple','憪踹?啣虜':'ps-badge-red'};
+  const statsRows=sortedCounts.map(([lbl,cnt])=>{
+    const pct=total?((cnt/total)*100).toFixed(1):0;
+    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
+    const bc=postureBadgeClass[lbl]||'ps-badge-gray';
+    return`<tr>
+      <td><span class="ps-badge ${bc}"><span style="color:${color}">??/span> ${escHtml(lbl)}</span></td>
+      <td style="font-weight:700;font-feature-settings:'tnum'">${cnt} ??/td>
+      <td>${pct}%<div class="ps-progress-bar"><div class="ps-progress-fill" style="width:${pct}%;background:${color}"></div></div></td>
+    </tr>`;
+  }).join('');
+  // Checkbox group
+  const actionDefs=[
+    {action:0,label:'?迫'},{action:1,label:'韏啗楝'},{action:3,label:'?Ｚ?'},
+    {action:5,label:'敹怨?'},{action:6,label:'頨箏尿'},{action:7,label:'憪踹?啣虜'}
+  ];
+  const checkPills=actionDefs.map(({action,label})=>{
+    const checked=postureCheckedActions.has(action);
+    return`<label class="ps-check-pill${checked?' checked-'+action:''}" onclick="togglePostureCheck(${action},this)">
+      <input type="checkbox" style="display:none"${checked?' checked':''}>
+      ${escHtml(label)}
+    </label>`;
+  }).join('');
+  content.innerHTML=`
+<div class="ps-card" style="margin-bottom:20px">
+  <div class="ps-card-header"><div class="ps-card-title">????</div></div>
+  <div class="ps-card-body ps-flow">
+    <div class="ps-summary-grid">
+      <div class="ps-summary-item">
+        <div class="ps-summary-label">銝餉?憪踵?</div>
+        <div class="ps-summary-value">${escHtml(topPosture)}</div>
+        <div class="ps-summary-sub">${topMinutes} ??</div>
+      </div>
+      <div class="ps-summary-item">
+        <div class="ps-summary-label">??????/div>
+        <div class="ps-summary-value">${minuteRows.length}</div>
+        <div class="ps-summary-sub">撌脫??斗?璈???/div>
+      </div>
+      <div class="ps-summary-item">
+        <div class="ps-summary-label">憪踵?蝔桅?</div>
+        <div class="ps-summary-value">${postureKinds}</div>
+        <div class="ps-summary-sub">${activeWindow}</div>
+      </div>
+    </div>
+    <div class="ps-note">????嚗???擗??絞閮?蝝啣???頠賂??方???敺?嚗?瘥?銝捆???撣賊?銝剜?畾萸?/div>
+  </div>
+</div>
+<div class="ps-grid-2">
+  <div class="ps-card">
+    <div class="ps-card-header"><div class="ps-card-title">憪踵???</div></div>
+    <div class="ps-card-body">${donutHtml}</div>
+  </div>
+  <div class="ps-card">
+    <div class="ps-card-header"><div class="ps-card-title">蝯梯??敦</div></div>
+    <div class="ps-card-body" style="padding:0">
+      <table class="ps-table">
+        <thead><tr><th>憪踵?</th><th>?</th><th>雿?</th></tr></thead>
+        <tbody>${statsRows}</tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="ps-card">
+  <div class="ps-card-header"><div class="ps-card-title">?典予??頠?/div></div>
+  <div class="ps-card-body ps-flow">${timelineHtml}<div class="ps-note">??頠貉?撖??撣塚?隞?”閰脣尿?閰脫?畾菔?撣詨?橘??拙??瘥??葫?啣虜?霅瑕??晞?/div></div>
+</div>
+<div class="ps-card">
+  <div class="ps-card-header" style="display:flex;align-items:center;justify-content:space-between">
+    <div class="ps-card-title">? 銝?憪踵?鞈?</div>
+    <button class="ps-btn ps-btn-primary" onclick="downloadPostureCSV()">銝? CSV</button>
+  </div>
+  <div class="ps-card-body">
+    <div style="font-size:13px;color:var(--text-dim);margin-bottom:12px">?暸閬?頛?憪踵?憿?嚗??撌脣?詨尿??????</div>
+    <div class="ps-checkbox-group" id="ps-check-group">${checkPills}</div>
+  </div>
+</div>`;
+}
+function togglePostureCheck(action,labelEl){
+  if(postureCheckedActions.has(action)){postureCheckedActions.delete(action);labelEl.classList.remove('checked-'+action);}
+  else{postureCheckedActions.add(action);labelEl.classList.add('checked-'+action);}
+}
+function downloadPostureCSV(){
+  if(!postureScreenMinuteRows.length){alert('隢?頛鞈?');return;}
+  const filtered=postureScreenMinuteRows.filter(r=>{
+    if(r.action===null||r.action===undefined)return false;
+    return postureCheckedActions.has(parseInt(r.action));
+  });
+  if(!filtered.length){alert('?暸?尿???鞈?嚗?隤踵蝭拚璇辣');return;}
+  const headers=['??','憪踵?','敹歲(bpm)','?澆(rpm)','擃澈(簞C)','?嗥葬憯?mmHg)','?撐憯?mmHg)','甇交'];
+  const rows=filtered.map(r=>[
+    r.time.slice(11,16),
+    actionLabel(r.action)||String(r.action),
+    r.heartbeat??'',r.breath??'',
+    r.temp!==null&&r.temp!==undefined?parseFloat(r.temp).toFixed(1):'',
+    r.sbp??'',r.dbp??'',r.step??''
+  ]);
+  const csv=[headers,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob(['嚜?+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  const memberStr=postureScreenMemberId==='ALL'?'all':postureScreenMemberId;
+  a.download=`posture_${escHtml(memberStr)}_${postureScreenDate||todayStr()}.csv`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ????????????????????????????????????????????????????????????
+   ANNOTATIONS (?怨風?嚗摮 localStorage)
+   ???????????????????????????????????????????????????????????? */
 let pendingScrollHour=null,pendingScrollMinute=null;
-function annotSeverity(cat){
-  if(cat==='裝置中斷')return 3;
-  if(cat==='裝置誤判')return 2;
+function annotSeverityFromCategory(cat){
+  if(cat==='銝剜')return 3;
+  if(cat==='鋆蔭隤文')return 2;
   return 1;
 }
 function buildAnnotContent(cat,text){
   const cleanText=String(text||'').trim();
-  return cat?`[[${cat}]] ${cleanText}`:cleanText;
+  if(!cleanText)return'';
+  return cat&&cat!==''?'[['+cat+']] '+cleanText:cleanText;
 }
 function parseAnnotContent(content){
   const raw=String(content||'').trim();
   const m=raw.match(/^\[\[(.+?)\]\]\s*(.*)$/);
-  if(!m)return{category:'觀察',text:raw};
-  return{category:m[1]||'觀察',text:m[2]||''};
+  if(!m)return{category:'',text:raw};
+  return{category:m[1]||'',text:m[2]||''};
 }
-function annotRecordFromRow(row){
-  const parsed=parseAnnotContent(row.content);
-  const dt=new Date(row.created_at);
-  const dateStr=Number.isNaN(dt.getTime())?(row.created_at||'').slice(0,10):`${dt.getFullYear()}-${p2(dt.getMonth()+1)}-${p2(dt.getDate())}`;
-  const timeStr=Number.isNaN(dt.getTime())?normalizeTime24((row.created_at||'').slice(11,16)):`${p2(dt.getHours())}:${p2(dt.getMinutes())}`;
-  return{id:row.id,table:row.table_name||'',memberId:row.member_id||'',date:dateStr,time:timeStr,category:parsed.category,text:parsed.text,severity:row.severity||annotSeverity(parsed.category)};
+async function deleteAnnot(id){
+  const {error}=await sb.from('nurse_reports').delete().eq('id',id);
+  if(error)throw error;
 }
-async function fetchAnnotsFromSupabase(){
+
+async function getAnnotsForPanel(){
   let q=sb.from('nurse_reports')
     .select('id,created_at,member_id,content,severity,table_name')
     .order('created_at',{ascending:false})
@@ -2445,12 +2815,19 @@ async function fetchAnnotsFromSupabase(){
   if(mid)q=q.eq('member_id',mid);
   const {data,error}=await q;
   if(error)throw error;
-  return(data||[]).map(annotRecordFromRow)
-    .sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
-}
-async function deleteAnnot(id){
-  const {error}=await sb.from('nurse_reports').delete().eq('id',id);
-  if(error)throw error;
+  return(data||[]).map(r=>{
+    const parsed=parseAnnotContent(r.content);
+    return{
+      id:r.id,
+      table:r.table_name||'',
+      memberId:r.member_id||'',
+      date:(r.created_at||'').slice(0,10),
+      time:normalizeTime24((r.created_at||'').slice(11,16)),
+      category:parsed.category,
+      text:parsed.text,
+      severity:r.severity
+    };
+  });
 }
 
 async function openAnnotPanel(){
@@ -2462,70 +2839,69 @@ async function openAnnotPanel(){
   const preDate=currentView==='day'?currentDate:today;
   const preMember=detailMemberId||(currentMemberId!=='ALL'?currentMemberId:'');
   const tblLabel=escHtml(TABLE_LABEL[currentTable]||currentTable||'');
-  listCol.innerHTML='<div class="annot-empty">讀取回報中…</div>';
   let annots=[];
   try{
-    annots=await fetchAnnotsFromSupabase();
+    annots=await getAnnotsForPanel();
   }catch(err){
-    listCol.innerHTML=`<div class="annot-empty">讀取失敗<br><small>${escHtml(err.message||String(err))}</small></div>`;
+    listCol.innerHTML=`<div class="annot-empty">?脩垢?霈?仃??br><small>${escHtml(err.message||'隢Ⅱ隤?Supabase 甈??”甈?閮剖?')}</small></div>`;
   }
 
-  const catClass=cat=>cat==='裝置誤判'?'cat-誤判':cat==='裝置中斷'?'cat-中斷':'';
+  const catClass=cat=>cat==='鋆蔭隤文'?'cat-隤文':cat==='鋆蔭銝剜'?'cat-銝剜':'';
   const listHtml=annots.length
     ?annots.map(a=>`<div class="annot-card">
   <div class="annot-card-head">
     <div class="annot-card-meta">
-      <span class="annot-card-time">📅 ${escHtml(a.date)} ${escHtml(a.time)}</span>
+      <span class="annot-card-time">?? ${escHtml(a.date)} ${escHtml(a.time)}</span>
       <span class="annot-card-cat ${catClass(a.category)}">${escHtml(a.category)}</span>
       ${a.memberId?`<span class="annot-card-member">${escHtml(a.memberId)}</span>`:''}
     </div>
-    <button class="annot-card-del" onclick="deleteAnnotAndRefresh(${a.id})" title="刪除">✕</button>
+    <button class="annot-card-del" onclick="deleteAnnotAndRefresh(${a.id})" title="?芷">??/button>
   </div>
   <div class="annot-card-text">${escHtml(a.text)}</div>
   <span class="annot-card-link" onclick="goToAnnotTime('${escHtml(a.date)}','${escHtml(a.time)}','${escHtml(a.memberId||'')}')">
-    📍 前往此時段數據 →
+    ?? ??甇斗?畾菜????
   </span>
 </div>`).join('')
-    :'<div class="annot-empty">尚無回報紀錄<br><small>填寫左側表單後儲存，回報會同步到雲端</small></div>';
+    :'<div class="annot-empty">撠?蝝??br><small>憛怠神撌血銵典敺摮??摮?祆?</small></div>';
 
   formCol.innerHTML=`
-<div class="annot-form-title" style="margin-bottom:14px;font-size:14px;">➕ 新增回報${tblLabel?' · '+tblLabel:''}</div>
-<div class="annot-example"><strong>填寫範例：</strong><br>
-• 裝置短暫移除（洗澡、充電等）<br>
-• 量測值偏低，穿戴位置可能不正確<br>
-• 居民主訴不適，請留意後續數值<br>
-• 08:00–08:02 開機初期數值尚未穩定</div>
+<div class="annot-form-title" style="margin-bottom:14px;font-size:14px;">???啣??${tblLabel?' 繚 '+tblLabel:''}</div>
+<div class="annot-example"><strong>憛怠神蝭?嚗?/strong><br>
+??鋆蔭?剜蝘駁嚗?瞉～??餌?嚗?br>
+???葫?澆?雿?蝛踵雿蔭?航銝迤蝣?br>
+??撅?銝餉迄銝嚗???敺??詨?br>
+??08:00??8:02 ?????詨澆??芰帘摰?/div>
 <div class="annot-form-row">
   <div class="annot-field">
-    <label>會員 ID</label>
-    <input class="annot-input" id="annot-member" value="${escHtml(preMember)}" placeholder="輸入會員ID">
+    <label>? ID</label>
+    <input class="annot-input" id="annot-member" value="${escHtml(preMember)}" placeholder="頛詨?ID">
   </div>
   <div class="annot-field">
-    <label>分類</label>
+    <label>??</label>
     <select class="annot-select" id="annot-cat">
-      <option value="觀察">觀察</option>
-      <option value="裝置誤判">裝置誤判</option>
-      <option value="裝置中斷">裝置中斷</option>
-      <option value="其他">其他</option>
+      <option value="閫撖?>閫撖?/option>
+      <option value="鋆蔭隤文">鋆蔭隤文</option>
+      <option value="鋆蔭銝剜">鋆蔭銝剜</option>
+      <option value="?嗡?">?嗡?</option>
     </select>
   </div>
 </div>
 <div class="annot-form-row">
   <div class="annot-field">
-    <label>日期</label>
+    <label>?交?</label>
     <input class="annot-input" id="annot-date" type="date" value="${escHtml(preDate)}">
   </div>
   <div class="annot-field">
-    <label>時間點</label>
+    <label>??暺?/label>
     <input class="annot-input" id="annot-time" type="time" step="60" lang="en-GB" value="${escHtml(curTime)}">
   </div>
 </div>
-<div><label style="font-size:12px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">回報說明</label>
-<textarea class="annot-textarea" id="annot-text" placeholder="說明此時段情況，例如：裝置短暫移除、穿戴鬆動、居民活動異常…"></textarea></div>
-<button class="btn-annot-save" onclick="saveAnnotFromForm()">儲存回報</button>`;
+<div><label style="font-size:12px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">?隤芣?</label>
+<textarea class="annot-textarea" id="annot-text" placeholder="隤芣?甇斗?畾菜?瘜?靘?嚗?蝵桃?怎宏?扎忽?湧???瘞暑?撣詹?></textarea></div>
+<button class="btn-annot-save" onclick="saveAnnotFromForm()">?脣??</button>`;
 
   listCol.innerHTML=`
-<div class="annot-list-head">📋 回報紀錄${tblLabel?' · '+tblLabel:''}${preMember?' · '+escHtml(preMember):''} <span style="font-weight:400;">(${annots.length} 筆)</span></div>
+<div class="annot-list-head">?? ?蝝??{tblLabel?' 繚 '+tblLabel:''}${preMember?' 繚 '+escHtml(preMember):''} <span style="font-weight:400;">(${annots.length} 蝑?</span></div>
 ${listHtml}`;
 
   document.getElementById('annot-overlay').classList.add('open');
@@ -2538,44 +2914,46 @@ async function renderDetAnnotList(){
   if(!el)return;
   let arr=[];
   try{
-    arr=await fetchAnnotsFromSupabase();
+    arr=(await getAnnotsForPanel())
+      .filter(a=>(!currentTable||a.table===currentTable)&&(!detailMemberId||a.memberId===detailMemberId))
+      .sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
   }catch(err){
-    el.innerHTML=`<div class="annot-empty" style="padding:20px 0 8px;">讀取失敗<br><small>${escHtml(err.message||String(err))}</small></div>`;
+    el.innerHTML=`<div class="annot-empty" style="padding:20px 0 8px;">?脩垢?霈?仃??br><small>${escHtml(err.message||'隢Ⅱ隤?Supabase 閮剖?')}</small></div>`;
     return;
   }
   if(!arr.length){
-    el.innerHTML='<div class="annot-empty" style="padding:20px 0 8px;">尚無回報紀錄<br><small>點擊「新增回報」以新增</small></div>';
+    el.innerHTML='<div class="annot-empty" style="padding:20px 0 8px;">撠?蝝??br><small>暺??憓??晞誑?啣?</small></div>';
     return;
   }
-  const catClass=cat=>cat==='裝置誤判'?'cat-誤判':cat==='裝置中斷'?'cat-中斷':'';
+  const catClass=cat=>cat==='鋆蔭隤文'?'cat-隤文':cat==='鋆蔭銝剜'?'cat-銝剜':'';
   el.innerHTML=arr.map(a=>`<div class="annot-card">
   <div class="annot-card-head">
     <div class="annot-card-meta">
-      <span class="annot-card-time">📅 ${escHtml(a.date)} ${escHtml(a.time)}</span>
+      <span class="annot-card-time">?? ${escHtml(a.date)} ${escHtml(a.time)}</span>
       <span class="annot-card-cat ${catClass(a.category)}">${escHtml(a.category)}</span>
     </div>
-    <button class="annot-card-del" onclick="deleteAnnotDet(${a.id})" title="刪除">✕</button>
+    <button class="annot-card-del" onclick="deleteAnnotDet(${a.id})" title="?芷">??/button>
   </div>
   <div class="annot-card-text">${escHtml(a.text)}</div>
-  <span class="annot-card-link" onclick="goToAnnotTime('${escHtml(a.date)}','${escHtml(a.time)}','${escHtml(a.memberId||'')}')">📍 前往此時段數據 →</span>
+  <span class="annot-card-link" onclick="goToAnnotTime('${escHtml(a.date)}','${escHtml(a.time)}','${escHtml(a.memberId||'')}')">?? ??甇斗?畾菜????/span>
 </div>`).join('');
 }
 
 async function deleteAnnotDet(id){
-  if(!confirm('確定要刪除此回報？'))return;
+  if(!confirm('蝣箏?閬?斗迨?嚗?))return;
   try{
     await deleteAnnot(id);
     renderDetAnnotList();
-  }catch(err){alert(`刪除失敗：${err.message||err}`);}
+  }catch(err){alert('Delete failed: '+(err.message||err));}
 }
 
 async function deleteAnnotAndRefresh(id){
-  if(!confirm('確定要刪除此回報？'))return;
+  if(!confirm('蝣箏?閬?斗迨?嚗?))return;
   try{
     await deleteAnnot(id);
     openAnnotPanel();
     renderDetAnnotList();
-  }catch(err){alert(`刪除失敗：${err.message||err}`);}
+  }catch(err){alert('Delete failed: '+(err.message||err));}
 }
 
 async function saveAnnotFromForm(){
@@ -2584,20 +2962,20 @@ async function saveAnnotFromForm(){
   const date=document.getElementById('annot-date').value;
   const time=normalizeTime24(document.getElementById('annot-time').value);
   const text=document.getElementById('annot-text').value.trim();
-  if(!date||!time){alert('請填寫日期和時間');return;}
-  if(!text){alert('請填寫回報說明');return;}
+  if(!date||!time){alert('隢‵撖急????');return;}
+  if(!text){alert('Please enter note text');return;}
   try{
     const {error}=await sb.from('nurse_reports').insert({
       member_id:member||'ALL',
       table_name:currentTable||'',
       content:buildAnnotContent(cat,text),
-      severity:annotSeverity(cat),
+      severity:annotSeverityFromCategory(cat),
       created_at:`${date}T${time}:00+08:00`
     });
     if(error)throw error;
     openAnnotPanel();
     renderDetAnnotList();
-  }catch(err){alert(`儲存失敗：${err.message||err}`);}
+  }catch(err){alert('Save failed: '+(err.message||err));}
 }
 
 function goToAnnotTime(date,time,memberId){
@@ -2613,277 +2991,27 @@ function goToAnnotTime(date,time,memberId){
   goScreen('dashboard','day');
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ????????????????????????????????????????????????????????????
    INIT
-   ════════════════════════════════════════════════════════════ */
-/* ════════════════════════════════════════════════════════════
-   POSTURE SCREEN
-   ════════════════════════════════════════════════════════════ */
-function initPostureScreen(){
-  const dateEl=document.getElementById('ps-date-input');
-  if(dateEl&&!dateEl.value)dateEl.value=currentDate||todayStr();
-  const selEl=document.getElementById('ps-member-select');
-  if(selEl){
-    selEl.innerHTML='<option value="ALL">全部</option>';
-    memberList.forEach(m=>{
-      const opt=document.createElement('option');
-      opt.value=m;opt.textContent=m;
-      selEl.appendChild(opt);
-    });
-    selEl.value=postureScreenMemberId||'ALL';
-  }
-}
-
-function computeActionStats(minuteRows){
-  const counts={};
-  minuteRows.forEach(r=>{
-    if(r.action!==null&&r.action!==undefined){
-      const lbl=actionLabel(r.action)||String(r.action);
-      counts[lbl]=(counts[lbl]||0)+1;
-    }
-  });
-  return counts;
-}
-
-function renderPostureDonut(counts,total){
-  const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  if(!total)return'';
-  const R=44,cx=55,cy=55,circ=2*Math.PI*R;
-  let offset=0,slices='';
-  entries.forEach(([lbl,cnt])=>{
-    const frac=cnt/total,dash=frac*circ;
-    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
-    slices+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${color}" stroke-width="18" stroke-dasharray="${dash.toFixed(2)} ${(circ-dash).toFixed(2)}" stroke-dashoffset="${(-offset).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"><title>${escHtml(lbl)}: ${cnt} 分鐘 (${Math.round(frac*100)}%)</title></circle>`;
-    offset+=dash;
-  });
-  let legend='';
-  entries.forEach(([lbl,cnt])=>{
-    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
-    const pct=Math.round(cnt/total*100);
-    legend+=`<div class="ps-legend-item">
-      <div class="ps-legend-swatch" style="background:${color}"></div>
-      <span class="ps-legend-name">${escHtml(lbl)}</span>
-      <span class="ps-legend-pct">${pct}%</span>
-      <span class="ps-legend-min">${cnt}分</span>
-    </div>`;
-  });
-  return`<div class="ps-donut-row">
-    <div class="ps-donut-wrap"><svg viewBox="0 0 110 110">${slices}
-      <text x="55" y="51" text-anchor="middle" font-size="11" fill="var(--text-mid)" font-weight="600">${total}</text>
-      <text x="55" y="64" text-anchor="middle" font-size="9" fill="var(--text-dim)">分鐘</text>
-    </svg></div>
-    <div class="ps-donut-legend">${legend}</div>
-  </div>`;
-}
-
-function renderPostureTimeline(minuteRows,counts,total){
-  if(!minuteRows.length)return'';
-  const segs=[];
-  minuteRows.forEach(r=>{
-    const t=r.time.slice(11,16);
-    const startMin=parseInt(t.slice(0,2))*60+parseInt(t.slice(3,5));
-    const lbl=actionLabel(r.action);
-    const last=segs[segs.length-1];
-    if(last&&last.lbl===lbl){last.endMin=startMin+1;last.count++;}
-    else segs.push({lbl,startMin,endMin:startMin+1,count:1});
-  });
-  let rects='';
-  segs.forEach(s=>{
-    const x=(s.startMin/1440*100).toFixed(3);
-    const w=Math.max((s.endMin-s.startMin)/1440*100,0.07).toFixed(3);
-    const color=ACTION_LABEL_COLOR[s.lbl]||'#94a3b8';
-    const h1=String(Math.floor(s.startMin/60)).padStart(2,'0')+':'+String(s.startMin%60).padStart(2,'0');
-    const h2=String(Math.floor(s.endMin/60)).padStart(2,'0')+':'+String(s.endMin%60).padStart(2,'0');
-    rects+=`<rect x="${x}%" y="0" width="${w}%" height="100%" fill="${color}" rx="0"><title>${escHtml(s.lbl||'未知')}: ${h1} ～ ${h2}（${s.count} 分）</title></rect>`;
-  });
-  // timeline legend from counts
-  const legendItems=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([lbl])=>{
-    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
-    return`<div class="ps-timeline-legend-item"><div class="ps-timeline-legend-dot" style="background:${color}"></div>${escHtml(lbl)}</div>`;
-  }).join('');
-  return`<div class="ps-timeline-wrap">
-    <div class="ps-timeline-labels"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div>
-    <div class="ps-timeline-bar-row"><svg viewBox="0 0 1440 36" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">${rects}</svg></div>
-    <div class="ps-timeline-legend">${legendItems}</div>
-  </div>`;
-}
-
-function renderPostureScreenContent(minuteRows,date){
-  const content=document.getElementById('ps-content');
-  if(!minuteRows.length){
-    content.innerHTML='<div class="ps-empty"><div class="ps-empty-icon">📭</div><div>查無資料，請調整日期或會員條件後重新載入</div></div>';
-    return;
-  }
-  const counts=computeActionStats(minuteRows);
-  const total=Object.values(counts).reduce((s,v)=>s+v,0);
-  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const topLbl=sorted[0]?.[0]||'—';
-  const topMin=sorted[0]?.[1]||0;
-  const activeStart=minuteRows[0].time.slice(11,16);
-  const activeEnd=minuteRows[minuteRows.length-1].time.slice(11,16);
-  const badgeClass={'靜止':'ps-badge-gray','走路':'ps-badge-blue','慢跑':'ps-badge-green','快跑':'ps-badge-orange','躺姿':'ps-badge-purple','姿勢異常':'ps-badge-red'};
-
-  // Stats strip
-  const statsStrip=`
-<div class="ps-stats-strip">
-  <div class="ps-stat-card">
-    <div class="ps-stat-label">最常見姿態</div>
-    <div style="margin:8px 0 4px"><span class="ps-badge ${badgeClass[topLbl]||'ps-badge-gray'}">${escHtml(topLbl)}</span></div>
-    <div class="ps-stat-sub">${topMin} 分鐘・佔 ${total?Math.round(topMin/total*100):0}%</div>
-  </div>
-  <div class="ps-stat-card">
-    <div class="ps-stat-label">有效分鐘數</div>
-    <div class="ps-stat-value">${minuteRows.length}</div>
-    <div class="ps-stat-sub">分鐘（已過濾暖機）</div>
-  </div>
-  <div class="ps-stat-card">
-    <div class="ps-stat-label">姿態種類</div>
-    <div class="ps-stat-value">${sorted.length}</div>
-    <div class="ps-stat-sub">種不同動作</div>
-  </div>
-  <div class="ps-stat-card">
-    <div class="ps-stat-label">活動時段</div>
-    <div style="font-size:20px;font-weight:800;color:var(--text);margin:8px 0 4px;font-variant-numeric:tabular-nums">${activeStart}</div>
-    <div class="ps-stat-sub">至 ${activeEnd}</div>
-  </div>
-</div>`;
-
-  // Table rows with progress bars
-  const tableRows=sorted.map(([lbl,cnt])=>{
-    const pct=total?((cnt/total)*100).toFixed(1):0;
-    const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
-    const bc=badgeClass[lbl]||'ps-badge-gray';
-    return`<tr>
-      <td><span class="ps-badge ${bc}">
-        <span style="width:7px;height:7px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>
-        ${escHtml(lbl)}</span></td>
-      <td class="ps-table-num">${cnt}</td>
-      <td style="min-width:120px">
-        <div class="ps-progress-label"><span>${pct}%</span></div>
-        <div class="ps-progress-bg"><div class="ps-progress-fill" style="width:${pct}%;background:${color}"></div></div>
-      </td>
-    </tr>`;
-  }).join('');
-
-  // Export pills
-  const actionDefs=[{a:0,l:'靜止'},{a:1,l:'走路'},{a:3,l:'慢跑'},{a:5,l:'快跑'},{a:6,l:'躺姿'},{a:7,l:'姿勢異常'}];
-  const pills=actionDefs.map(({a,l})=>{
-    const on=postureCheckedActions.has(a);
-    return`<label class="ps-pill${on?' on-'+a:''}" onclick="togglePostureCheck(${a},this)">
-      <input type="checkbox" style="display:none"${on?' checked':''}>${escHtml(l)}
-    </label>`;
-  }).join('');
-
-  content.innerHTML=`
-${statsStrip}
-<div class="ps-grid-2 ps-grid-main">
-  <div class="ps-card">
-    <div class="ps-card-header">
-      <div><div class="ps-card-title">姿態分佈</div><div class="ps-card-desc">各動作佔當日總時間比例</div></div>
-    </div>
-    <div class="ps-card-body">${renderPostureDonut(counts,total)}</div>
-  </div>
-  <div class="ps-card">
-    <div class="ps-card-header">
-      <div><div class="ps-card-title">詳細統計</div><div class="ps-card-desc">依時間排序</div></div>
-    </div>
-    <div class="ps-card-body-flush">
-      <table class="ps-table">
-        <thead><tr><th>姿態</th><th>分鐘</th><th>佔比</th></tr></thead>
-        <tbody>${tableRows}</tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<div class="ps-card">
-  <div class="ps-card-header">
-    <div><div class="ps-card-title">全天時間軸</div><div class="ps-card-desc">24小時活動分佈，將滑鼠移至色塊查看時段</div></div>
-  </div>
-  <div class="ps-card-body">${renderPostureTimeline(minuteRows,counts,total)}</div>
-</div>
-<div class="ps-card">
-  <div class="ps-card-header">
-    <div><div class="ps-card-title">匯出 CSV</div><div class="ps-card-desc">勾選要匯出的姿態類別</div></div>
-    <button class="ps-btn ps-btn-primary ps-btn-sm" onclick="downloadPostureCSV()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      匯出
-    </button>
-  </div>
-  <div class="ps-card-body">
-    <div class="ps-pill-group" id="ps-check-group">${pills}</div>
-  </div>
-</div>`;
-}
-
-async function loadPostureScreen(){
-  if(!currentTable){alert('請先選擇資料庫');return;}
-  const dateEl=document.getElementById('ps-date-input');
-  const selEl=document.getElementById('ps-member-select');
-  postureScreenDate=dateEl?.value||currentDate||todayStr();
-  postureScreenMemberId=selEl?.value||'ALL';
-  // Cache key 與 dayViewCacheKey() 格式一致（雙底線分隔）
-  const cacheKey=`${currentTable}__${postureScreenDate}__${postureScreenMemberId}`;
-  const btn=document.getElementById('ps-load-btn');
-  const spinSvg='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
-  if(btn){btn.disabled=true;btn.innerHTML=spinSvg+' 載入中...';}
-  document.getElementById('ps-content').innerHTML=`<div class="ps-loading">${spinSvg}<span>載入中...</span></div>`;
-  let rawRows=[];
-  if(postureRawRowsCacheKey===cacheKey){
-    rawRows=postureRawRowsCache.slice();
-  }else if(dayViewRawRowsCacheKey===dayViewCacheKey()&&dayViewRawRowsCache.length&&(postureScreenMemberId==='ALL'||postureScreenMemberId===currentMemberId)){
-    rawRows=dayViewRawRowsCache.slice();
-    if(postureScreenMemberId!=='ALL')rawRows=rawRows.filter(r=>r.member_id===postureScreenMemberId);
-  }else{
-    // 暫時替換 currentMemberId 使 fetchDay 套用正確的會員篩選
-    const savedMemberId=currentMemberId;
-    currentMemberId=postureScreenMemberId;
-    rawRows=await fetchDay(currentTable,postureScreenDate,true);
-    currentMemberId=savedMemberId;
-    postureRawRowsCache=rawRows.slice();
-    postureRawRowsCacheKey=cacheKey;
-  }
-  const normalSvg='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
-  if(btn){btn.disabled=false;btn.innerHTML=normalSvg+' 載入';}
-  postureScreenMinuteRows=filterWarmupMinutes(aggregateToMinutes(rawRows));
-  renderPostureScreenContent(postureScreenMinuteRows,postureScreenDate);
-  const memberLabel=postureScreenMemberId==='ALL'?'全部':postureScreenMemberId;
-  const sub=document.getElementById('ps-subtitle');
-  if(sub)sub.textContent=`${TABLE_LABEL[currentTable]||currentTable} ／ ${postureScreenDate} ／ ${memberLabel} ／ ${postureScreenMinuteRows.length} 筆`;
-}
-
-function togglePostureCheck(action,labelEl){
-  if(postureCheckedActions.has(action)){
-    postureCheckedActions.delete(action);
-    labelEl.classList.remove('on-'+action);
-    labelEl.querySelector('input').checked=false;
-  }else{
-    postureCheckedActions.add(action);
-    labelEl.classList.add('on-'+action);
-    labelEl.querySelector('input').checked=true;
-  }
-}
-
-function downloadPostureCSV(){
-  if(!postureScreenMinuteRows.length){alert('沒有資料可匯出');return;}
-  const allowedActions=new Set();
-  postureCheckedActions.forEach(a=>allowedActions.add(a));
-  const rows=postureScreenMinuteRows.filter(r=>r.action===null||r.action===undefined||allowedActions.has(parseInt(r.action)));
-  const header='時間,會員ID,動作代碼,動作名稱\n';
-  const body=rows.map(r=>{
-    const lbl=actionLabel(r.action)||'';
-    return`${r.time},${r.member_id||''},${r.action??''},${lbl}`;
-  }).join('\n');
-  const blob=new Blob(['﻿'+header+body],{type:'text/csv;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download=`動作姿態_${postureScreenDate}_${postureScreenMemberId}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
+   ???????????????????????????????????????????????????????????? */
 loadRemembered();
 checkExistingSession();
 </script>
+<!-- Nurse Report Modal -->
+<div class="nurse-modal-overlay" id="nurse-modal-overlay" onclick="if(event.target===this)closeNurseModal()">
+  <div class="nurse-modal">
+    <h3>?啣??怨風?酉</h3>
+    <div class="nurse-severity-row">
+      <button class="nurse-sev-btn sel-1" data-sev="1" onclick="selectSeverity(1)">1 瘜冽?</button>
+      <button class="nurse-sev-btn" data-sev="2" onclick="selectSeverity(2)">2 霅血?</button>
+      <button class="nurse-sev-btn" data-sev="3" onclick="selectSeverity(3)">3 蝺?/button>
+    </div>
+    <textarea id="nurse-content" placeholder="?酉?批捆??></textarea>
+    <div class="nurse-modal-btns">
+      <button class="btn-nurse-cancel" onclick="closeNurseModal()">??</button>
+      <button class="btn-nurse-submit" onclick="submitNurseReport()">?</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
