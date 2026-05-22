@@ -206,6 +206,7 @@ select option { background: var(--white); }
 .op-tab[data-op=select].active  { border-color: var(--sky);    background: var(--sky-light);   color: #0284c7; }
 .op-tab[data-op=insert].active  { border-color: var(--green);  background: var(--green-light);  color: #065f46; }
 .op-tab[data-op=update].active  { border-color: var(--amber);  background: var(--amber-light);  color: #92400e; }
+.op-tab[data-op=delete].active  { border-color: #ef4444; background: #fef2f2; color: #b91c1c; }
 .op-panel { display: none; }
 .op-panel.active { display: block; }
 
@@ -261,6 +262,8 @@ table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
 .modal-confirm.green:hover { background: var(--green-hover); }
 .modal-confirm.amber { background: var(--amber); }
 .modal-confirm.amber:hover { background: #d97706; }
+.modal-confirm.red { background: #dc2626; }
+.modal-confirm.red:hover { background: #b91c1c; }
 
 /* ── Misc ───────────────────────────────────────── */
 .filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -372,6 +375,7 @@ table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
         <button class="op-tab active" data-op="select" onclick="switchOp('select',this)">SELECT 查詢</button>
         <button class="op-tab"        data-op="insert" onclick="switchOp('insert',this)">INSERT 寫入</button>
         <button class="op-tab"        data-op="update" onclick="switchOp('update',this)">UPDATE 更新</button>
+        <button class="op-tab"        data-op="delete" onclick="switchOp('delete',this)">DELETE 刪除</button>
       </div>
 
       <!-- SELECT -->
@@ -455,6 +459,27 @@ table.dt { width: 100%; border-collapse: collapse; font-size: 12px; }
         <div class="result-area" id="upd-result"></div>
       </div>
 
+      <!-- DELETE -->
+      <div class="op-panel" id="panel-delete">
+        <div class="card" style="background:#fef2f2;border-color:#fecaca;padding:1rem 1.25rem;margin-bottom:1rem">
+          <div style="font-size:12px;font-weight:600;color:#b91c1c;margin-bottom:.5rem">DELETE 使用說明</div>
+          <div style="font-size:12.5px;color:#991b1b;line-height:1.9">
+            請務必填寫精確的 WHERE 條件，避免刪到整批資料。<br>
+            範例：<code style="background:#fee2e2;padding:1px 5px;border-radius:4px">id=eq.123</code><br>
+            或：<code style="background:#fee2e2;padding:1px 5px;border-radius:4px">member_id=eq.CY001&date_minute=eq.2026-01-15T09:01:00</code>
+          </div>
+        </div>
+        <div class="card">
+          <div class="field-row">
+            <label class="field-label">WHERE 條件</label>
+            <input type="text" id="delFilter" placeholder="id=eq.123" />
+            <div class="field-hint">至少要有一個精確條件，建議優先用 id。</div>
+          </div>
+          <button class="btn-run" style="background:#dc2626" onclick="runDelete()">執行刪除</button>
+        </div>
+        <div class="result-area" id="del-result"></div>
+      </div>
+
     </div><!-- /tab-dbops -->
   </div><!-- /content -->
 </div><!-- /appView -->
@@ -493,6 +518,7 @@ const ACCESS_MAP = {
 let accessToken   = null
 let userEmail     = null
 let allowedTables = []
+const OPS_EXTRA_TABLES = ['users', 'measurement_records', 'organizations']
 let isDownloading = false
 
 // ─── Auth ────────────────────────────────────────
@@ -570,7 +596,8 @@ function initApp() {
   // Table select for DB ops
   const sel = document.getElementById('dbTable')
   sel.innerHTML = ''
-  allowedTables.forEach(t => {
+  const opTables = [...new Set([...allowedTables, ...OPS_EXTRA_TABLES])]
+  opTables.forEach(t => {
     const opt = document.createElement('option')
     opt.value = t; opt.textContent = t
     sel.appendChild(opt)
@@ -808,6 +835,9 @@ function fillUpdateExample() {
   document.getElementById('updFilter').value = 'id=eq.1'
   document.getElementById('updJson').value   = JSON.stringify({"heartbeat": 80}, null, 2)
 }
+function fillDeleteExample() {
+  document.getElementById('delFilter').value = 'id=eq.1'
+}
 
 // ─── SELECT ───────────────────────────────────────
 async function runSelect() {
@@ -879,6 +909,37 @@ async function doUpdate(table, filter, payload) {
     const text = await r.text()
     const d = text ? JSON.parse(text) : []
     renderResult('upd-result', r, Array.isArray(d) ? d : [d])
+  } catch(e) { el.innerHTML = `<div class="result-box log-err">${e.message}</div>` }
+}
+
+// DELETE
+function runDelete() {
+  const table  = document.getElementById('dbTable').value
+  const filter = document.getElementById('delFilter').value.trim()
+  if (!filter) { alert('請填寫 WHERE 條件'); return }
+  if (!/=eq\.|=in\.|=is\.|=gt\.|=gte\.|=lt\.|=lte\./.test(filter)) {
+    alert('DELETE 條件看起來不夠精確，請至少使用 eq./in./is. 這類條件')
+    return
+  }
+
+  showModal({
+    icon: '⚠️',
+    title: `確認刪除資料`,
+    body: `資料表：<code>${table}</code><br>WHERE：<code>${filter}</code><br><span style="color:var(--red);font-size:12px;font-weight:700">此操作不可復原，請再次確認。</span>`,
+    confirmText: '確認刪除',
+    confirmClass: 'red',
+    onConfirm: () => doDelete(table, filter)
+  })
+}
+async function doDelete(table, filter) {
+  const el = document.getElementById('del-result')
+  el.innerHTML = `<div class="result-box" style="color:var(--text3)">刪除中...</div>`
+  try {
+    const f = filter.replace(/\s+/g,'&')
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${f}`, { method:'DELETE', headers: apiHeaders() })
+    const text = await r.text()
+    const d = text ? JSON.parse(text) : []
+    renderResult('del-result', r, Array.isArray(d) ? d : [d])
   } catch(e) { el.innerHTML = `<div class="result-box log-err">${e.message}</div>` }
 }
 </script>

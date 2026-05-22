@@ -1,0 +1,238 @@
+/*
+  ╔══════════════════════════════════════════════════════════╗
+  ║  VitaLily — Logo Component System                       ║
+  ║  Healthcare Dashboard (機構健康資料看板)                  ║
+  ║  Designed to sit on dark blue-green (login) and         ║
+  ║  frosted glass / light mint (dashboard) backgrounds.    ║
+  ╚══════════════════════════════════════════════════════════╝
+
+  Google Font import — add once to <head>:
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant:wght@300;400;500;600&display=swap" rel="stylesheet">
+*/
+
+/* ─────────────────────────────────────────────
+   1. DESIGN TOKENS
+   ───────────────────────────────────────────── */
+:root {
+  /* Core logo tokens */
+  --logo-lily-stroke:    #C9A96E;           /* gold — icon on dark bg  */
+  --logo-wordmark:       #C9A96E;           /* gold wordmark on dark bg */
+  --logo-subtitle:       rgba(255,255,255,0.52); /* faded white subtitle on dark */
+
+  /* Light-bg overrides — applied via .logo--on-light modifier */
+  --logo-lily-stroke-light:    #8B6A35;     /* deeper amber, readable on white */
+  --logo-wordmark-light:       #8B6A35;
+  --logo-subtitle-light:       rgba(72,96,85,0.72); /* matches --text-mid */
+
+  /* Typography */
+  --logo-font-serif:    'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+  --logo-font-fallback: Georgia, 'Times New Roman', serif;
+
+  /* Timing */
+  --logo-transition:    200ms ease;
+}
+
+
+/* ─────────────────────────────────────────────
+   2. BASE COMPONENT STRUCTURE
+   ───────────────────────────────────────────── */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;                       /* gap controlled per variant */
+  text-decoration: none;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Icon wrapper — scales the SVG, inherits color token */
+.logo__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--logo-lily-stroke);
+  transition: color var(--logo-transition),
+              transform var(--logo-transition);
+}
+
+.logo__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Text stack */
+.logo__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Wordmark — "VitaLily" */
+.logo__wordmark {
+  font-family: var(--logo-font-serif);
+  font-weight: 500;             /* Cormorant 500 is ideal — elegant but present */
+  font-style: normal;
+  color: var(--logo-wordmark);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  line-height: 1;
+  transition: color var(--logo-transition);
+  display: block;
+}
+
+/* Subtitle — "機構健康資料看板" or "Healthcare Dashboard" */
+.logo__subtitle {
+  font-family: 'Noto Sans TC', 'DM Sans', system-ui, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--logo-subtitle);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
+  transition: color var(--logo-transition);
+  display: block;
+}
+
+
+/* ─────────────────────────────────────────────
+   3. SIZE VARIANTS
+   ───────────────────────────────────────────── */
+
+/* ── Large — 160px wide · login / splash screen ── */
+.logo-large {
+  width: 160px;
+  gap: 14px;
+  align-items: center;
+}
+
+.logo-large .logo__icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.logo-large .logo__wordmark {
+  font-size: 22px;
+  letter-spacing: 0.10em;
+}
+
+.logo-large .logo__subtitle {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  margin-top: 5px;
+}
+
+
+/* ── Medium — 120px wide · sticky header / topbar ── */
+.logo-medium {
+  width: 120px;
+  gap: 10px;
+  align-items: center;
+}
+
+.logo-medium .logo__icon {
+  width: 32px;
+  height: 32px;
+}
+
+.logo-medium .logo__wordmark {
+  font-size: 16px;
+  letter-spacing: 0.08em;
+}
+
+.logo-medium .logo__subtitle {
+  font-size: 7.5px;
+  letter-spacing: 0.16em;
+  margin-top: 3px;
+}
+
+
+/* ── Small — 32px icon-only · collapsed sidebar ── */
+.logo-small {
+  width: 32px;
+  height: 32px;
+  gap: 0;
+}
+
+.logo-small .logo__icon {
+  width: 32px;
+  height: 32px;
+}
+
+/* Hide text in collapsed icon-only mode */
+.logo-small .logo__text {
+  display: none;
+}
+
+
+/* ─────────────────────────────────────────────
+   4. COLOR CONTEXT MODIFIERS
+   ───────────────────────────────────────────── */
+
+/*
+  Default (no modifier) = dark background context:
+    - login panel (dark blue-green gradient)
+    - sidebar drawer header
+    Tokens already defined in :root target dark bg.
+*/
+
+
+/* .logo--on-light — use on frosted glass / mint dashboard bg */
+.logo--on-light {
+  --logo-lily-stroke: var(--logo-lily-stroke-light);
+  --logo-wordmark:    var(--logo-wordmark-light);
+  --logo-subtitle:    var(--logo-subtitle-light);
+}
+
+
+/* .logo--on-white — pure white panel (e.g. card headers) */
+.logo--on-white {
+  --logo-lily-stroke: #7D5E28;
+  --logo-wordmark:    #7D5E28;
+  --logo-subtitle:    rgba(60,80,70,0.60);
+}
+
+
+/* .logo--mono-white — all-white (dark overlay hero areas) */
+.logo--mono-white {
+  --logo-lily-stroke: rgba(255,255,255,0.92);
+  --logo-wordmark:    rgba(255,255,255,0.92);
+  --logo-subtitle:    rgba(255,255,255,0.48);
+}
+
+
+/* ─────────────────────────────────────────────
+   5. HOVER & FOCUS STATES (interactive logo links)
+   ───────────────────────────────────────────── */
+a.logo:hover .logo__icon {
+  transform: scale(1.08) rotate(15deg);
+}
+
+a.logo:hover .logo__wordmark {
+  letter-spacing: 0.11em;
+}
+
+a.logo:focus-visible {
+  outline: 2px solid var(--logo-lily-stroke);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+
+/* ─────────────────────────────────────────────
+   6. REDUCED-MOTION SAFE GUARD
+   ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .logo__icon,
+  .logo__wordmark,
+  .logo__subtitle {
+    transition: none;
+  }
+  a.logo:hover .logo__icon {
+    transform: none;
+  }
+}

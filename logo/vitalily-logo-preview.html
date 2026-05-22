@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VitaLily Logo Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans TC', sans-serif; background: #1a2a3a; color: #eee; }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  padding: 40px 56px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.row-label {
+  width: 100%;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.35;
+  margin-bottom: -24px;
+}
+
+.bg-navy  { background: linear-gradient(155deg, #243567 0%, #16213e 100%); }
+.bg-monet { background: linear-gradient(155deg, #1e3a3a 0%, #243567 60%, #16213e 100%); }
+.bg-white { background: #F5F5F0; }
+.bg-glass { background: linear-gradient(135deg, #dce8ee 0%, #e8f0f5 100%); }
+
+.lily { display: block; flex-shrink: 0; }
+
+.lockup { display: flex; align-items: center; gap: 12px; }
+.lockup.vertical { flex-direction: column; gap: 8px; text-align: center; }
+
+.wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: #C9A96E;
+  line-height: 1.1;
+}
+.subtitle {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: rgba(200,200,196,0.75);
+  margin-top: 2px;
+}
+.wordmark.on-light { color: #8B6A35; }
+.subtitle.on-light { color: rgba(74,74,72,0.65); }
+
+.chip {
+  font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; opacity: 0.4;
+  display: block; margin-top: 10px;
+}
+
+.sidebar {
+  width: 52px;
+  background: rgba(22,33,62,0.96);
+  border-radius: 10px;
+  padding: 14px 0;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 18px;
+}
+.sidebar-dot {
+  width: 28px; height: 4px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 2px;
+}
+
+.topbar {
+  width: 420px; height: 56px;
+  background: rgba(245,245,240,0.92);
+  border-radius: 8px;
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+.topbar-sep { width: 1px; height: 20px; background: rgba(184,205,216,0.5); margin: 0 4px; }
+.topbar-text {
+  font-size: 11px; color: rgba(74,74,72,0.55);
+  letter-spacing: 0.04em;
+  font-family: 'Noto Sans TC', sans-serif; font-weight: 300;
+}
+
+.login-card {
+  border-radius: 14px; overflow: hidden;
+  display: flex; width: 380px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+}
+.login-left {
+  width: 140px;
+  background: linear-gradient(170deg, #3a5a7a 0%, #243560 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 28px 16px; gap: 10px;
+}
+.login-right {
+  flex: 1;
+  background: rgba(245,245,240,0.95);
+  padding: 24px 20px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.field-mock { height: 32px; background: #fff; border: 1px solid #B8CDD8; border-radius: 5px; }
+.btn-mock   { height: 36px; background: #7A9BAD; border-radius: 5px; }
+.login-title { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 16px; color: #1E1E1C; letter-spacing: 0.03em; }
+.login-sub   { font-size: 10px; color: #8C8C8A; letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+
+
+<!-- ═══ 1. 大尺寸特寫 ═══ -->
+<div class="row bg-monet">
+  <span class="row-label">睡蓮圖標 — 大尺寸特寫 (Monet 背景)</span>
+  <div style="display:flex; align-items:flex-end; gap:32px; margin-top:16px;">
+    <div style="text-align:center">
+      <img src="vitalily-logo.png" class="lily" width="128" height="128">
+      <span class="chip" style="color:#aaa;">128 px</span>
+    </div>
+    <div style="text-align:center">
+      <img src="vitalily-logo.png" class="lily" width="80" height="80">
+      <span class="chip" style="color:#aaa;">80 px</span>
+    </div>
+    <div style="text-align:center">
+      <img src="vitalily-logo.png" class="lily" width="48" height="48">
+      <span class="chip" style="color:#aaa;">48 px</span>
+    </div>
+    <div style="text-align:center">
+      <img src="vitalily-logo.png" class="lily" width="32" height="32">
+      <span class="chip" style="color:#aaa;">32 px</span>
+    </div>
+    <div style="text-align:center">
+      <img src="vitalily-logo.png" class="lily" width="20" height="20">
+      <span class="chip" style="color:#aaa;">20 px</span>
+    </div>
+    <div style="text-align:center">
+      <img src="vitalily-logo.png" class="lily" width="16" height="16">
+      <span class="chip" style="color:#aaa;">16 px</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ 2. Login 左欄 (深藍) ═══ -->
+<div class="row bg-navy">
+  <span class="row-label">登入頁左側面板 — 深藍</span>
+
+  <div class="lockup vertical" style="margin-top:16px;">
+    <img src="vitalily-logo.png" class="lily" width="72" height="72">
+    <div>
+      <div class="wordmark" style="font-size:20px;">VitaLily</div>
+      <div class="subtitle" style="font-size:10px; text-align:center;">機構健康資料看板</div>
+    </div>
+  </div>
+
+  <div class="lockup" style="margin-top:16px;">
+    <img src="vitalily-logo.png" class="lily" width="44" height="44">
+    <div>
+      <div class="wordmark" style="font-size:17px;">VitaLily</div>
+      <div class="subtitle" style="font-size:9px;">機構健康資料看板</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ 3. Topbar (淡霧藍底) ═══ -->
+<div class="row bg-glass">
+  <span class="row-label">頂部導覽列 — 淡霧藍底</span>
+  <div class="topbar" style="margin-top:16px;">
+    <img src="vitalily-logo.png" class="lily" width="32" height="32">
+    <div class="topbar-sep"></div>
+    <div class="wordmark on-light" style="font-size:14px;">VitaLily</div>
+    <div class="topbar-sep"></div>
+    <div class="topbar-text">機構健康資料看板</div>
+  </div>
+</div>
+
+
+<!-- ═══ 4. Sidebar 收合 ═══ -->
+<div class="row bg-navy">
+  <span class="row-label">側邊欄收合 — 32px icon</span>
+  <div class="sidebar" style="margin-top:16px;">
+    <img src="vitalily-logo.png" class="lily" width="32" height="32">
+    <div class="sidebar-dot"></div>
+    <div class="sidebar-dot"></div>
+    <div class="sidebar-dot"></div>
+    <div class="sidebar-dot"></div>
+  </div>
+</div>
+
+
+<!-- ═══ 5. 登入卡片完整模擬 ═══ -->
+<div class="row bg-monet">
+  <span class="row-label">登入卡片完整模擬</span>
+  <div class="login-card" style="margin-top:16px;">
+    <div class="login-left">
+      <img src="vitalily-logo.png" class="lily" width="64" height="64">
+      <div class="wordmark" style="font-size:15px; text-align:center;">VitaLily</div>
+      <div class="subtitle" style="font-size:8px; text-align:center; line-height:1.5;">機構健康<br>資料看板</div>
+    </div>
+    <div class="login-right">
+      <div>
+        <div class="login-title">歡迎回來</div>
+        <div class="login-sub" style="margin-top:3px;">請使用已授權的帳號登入</div>
+      </div>
+      <div class="field-mock"></div>
+      <div class="field-mock"></div>
+      <div class="btn-mock"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ 6. 白底（列印 / 報告） ═══ -->
+<div class="row bg-white">
+  <span class="row-label" style="color:#888;">白底 — 列印 / 報告封面</span>
+
+  <div class="lockup" style="margin-top:16px;">
+    <img src="vitalily-logo.png" class="lily" width="56" height="56">
+    <div>
+      <div class="wordmark on-light" style="font-size:22px;">VitaLily</div>
+      <div class="subtitle on-light" style="font-size:10px;">機構健康資料看板</div>
+    </div>
+  </div>
+
+  <div class="lockup" style="margin-top:16px;">
+    <img src="vitalily-logo.png" class="lily" width="32" height="32">
+    <div>
+      <div class="wordmark on-light" style="font-size:14px;">VitaLily</div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

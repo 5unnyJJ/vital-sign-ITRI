@@ -8,9 +8,23 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <title>機構健康資料看板 v3.0</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Preconnect to external domains (dns-prefetch removed: preconnect already covers DNS) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://lrrxswxvphoeyuvemvin.supabase.co">
+<!-- Preload main background image; timthumb (login) preloaded conditionally via JS -->
+<link rel="preload" as="image" href="images/N-4240-00-000027-wpu.jpg">
+<!-- Preload Supabase SDK so download starts while HTML parses -->
+<link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js" crossorigin>
+<!-- Critical font: Noto Sans TC only (3 weights cover all usage) -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"></noscript>
+<!-- Deferred: extra Noto weights + Cormorant (login decoration only, display=optional = skip if not cached) -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;600&family=Cormorant+Garamond:wght@300;400&display=optional" onload="this.onload=null;this.rel='stylesheet'">
 <!-- OWASP A08: 固定版本防止供應鏈攻擊（升版前請先驗證） -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<!-- 注意：不加 defer，inline script 依賴 supabase.createClient()，必須同步載入 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js" crossorigin="anonymous"></script>
 <style>
 :root{--bg:#eef4ef;--bg-alt:#f7fbf8;--surface:rgba(255,255,255,.86);--border:#d2e2d9;--border-light:#e5eeea;
 --mint:#7aaa96;--mint-mid:#5d9180;--mint-dark:#3d6b5a;--mint-light:#d8efe5;--mint-xlight:#f0f9f4;
@@ -66,24 +80,28 @@ z-index:0;
 /* ══ LOGIN ══ */
 #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;
 background:
-linear-gradient(rgba(16,27,42,.48),rgba(24,39,58,.58)),
+linear-gradient(rgba(16,27,42,.38),rgba(24,39,58,.44)),
 url('images/timthumb.jpg');
 background-size:cover,cover;
 background-repeat:no-repeat,no-repeat;
 background-position:center center,center center;
 background-attachment:fixed;}
-.login-wrap{display:flex;background:rgba(245,250,255,.78);border:1px solid rgba(255,255,255,.52);backdrop-filter:blur(14px);border-radius:24px;box-shadow:0 18px 48px rgba(18,30,47,.3);overflow:hidden;width:820px;max-width:93vw;}
-.login-aside{width:280px;flex-shrink:0;background:linear-gradient(160deg,rgba(36,67,104,.9) 0%,rgba(28,48,74,.84) 55%,rgba(19,32,54,.92) 100%);padding:52px 38px;display:flex;flex-direction:column;justify-content:space-between;}
-.login-brand h1{font-size:21px;font-weight:700;color:#fff;line-height:1.4;letter-spacing:-.3px;}
-.login-brand small{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.6px;text-transform:uppercase;margin-top:5px;display:block;}
+.login-wrap{display:flex;background:linear-gradient(135deg,rgba(242,248,255,.16),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.42);backdrop-filter:blur(24px) saturate(1.15);-webkit-backdrop-filter:blur(24px) saturate(1.15);border-radius:24px;box-shadow:0 22px 60px rgba(11,22,37,.28),inset 0 1px 0 rgba(255,255,255,.32);overflow:hidden;width:820px;max-width:93vw;}
+.login-aside{width:320px;flex-shrink:0;background:linear-gradient(160deg,rgba(42,72,108,.38) 0%,rgba(30,51,78,.30) 55%,rgba(20,34,56,.42) 100%);padding:28px 36px 52px;display:flex;flex-direction:column;justify-content:flex-start;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.login-brand{display:flex;flex-direction:column;align-items:center;gap:8px;padding-top:0;position:relative;z-index:2;margin-top:40px;}
+.login-brand-logo{display:none;}
+.login-brand h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:62px;font-weight:300;color:#d7b57a;line-height:.94;letter-spacing:.05em;margin:0;text-align:center;position:relative;z-index:1;}
+.login-brand small{font-size:17px;font-weight:500;color:rgba(227,235,245,.78);letter-spacing:.01em;text-transform:none;margin-top:0;display:block;line-height:1.35;text-align:center;}
+.login-frame{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:78px 78px;}
+.login-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:0;}
 .login-deco{font-size:68px;opacity:.18;text-align:right;user-select:none;}
 .login-form{flex:1;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;}
 .login-form h2{font-size:22px;font-weight:700;letter-spacing:-.4px;margin-bottom:5px;}
 .login-form .sub{font-size:14px;color:var(--text-dim);margin-bottom:34px;}
 .field{margin-bottom:17px;}
 .field label{display:block;font-size:11px;font-weight:700;color:var(--text-mid);margin-bottom:7px;text-transform:uppercase;letter-spacing:.6px;}
-.field input{width:100%;padding:12px 15px;background:var(--bg-alt);border:1.5px solid var(--border);border-radius:var(--r-md);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .18s,box-shadow .18s,background .15s;}
-.field input:focus{border-color:var(--mint);background:#fff;box-shadow:0 0 0 3px rgba(122,170,150,.17);}
+.field input{width:100%;padding:12px 15px;background:rgba(255,255,255,.36);border:1.5px solid rgba(197,221,213,.72);border-radius:var(--r-md);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .18s,box-shadow .18s,background .15s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+.field input:focus{border-color:rgba(122,170,150,.92);background:rgba(255,255,255,.5);box-shadow:0 0 0 3px rgba(122,170,150,.14);}
 .remember-row{display:flex;align-items:center;gap:8px;margin:0 0 22px;}
 .remember-row input[type=checkbox]{width:14px;height:14px;accent-color:var(--mint);cursor:pointer;}
 .remember-row label{font-size:13px;color:var(--text-dim);cursor:pointer;}
@@ -91,7 +109,7 @@ background-attachment:fixed;}
 .btn-login:hover{background:var(--mint-mid);}.btn-login:active{transform:scale(.99);}
 .btn-login:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;}
 .error-msg{background:var(--red-light);border:1px solid rgba(184,84,80,.18);color:var(--red);padding:10px 14px;border-radius:var(--r-sm);font-size:13px;margin-bottom:15px;display:none;}
-.session-banner{background:var(--mint-xlight);border:1.5px solid var(--mint-light);border-radius:var(--r-md);padding:13px 16px;margin-bottom:18px;display:none;}
+.session-banner{background:rgba(240,249,244,.42);border:1.5px solid rgba(216,239,229,.7);border-radius:var(--r-md);padding:13px 16px;margin-bottom:18px;display:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
 .session-banner p{font-size:13px;color:var(--text-mid);margin-bottom:10px;}
 .session-banner .session-email{font-weight:700;color:var(--mint-dark);}
 .session-btns{display:flex;gap:8px;}
@@ -105,13 +123,15 @@ background-attachment:fixed;}
 .login-stage .login-wrap{position:relative;z-index:2;}
 .login-wrap{position:relative;width:820px;max-width:93vw;overflow:hidden;}
 .login-aside,.login-form{position:relative;overflow:hidden;}
-.login-aside::after,.login-form::before,.login-form::after{display:none;}
-.login-form{padding:78px 48px 118px;display:flex;flex-direction:column;justify-content:center;}
-.login-decor-1{width:35px;left:6px;top:8px;opacity:.60;transform:rotate(30deg);}
-.login-decor-2{width:256px;left:-35px;bottom:-2px;opacity:.95;}
-.login-decor-3{width:83px;left:140px;bottom:15px;opacity:.90;transform:rotate(30deg);}
-.login-decor-4{width:500px;right:15px;top:10px;opacity:.11;}
-.login-decor-5{width:500px;right:10px;bottom:-20px;opacity:.17;transform:rotate(-2deg);}
+.login-aside::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 38%,rgba(9,18,31,.1) 100%);pointer-events:none;}
+.login-form::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.26),rgba(255,255,255,.08) 42%,rgba(213,228,239,.06) 100%);pointer-events:none;z-index:1;}
+.login-form::after{content:'';position:absolute;inset:18px;border-radius:20px;border:1px solid rgba(255,255,255,.18);pointer-events:none;z-index:1;opacity:.9;}
+.login-form{padding:78px 48px 118px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(244,249,253,.18));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
+.login-decor-1{display:none;}
+.login-decor-2{width:186px;left:67px;bottom:34px;opacity:.74;filter:drop-shadow(0 12px 22px rgba(10,20,34,.18));}
+.login-decor-3{display:none;}
+.login-decor-4{width:420px;right:20px;top:14px;opacity:.06;}
+.login-decor-5{width:420px;right:16px;bottom:-12px;opacity:.1;transform:rotate(-2deg);}
 .login-form h2,.login-form .sub,.login-form .session-banner,.login-form .error-msg,.login-form .field,.login-form .remember-row,.login-form .btn-login{position:relative;z-index:4;}
 .login-form h2{max-width:100%;line-height:1.15;margin-bottom:8px;}
 .login-form .sub{max-width:100%;margin-bottom:34px;}
@@ -139,6 +159,7 @@ background-attachment:fixed;}
 /* login extra decor */
 @media(max-width:600px){.login-aside{display:none;}.login-form{padding:42px 24px 62px;}.login-form h2,.login-form .sub{max-width:100%;}}
 @media(max-width:980px){.decor-ov-2,.decor-ov-3,.decor-ov-4,.decor-det-2,.decor-det-3,.decor-det-4,.decor-dash-2,.decor-dash-3,.decor-dash-4{display:none;}.login-decor-2,.login-decor-3{display:none;}.login-form{padding:68px 34px 96px;}.login-decor-1{width:50px;left:8px;top:8px;}.login-decor-4{width:400px;right:15px;top:10px;opacity:.10;}.login-decor-5{width:400px;right:10px;bottom:0px;opacity:.14;}}
+@media(max-width:980px){.login-aside{width:292px;padding:26px 28px 44px;}.login-brand{margin-top:28px;}.login-brand-logo{display:none;}.login-brand h1{font-size:39px;}.login-brand small{font-size:15px;}.login-decor-2{width:164px;left:64px;bottom:24px;}}
 @media(max-width:760px){.login-decor-1,.login-decor-2,.login-decor-3,.login-decor-4,.login-decor-5{display:none;}}
 @media(max-width:700px){.screen-shell .screen-decor{display:none;}}
 
@@ -356,6 +377,8 @@ background-attachment:fixed;}
 .btn-refresh:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
 .btn-refresh.spinning svg{animation:spin .6s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
+@keyframes cardFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.member-card.card-appear{animation:cardFadeIn 160ms ease-out both;}
 .btn-account{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text-mid);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .18s;}
 .btn-account:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
 .btn-account.has-filter{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
@@ -537,6 +560,27 @@ background-attachment:fixed;}
 .annot-modal-form-col{width:360px;flex-shrink:0;padding:20px;overflow-y:auto;border-right:1px solid var(--border-light);}
 .annot-modal-list-col{flex:1;padding:20px;overflow-y:auto;background:var(--bg-alt);border-radius:0 0 var(--r-xl) 0;}
 @media(max-width:640px){.annot-modal-cols{flex-direction:column;}.annot-modal-form-col{width:100%;border-right:none;border-bottom:1px solid var(--border-light);}}
+
+/* ══ POSTURE CALENDAR MODAL ══ */
+.ps-cal-overlay{display:none;position:fixed;inset:0;z-index:700;align-items:center;justify-content:center;padding:16px;}
+.ps-cal-overlay.open{display:flex;}
+.ps-cal-backdrop{position:absolute;inset:0;background:rgba(20,35,28,.42);backdrop-filter:blur(3px);}
+.ps-cal-modal{position:relative;background:#fff;border-radius:var(--r-xl);padding:28px;max-width:420px;width:100%;box-shadow:var(--shadow-md);animation:fadeUp .22s ease;}
+.ps-cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.ps-cal-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;border-radius:var(--r-sm);color:var(--text-dim);font-size:18px;cursor:pointer;transition:all .15s;}
+.ps-cal-close:hover{background:var(--bg-alt);color:var(--text);}
+.ps-cal-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:16px;}
+.ps-cal-nav-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--r-sm);cursor:pointer;font-size:16px;color:var(--text-mid);transition:all .15s;}
+.ps-cal-nav-btn:hover{background:var(--mint-light);border-color:var(--mint);color:var(--mint-dark);}
+.ps-cal-month-label{font-size:15px;font-weight:700;color:var(--text);min-width:120px;text-align:center;}
+.ps-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.ps-cal-dow{display:flex;align-items:center;justify-content:center;height:32px;font-size:11px;font-weight:600;color:var(--text-dim);}
+.ps-cal-day{display:flex;align-items:center;justify-content:center;height:36px;border-radius:var(--r-sm);font-size:13px;color:var(--text-dim);opacity:.4;cursor:default;position:relative;}
+.ps-cal-day.has-data{opacity:1;color:var(--mint-dark);background:var(--mint-xlight);border:1px solid var(--mint-light);cursor:pointer;font-weight:600;}
+.ps-cal-day.has-data:hover{background:var(--mint-light);border-color:var(--mint);transform:scale(1.06);}
+.ps-cal-day.is-today::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--orange);}
+.ps-cal-day.empty{opacity:0;pointer-events:none;}
+.ps-cal-loading{grid-column:1/-1;text-align:center;padding:24px 0;color:var(--text-dim);font-size:13px;}
 .annot-form-box{background:var(--bg-alt);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:16px;}
 .annot-form-title{font-size:13px;font-weight:700;color:var(--text-mid);margin-bottom:12px;}
 .annot-form-row{display:flex;gap:8px;margin-bottom:10px;}
@@ -572,23 +616,29 @@ background-attachment:fixed;}
 
 /* ══ POSTURE SCREEN — shadcn-inspired ══ */
 /* Layout */
-.ps-main{padding:40px 48px 64px;max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:32px;}
+.ps-main{padding:12px 48px 72px;max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:28px;}
+#ps-content{display:flex;flex-direction:column;gap:20px;scroll-margin-top:140px;}
 .ps-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:8px;border-bottom:1px solid var(--border-light);}
 .ps-title{font-size:26px;font-weight:800;letter-spacing:-.4px;color:var(--text);}
 .ps-subtitle{font-size:13px;color:var(--text-dim);margin-top:5px;line-height:1.6;}
 
-/* Toolbar — shadcn card feel */
-.ps-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;background:rgba(255,255,255,.9);border:1px solid var(--border);border-radius:14px;box-shadow:0 1px 4px rgba(40,70,55,.06);position:sticky;top:72px;z-index:20;backdrop-filter:blur(8px);}
-.ps-toolbar-label{font-size:12px;font-weight:600;color:var(--text-dim);white-space:nowrap;}
-.ps-date-input,.ps-select{height:38px;padding:0 12px;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;color:var(--text);outline:none;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
-.ps-date-input:focus,.ps-select:focus{border-color:var(--mint);box-shadow:0 0 0 2px rgba(122,170,150,.18);}
+/* Toolbar */
+.ps-toolbar{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;padding:18px 22px;background:var(--bg-alt);border:1px solid var(--border);border-radius:16px;box-shadow:0 2px 8px rgba(40,70,55,.07);position:sticky;top:-38px;z-index:20;backdrop-filter:blur(12px);}
+.ps-toolbar-group{display:flex;flex-direction:column;gap:5px;}
+.ps-toolbar-label{font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.7px;white-space:nowrap;}
+.ps-date-pick-btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;background:#fff;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;color:var(--text);cursor:pointer;transition:border-color .15s,box-shadow .15s;white-space:nowrap;min-width:160px;}
+.ps-date-pick-btn:hover{border-color:var(--mint);box-shadow:0 0 0 3px rgba(122,170,150,.18);}
+.ps-date-input,.ps-select{height:38px;padding:0 14px;background:#fff;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit;color:var(--text);outline:none;cursor:pointer;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:auto;}
+.ps-date-input{min-width:175px;width:175px;}
+.ps-select{min-width:150px;}
+.ps-date-input:focus,.ps-select:focus{border-color:var(--mint);box-shadow:0 0 0 3px rgba(122,170,150,.18);}
 
 /* Buttons */
-.ps-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;padding:0 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap;}
-.ps-btn-primary{background:var(--mint);color:#fff;box-shadow:0 1px 3px rgba(122,170,150,.4);}
+.ps-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:46px;padding:0 20px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.ps-btn-primary{background:var(--mint);color:#fff;box-shadow:0 2px 6px rgba(122,170,150,.4);}
 .ps-btn-primary:hover{background:var(--mint-mid);}
 .ps-btn-primary:disabled{opacity:.5;cursor:not-allowed;}
-.ps-btn-sm{height:32px;padding:0 12px;font-size:12px;font-weight:600;border-radius:6px;}
+.ps-btn-sm{height:34px;padding:0 14px;font-size:12px;font-weight:600;border-radius:7px;}
 .ps-btn-ghost{background:transparent;color:var(--text-mid);border:1px solid var(--border);}
 .ps-btn-ghost:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
 
@@ -676,6 +726,40 @@ background-attachment:fixed;}
 @media(max-width:1024px){.ps-stats-strip{grid-template-columns:repeat(2,1fr);}.ps-grid-main{grid-template-columns:1fr;}}
 @media(max-width:700px){.ps-grid-2{grid-template-columns:1fr;}.ps-main{padding:20px 16px 40px;gap:20px;}.ps-toolbar{position:static;top:auto;}.ps-date-input,.ps-select,.ps-btn{width:100%;}.ps-title{font-size:22px;}.ps-stats-strip{grid-template-columns:1fr 1fr;}}
 @media(max-width:480px){.ps-stats-strip{grid-template-columns:1fr;}}
+
+/* ── POSTURE REDESIGN ── */
+.ps-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;scroll-margin-top:140px;}
+.ps-kpi{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px 24px 18px;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(40,70,55,.06),0 4px 12px rgba(40,70,55,.04);display:flex;flex-direction:column;gap:4px;}
+.ps-kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--kc,var(--mint));border-radius:14px 0 0 14px;}
+.ps-kpi-label{font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.6px;}
+.ps-kpi-num{font-size:36px;font-weight:800;color:var(--text);line-height:1;font-variant-numeric:tabular-nums;margin:8px 0 2px;}
+.ps-kpi-main{display:flex;align-items:center;gap:8px;margin:8px 0 2px;}
+.ps-kpi-dot{width:11px;height:11px;border-radius:50%;background:var(--kc,var(--mint));flex-shrink:0;}
+.ps-kpi-val{font-size:24px;font-weight:800;color:var(--text);line-height:1;}
+.ps-kpi-sub{font-size:12px;color:var(--text-dim);margin-top:2px;}
+.ps-kpi-time{font-size:26px;font-weight:800;color:var(--text);line-height:1;font-variant-numeric:tabular-nums;margin:8px 0 2px;letter-spacing:.02em;}
+.ps-main-grid{display:grid;grid-template-columns:55fr 45fr;gap:20px;align-items:start;}
+.ps-act-list{display:flex;flex-direction:column;gap:10px;}
+.ps-act-item{display:flex;align-items:stretch;border-radius:10px;overflow:hidden;background:var(--bg-alt);border:1px solid var(--border-light);transition:box-shadow .15s;}
+.ps-act-item:hover{box-shadow:0 2px 8px rgba(40,70,55,.08);}
+.ps-act-swatch{width:6px;flex-shrink:0;background:var(--ac,#94a3b8);}
+.ps-act-body{flex:1;padding:14px 18px;}
+.ps-act-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px;}
+.ps-act-name{font-size:14px;font-weight:700;color:var(--text);}
+.ps-act-pct{font-size:20px;font-weight:800;color:var(--ac,#94a3b8);font-variant-numeric:tabular-nums;line-height:1;}
+.ps-act-min{font-size:11px;color:var(--text-dim);margin-top:7px;font-variant-numeric:tabular-nums;}
+.ps-donut-wrap{width:200px;height:200px;flex-shrink:0;}
+.ps-donut-row{display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:center;}
+.ps-donut-legend{display:flex;flex-direction:column;gap:10px;flex:1;min-width:130px;}
+.ps-timeline-bar-row{position:relative;height:52px;border-radius:10px;overflow:hidden;background:#f1f5f9;}
+.ps-timeline-bar-row svg{position:absolute;inset:0;width:100%;height:100%;}
+.ps-timeline-wrap{display:flex;flex-direction:column;gap:10px;}
+.ps-timeline-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);padding:0 2px;}
+.ps-timeline-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;}
+.ps-timeline-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-mid);font-weight:500;}
+.ps-timeline-legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+@media(max-width:1100px){.ps-kpi-row{grid-template-columns:repeat(2,1fr);}.ps-main-grid{grid-template-columns:1fr;}}
+@media(max-width:600px){.ps-kpi-row{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
@@ -770,6 +854,25 @@ background-attachment:fixed;}
   </div>
 </div>
 
+<!-- ══ POSTURE CALENDAR MODAL ══ -->
+<div class="ps-cal-overlay" id="ps-cal-overlay">
+  <div class="ps-cal-backdrop" onclick="closePostureCal()"></div>
+  <div class="ps-cal-modal">
+    <div class="ps-cal-head">
+      <span style="font-weight:700;font-size:15px;">🧘 選擇姿態統計日期</span>
+      <button class="ps-cal-close" onclick="closePostureCal()">✕</button>
+    </div>
+    <div class="ps-cal-nav">
+      <button class="ps-cal-nav-btn" onclick="psCalChangeMonth(-1)">&#8592;</button>
+      <span class="ps-cal-month-label" id="ps-cal-month-label"></span>
+      <button class="ps-cal-nav-btn" onclick="psCalChangeMonth(1)">&#8594;</button>
+    </div>
+    <div class="ps-cal-grid" id="ps-cal-grid">
+      <div class="ps-cal-loading">載入中…</div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ ACCOUNT SIDEBAR (dashboard member filter) ══ -->
 <div class="acct-overlay" id="acct-overlay">
   <div class="acct-backdrop" onclick="closeAccountSidebar()"></div>
@@ -790,16 +893,23 @@ background-attachment:fixed;}
 </div>
 
 <!-- ══ LOGIN ══ -->
-<div id="login-screen">
+<!-- display:none by default to prevent flash during async session check (F5 restore) -->
+<div id="login-screen" style="display:none">
   <div class="login-stage">
-  <div class="botanical-floating login-decor-1"><img src="images/Snipaste_2026-04-08_17-09-20_nobg.png" alt=""></div>
-  <div class="botanical-floating login-decor-2"><img src="images/Snipaste_2026-04-08_17-08-33_nobg.png" alt=""></div>
+  <!-- login-decor-1 removed -->
+  <div class="botanical-floating login-decor-2"><img src="logo/vitalily-logo.png" alt=""></div>
   <div class="botanical-floating login-decor-3"><img src="images/Snipaste_2026-04-08_17-08-21_nobg.png" alt=""></div>
   <div class="botanical-floating login-decor-4"><img src="images/Snipaste_2026-04-08_17-10-44_nobg.png" alt=""></div>
   <div class="botanical-floating login-decor-5"><img src="images/Snipaste_2026-04-08_17-10-51_nobg.png" alt=""></div>
   <div class="login-wrap">
     <div class="login-aside">
-      <div class="login-brand"><h1>機構健康<br>資料看板</h1><small>Healthcare Dashboard v3.0</small></div>
+      <div class="login-brand">
+        <div class="login-frame">
+          <img class="login-frame-img" src="金邊.png" alt="">
+          <h1>VitaLily</h1>
+        </div>
+        <small>健康資料平台</small>
+      </div>
     </div>
     <div class="login-form">
       <h2>歡迎回來</h2><p class="sub">請使用已授權的帳號登入</p>
@@ -827,7 +937,10 @@ background-attachment:fixed;}
     <button class="btn-hamburger" onclick="openSidebar()" title="功能選單">
       <span></span><span></span><span></span>
     </button>
-    <div class="topbar-brand">🌿 健康資料看板</div>
+    <div class="topbar-brand" style="display:flex;align-items:center;gap:8px;">
+      <img src="logo/vitalily-logo.png" alt="" style="width:28px;height:28px;flex-shrink:0;">
+      <span>VitaLily</span>
+    </div>
   </div>
   <div class="topbar-tabs-area" id="tabs"></div>
   <div class="topbar-right">
@@ -849,13 +962,15 @@ background-attachment:fixed;}
       <div class="ov-title-group">
         <div class="ov-title" id="ov-title">今日會員狀態</div>
         <div class="ov-subtitle" id="ov-subtitle">載入中…</div>
+        <div id="ov-freshness" style="font-size:12px;color:var(--text-light);margin-top:2px;display:none;"></div>
+        <div id="ov-error-banner" style="display:none;margin-top:6px;padding:7px 12px;background:rgba(240,240,240,.85);border:1px solid var(--border);border-radius:var(--r-sm);font-size:12px;color:var(--text-mid);display:none;"></div>
       </div>
       <div class="ov-header-right">
         <div class="ov-view-toggle">
           <button class="ov-view-btn active" id="ov-mode-today" onclick="setOverviewMode('today')">今日會員</button>
           <button class="ov-view-btn" id="ov-mode-all" onclick="setOverviewMode('all')">全部會員</button>
         </div>
-        <button class="btn-scan" id="btn-scan-overview" onclick="scanAndLoadCards()">
+        <button class="btn-scan" id="btn-scan-overview" onclick="if(currentTable&&(currentDate||todayStr()))localStorage.removeItem(getScanCacheKey(currentTable,currentDate||todayStr()));scanAndLoadCards()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
           重新掃描
         </button>
@@ -944,10 +1059,10 @@ background-attachment:fixed;}
         <span class="det-action-label">月視圖</span>
         <span class="det-action-sub">查看月份趨勢</span>
       </button>
-      <button class="det-action-btn" onclick="openSearch()">
-        <span class="det-action-icon">🔍</span>
-        <span class="det-action-label">查詢歷史</span>
-        <span class="det-action-sub">指定日期查詢</span>
+      <button class="det-action-btn" onclick="openPostureCal()">
+        <span class="det-action-icon">🧘</span>
+        <span class="det-action-label">動作姿態統計</span>
+        <span class="det-action-sub">查看姿態分析</span>
       </button>
       <button class="det-action-btn" onclick="exportCSV()">
         <span class="det-action-icon">📋</span>
@@ -1041,15 +1156,26 @@ background-attachment:fixed;}
       <button class="btn-back" onclick="goScreen('overview')">← 返回總覽</button>
     </div>
     <div class="ps-toolbar">
-      <span class="ps-toolbar-label">日期</span>
-      <input type="date" class="ps-date-input" id="ps-date-input">
-      <span class="ps-toolbar-label">會員</span>
-      <select class="ps-select" id="ps-member-select" style="min-width:130px">
-        <option value="ALL">全部</option>
-      </select>
-      <button class="ps-btn ps-btn-primary" id="ps-load-btn" onclick="loadPostureScreen()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      <div class="ps-toolbar-group">
+        <span class="ps-toolbar-label">👤 會員</span>
+        <select class="ps-select" id="ps-member-select">
+          <option value="ALL">全部</option>
+        </select>
+      </div>
+      <div class="ps-toolbar-group">
+        <span class="ps-toolbar-label">📅 日期</span>
+        <button type="button" class="ps-date-pick-btn" id="ps-date-pick-btn" onclick="openPostureCal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span id="ps-date-display">選擇日期</span>
+        </button>
+        <input type="date" class="ps-date-input" id="ps-date-input" style="display:none">
+      </div>
+      <button type="button" class="ps-btn ps-btn-primary" id="ps-load-btn" onclick="loadPostureScreen()" style="align-self:flex-end">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         載入資料
+      </button>
+      <button type="button" class="ps-btn" onclick="downloadPostureCSV()" style="align-self:flex-end;background:#fff;border:1.5px solid var(--border);">
+        📥 匯出數據
       </button>
     </div>
     <div id="ps-content">
@@ -1067,7 +1193,8 @@ background-attachment:fixed;}
 // 若 repo 為 public，此 key 可被他人看到，但在 RLS 正確設定下不會造成資料外洩
 const SUPABASE_URL='https://lrrxswxvphoeyuvemvin.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxycnhzd3h2cGhvZXl1dmVtdmluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMzU1NjksImV4cCI6MjA4MzkxMTU2OX0.54qS-CTVL9XeIbNO83r8spsRrk8woyBz3u-HoRdFxHs';
-const TABLE_LABEL={'DC_data_base':'都蘭診所','CY_data_base':'嘉義醫院','YK_data_base':'員郭醫院'};
+const TABLE_LABEL={'DC_data_base':'都蘭診所','CY_data_base':'嘉義醫院','YK_data_base':'員郭醫院','T1_data_base':'紡綜所'};
+const TABLE_RPC={'DC_data_base':'get_dc_overview','CY_data_base':'get_cy_overview','YK_data_base':'get_yk_overview','T1_data_base':'get_t1_overview'};
 const ACTION_COLORS={0:'#94a3b8',1:'#3b82f6',2:'#3b82f6',3:'#22c55e',4:'#22c55e',5:'#f97316',6:'#a855f7',7:'#ef4444'};
 const ACTION_LABEL_COLOR={'靜止':'#94a3b8','走路':'#3b82f6','慢跑':'#22c55e','快跑':'#f97316','躺姿':'#a855f7','姿勢異常':'#ef4444'};
 
@@ -1098,6 +1225,7 @@ let dayStats=null,lastUploadTime=null,lastUploadTicker=null,resumeSession_data=n
 // New state
 let currentScreen='overview';
 let loadToken=0; // race condition guard for loadCurrentTable
+let scanToken=0; // race condition guard for scanAndLoadCards
 let detailMemberId=null,detailMetrics=new Set(['hb','bp','temp','br']),detailRange='today';
 let detailRawData=null,detailDailySummary={};
 let detailSyncedDayRowsCache=[],detailSyncedDayRowsCacheKey='';
@@ -1106,6 +1234,8 @@ let noteSaveTimer=null;
 let overviewCardData={};
 let overviewTodayData={};
 let overviewAllData={};
+let orgByTable={}; // { table_name: { id, org_code, org_name } } — loaded from organizations table
+let memberIdsByTable={}; // { table_name: string[] } — sourced from users table when available
 let overviewMode='today';
 let postureScreenDate=null;
 let postureScreenMemberId='ALL';
@@ -1122,6 +1252,154 @@ function p2(n){return String(n).padStart(2,'0');}
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function todayStr(){const d=new Date();return`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;}
 function monthStr(offset=0){const d=new Date();d.setMonth(d.getMonth()+offset);return`${d.getFullYear()}-${p2(d.getMonth()+1)}`;}
+function memberSearchToken(value){return String(value??'').trim().replace(/\s+/g,'').toLowerCase();}
+function memberSort(a,b){return String(a).localeCompare(String(b),'zh-Hant',{numeric:true,sensitivity:'base'});}
+function chunkArray(list,size){
+  const out=[];
+  for(let i=0;i<list.length;i+=size)out.push(list.slice(i,i+size));
+  return out;
+}
+function getAllowedMemberTokenSet(table){
+  if(!(table in memberIdsByTable))return null;
+  const ids=memberIdsByTable[table]||[];
+  return new Set(ids.map(memberSearchToken).filter(Boolean));
+}
+function filterMemberIdsByAllowed(table,ids){
+  const allowed=getAllowedMemberTokenSet(table);
+  if(!allowed)return uniqueMemberIds((ids||[]).map(member_id=>({member_id})));
+  const seen=new Set(),out=[];
+  (ids||[]).forEach(id=>{
+    const raw=String(id??'').trim();
+    const token=memberSearchToken(raw);
+    if(!token||!allowed.has(token)||seen.has(token))return;
+    seen.add(token);
+    out.push(raw);
+  });
+  return out.sort(memberSort);
+}
+function filterRowsByAllowedMemberIds(table,rows){
+  const allowed=getAllowedMemberTokenSet(table);
+  if(!allowed)return rows||[];
+  return (rows||[]).filter(r=>allowed.has(memberSearchToken(r?.member_id)));
+}
+function uniqueMemberIds(rows){
+  const seen=new Set(),ids=[];
+  (rows||[]).forEach(r=>{
+    const raw=String(r?.member_id??'').trim();
+    const token=memberSearchToken(raw);
+    if(!token||seen.has(token))return;
+    seen.add(token);
+    ids.push(raw);
+  });
+  return ids.sort(memberSort);
+}
+function mergeMemberLists(...lists){
+  const seen=new Set(),merged=[];
+  lists.flat().forEach(id=>{
+    const raw=String(id??'').trim();
+    const token=memberSearchToken(raw);
+    if(!token||seen.has(token))return;
+    seen.add(token);
+    merged.push(raw);
+  });
+  return merged.sort(memberSort);
+}
+async function fetchPagedRows(table,buildQuery,pageSize=1000){
+  let all=[],page=0;
+  while(true){
+    const q=buildQuery(sb.from(table)).range(page*pageSize,(page+1)*pageSize-1);
+    const {data,error}=await q;
+    if(error)throw error;
+    if(!data?.length)break;
+    all=all.concat(data);
+    if(data.length<pageSize)break;
+    page++;
+  }
+  return all;
+}
+async function loadOrganizations(){
+  if(Object.keys(orgByTable).length>0)return; // 已載入，跳過重複請求
+  try{
+    const{data,error}=await sb.from('organizations').select('id,org_code,org_name,table_name').not('table_name','is',null);
+    if(!error&&data){
+      data.forEach(org=>{
+        orgByTable[org.table_name]={id:org.id,org_code:org.org_code,org_name:org.org_name};
+        if(!TABLE_LABEL[org.table_name])TABLE_LABEL[org.table_name]=org.org_name;
+      });
+    }
+  }catch(e){console.warn('[Org] loadOrganizations failed:',e.message);}
+}
+// ── Org prefix guard (Problem 1: prevent cross-org member_id like CY001 leaking into DC list) ──
+function isMemberIdValidForOrg(memberId,table){
+  const org=orgByTable[table];
+  if(!org||!org.org_code)return true; // org unknown — be conservative and allow
+  const code=org.org_code.toUpperCase();
+  return String(memberId).toUpperCase().startsWith(code);
+}
+async function fetchAllMemberIds(table){
+  const org=orgByTable[table];
+  if(org){
+    const{data,error}=await sb.from('users').select('member_id').eq('org_id',org.id).order('member_id',{ascending:true});
+    if(!error){
+      // Apply prefix guard immediately after fetching from users table
+      const ids=uniqueMemberIds(data||[]).filter(id=>id&&isMemberIdValidForOrg(id,table));
+      memberIdsByTable[table]=ids;
+      return ids;
+    }
+  }
+  // fallback: scan vital signs table if org mapping not found
+  const rows=await fetchPagedRows(table,q=>q.select('member_id').order('member_id',{ascending:true}),1000);
+  const rawIds=uniqueMemberIds(rows).filter(id=>id&&isMemberIdValidForOrg(id,table));
+  // 推測本表 dominant prefix，過濾掉前綴不符的跨機構 ID
+  const prefixCount={};
+  rawIds.forEach(id=>{const m=String(id).match(/^([A-Za-z]{2,4})/);if(m)prefixCount[m[1].toUpperCase()]=(prefixCount[m[1].toUpperCase()]||0)+1;});
+  const dominant=Object.entries(prefixCount).sort((a,b)=>b[1]-a[1])[0]?.[0];
+  const ids=dominant?rawIds.filter(id=>String(id).toUpperCase().startsWith(dominant)):rawIds;
+  memberIdsByTable[table]=ids;
+  return ids;
+}
+async function fetchTodayRowsForMembers(table,memberIds,start,end){
+  const chunks=chunkArray(memberIds,25);
+  const batches=await Promise.all(chunks.map(ids=>fetchPagedRows(table,q=>q
+    .select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute')
+    .in('member_id',ids)
+    .gte('date_minute',start)
+    .lte('date_minute',end)
+    .order('date_minute',{ascending:true}),1000)));
+  return batches.flat();
+}
+async function fetchLatestRowsForMembers(table,memberIds){
+  if(!memberIds||!memberIds.length)return[];
+  // 單一 .in() 請求取最近 N 筆，JS 端 group by member_id 各取最新一筆
+  // 比逐人查或分批序列快：60 人從 3+ RTT 降為 1 RTT
+  const limit=memberIds.length*3;
+  const{data,error}=await sb.from(table)
+    .select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute')
+    .in('member_id',memberIds)
+    .order('date_minute',{ascending:false})
+    .limit(limit);
+  if(error)throw error;
+  // group by member_id，各取第一筆（已按 date_minute desc 排序，即最新）
+  const seen=new Set();
+  const rows=[];
+  for(const r of(data||[])){
+    if(!r.member_id||seen.has(r.member_id))continue;
+    seen.add(r.member_id);
+    rows.push(r);
+  }
+  return rows;
+}
+async function fetchOverviewViaRPC(table,memberIds,start,end){
+  const rpcName=TABLE_RPC[table];
+  if(!rpcName||!memberIds.length)return null;
+  const{data,error}=await sb.rpc(rpcName,{
+    p_member_ids:memberIds,
+    p_today_start:start,
+    p_today_end:end,
+  });
+  if(error){console.warn('[RPC]',rpcName,'failed:',error.message);return null;}
+  return data||[];
+}
 function normalizeTime24(value){
   const m=String(value||'').trim().replace(/\./g,':').match(/^(\d{1,2}):(\d{1,2})$/);
   if(!m)return'';
@@ -1424,12 +1702,35 @@ function loadRemembered(){
   if(em){document.getElementById('email').value=em;document.getElementById('remember').checked=true;}
   localStorage.removeItem('rm_pass');
 }
+function preloadLoginBg(){
+  if(document.querySelector('link[data-login-bg]'))return;
+  const l=document.createElement('link');l.rel='preload';l.as='image';l.href='images/timthumb.jpg';l.dataset.loginBg='1';document.head.appendChild(l);
+}
 async function checkExistingSession(){
+  // login-screen starts hidden (display:none in HTML); only reveal it when we confirm no valid session
   const{data:{session}}=await sb.auth.getSession();
-  if(session?.user?.email){resumeSession_data=session;document.getElementById('session-email-display').textContent=session.user.email;document.getElementById('session-banner').style.display='block';}
+  if(session?.user?.email){
+    resumeSession_data=session;
+    // Auto-restore silently on F5 (skip the banner prompt)
+    await loadOrganizations();
+    const tables=await fetchUserTables();
+    if(tables.length){
+      initApp(session.user.email,tables);
+      return; // session restored — login screen stays hidden
+    } else {
+      // No accessible tables — fall through to show login
+      resumeSession_data=null;
+      preloadLoginBg();
+    }
+  } else {
+    preloadLoginBg();
+  }
+  // Only reach here when there is genuinely no usable session
+  document.getElementById('login-screen').style.display='flex';
 }
 async function resumeSession(){
   if(!resumeSession_data)return;
+  await loadOrganizations();
   const tables=await fetchUserTables();
   if(!tables.length){showLoginError('此帳號無可存取的機構，請聯絡管理員。');return;}
   initApp(resumeSession_data.user.email,tables);
@@ -1447,8 +1748,19 @@ async function doLogin(){
   errEl.style.display='none';
   if(!email||!pass){showLoginError('請填寫 Email 和密碼');return;}
   btn.disabled=true;btn.textContent='登入中…';
-  const{data,error}=await sb.auth.signInWithPassword({email,password:pass});
-  if(error){showLoginError('登入失敗：'+error.message);btn.disabled=false;btn.textContent='登入';return;}
+  // 慢網路提示：超過 3 秒顯示提醒
+  const slowTimer=setTimeout(()=>{if(btn.disabled)btn.textContent='連線中，請稍候…';},3000);
+  let data,error;
+  try{({data,error}=await sb.auth.signInWithPassword({email,password:pass}));}
+  catch(e){error=e;}
+  clearTimeout(slowTimer);
+  if(error){
+    // 區分網路失敗 vs 帳密錯誤
+    const isNetErr=error.message&&(error.message.includes('fetch')||error.message.includes('network')||error.message.includes('Failed'));
+    showLoginError(isNetErr?'無法連線至伺服器，請確認網路後重試':'帳號或密碼錯誤，請確認後重試');
+    btn.disabled=false;btn.textContent='登入';return;
+  }
+  await loadOrganizations();
   const tables=await fetchUserTables();
   if(!tables.length){await sb.auth.signOut({scope:'global'});showLoginError('此帳號無可存取的機構，請聯絡管理員。');btn.disabled=false;btn.textContent='登入';return;}
   if(remember)localStorage.setItem('rm_email',email);else localStorage.removeItem('rm_email');
@@ -1461,9 +1773,13 @@ async function doLogout(){
   if(rtChannel){sb.removeChannel(rtChannel);rtChannel=null;}
   await sb.auth.signOut({scope:'global'});
   Object.keys(localStorage).forEach(k=>{if(k.startsWith('sb-'))localStorage.removeItem(k);});
+  localStorage.removeItem('vd_session_table');
+  localStorage.removeItem('vd_session_screen');
+  localStorage.removeItem('vd_session_view');
   sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
   currentTable=null;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';currentMemberId='ALL';memberList=[];dailySummaryCache={};dayStats=null;resumeSession_data=null;
   detailMemberId=null;overviewCardData={};overviewTodayData={};overviewAllData={};
+  orgByTable={};memberIdsByTable={};scanToken++;loadToken++;
   document.getElementById('shared-topbar').style.display='none';
   ['member-overview','member-detail','dashboard'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('login-screen').style.display='flex';
@@ -1501,17 +1817,25 @@ function updateSidebarActive(){
 /* ════════════════════════════════════════════════════════════
    SCREEN MANAGEMENT
    ════════════════════════════════════════════════════════════ */
+let lastOverviewScrollY=0; // 記錄 overview 捲動位置，返回時恢復
 function showScreen(name){
+  // 離開 overview 時儲存捲動位置
+  if(currentScreen==='overview')lastOverviewScrollY=window.scrollY;
   ['member-overview','member-detail','dashboard','posture-screen'].forEach(id=>{document.getElementById(id).style.display='none';});
   const idMap={overview:'member-overview',detail:'member-detail',dashboard:'dashboard',posture:'posture-screen'};
   document.getElementById(idMap[name]||'member-overview').style.display='block';
   currentScreen=name;
+  // Persist screen for F5 restore (exclude transient screens)
+  if(name==='overview'||name==='dashboard'||name==='posture'){localStorage.setItem('vd_session_screen',name);}
+  if(name==='dashboard'){localStorage.setItem('vd_session_view',currentView);}
   updateSidebarActive();closeSidebar();
-  window.scrollTo(0,0);
+  // 返回 overview 時恢復捲動位置，其他畫面置頂
+  if(name==='overview'){window.scrollTo(0,lastOverviewScrollY);}else{window.scrollTo(0,0);}
 }
 
 function goScreen(target,view){
   if(target==='overview'){
+    detailSyncedDayRowsCache=[];detailSyncedDayRowsCacheKey='';
     showScreen('overview');
     scanAndLoadCards();
   } else if(target==='dashboard'){
@@ -1547,16 +1871,55 @@ function initApp(email,tables){
     tabsEl.appendChild(btn);
   });
   currentDate=todayStr();currentMonth=monthStr();
-  if(tables.length)switchTable(tables[0],tabsEl.querySelector('.tab'),true);
+  // Restore last session state (F5 recovery)
+  const savedTable=localStorage.getItem('vd_session_table');
+  const savedScreen=localStorage.getItem('vd_session_screen');
+  const savedView=localStorage.getItem('vd_session_view');
+  const targetTable=(savedTable&&tables.includes(savedTable))?savedTable:tables[0];
+  // Find matching tab button for targetTable
+  const allTabBtns=tabsEl.querySelectorAll('.tab');
+  let targetBtn=allTabBtns[0];
+  allTabBtns.forEach((btn,i)=>{if(tables[i]===targetTable)targetBtn=btn;});
+  // Mark correct tab active before switchTable runs
+  allTabBtns.forEach(b=>b.classList.remove('active'));
+  if(targetBtn)targetBtn.classList.add('active');
+  if(tables.length){
+    // Switch to saved table without triggering showScreen('overview') default,
+    // instead we do the init manually to allow screen restore afterwards
+    const isNewTable=true;
+    currentTable=targetTable;
+    localStorage.setItem('vd_session_table',targetTable);
+    currentPage=1;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';
+    currentMemberId='ALL';memberList=[];dailySummaryCache={};dayStats=null;
+    clearLastUpload();overviewCardData={};overviewTodayData={};overviewAllData={};
+    subscribeRealtime(targetTable);
+    // Restore saved screen
+    if(savedScreen==='dashboard'&&(savedView==='day'||savedView==='month')){
+      setView(savedView);
+      showScreen('dashboard');
+      loadCurrentTable();
+    } else if(savedScreen==='posture'){
+      showScreen('posture');
+      initPostureScreen();
+    } else {
+      showScreen('overview');
+      scanAndLoadCards();
+    }
+  }
   setAutoRefresh();
 }
 
 function switchTable(name,btnEl,firstLoad=false){
   document.querySelectorAll('#tabs .tab').forEach(t=>t.classList.remove('active'));
   if(btnEl)btnEl.classList.add('active');
-  currentTable=name;currentPage=1;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';
-  currentMemberId='ALL';memberList=[];dailySummaryCache={};dayStats=null;
-  clearLastUpload();overviewCardData={};overviewTodayData={};overviewAllData={};
+  const isNewTable=(name!==currentTable)||firstLoad;
+  currentTable=name;
+  localStorage.setItem('vd_session_table',name);
+  if(isNewTable){
+    currentPage=1;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';
+    currentMemberId='ALL';memberList=[];dailySummaryCache={};dayStats=null;
+    clearLastUpload();overviewCardData={};overviewTodayData={};overviewAllData={};
+  }
   subscribeRealtime(name);
   showScreen('overview');
   scanAndLoadCards();
@@ -1565,33 +1928,6 @@ function switchTable(name,btnEl,firstLoad=false){
 /* ════════════════════════════════════════════════════════════
    MEMBER DETAIL
    ════════════════════════════════════════════════════════════ */
-async function openMemberDetail(memberId){
-  detailMemberId=memberId;detailMetrics=new Set(['hb']);detailRange='today';detailRawData=null;detailDailySummary={};
-  // Update header
-  document.getElementById('det-member-id').textContent=memberId;
-  document.getElementById('det-member-sub').textContent=TABLE_LABEL[currentTable]||currentTable;
-  // Status from overview data
-  const rows=overviewCardData[memberId]||[];
-  if(rows.length){
-    const aHb=avg(rows.map(r=>r.heartbeat)),aSbp=avg(rows.map(r=>r.sbp)),aTemp=avg(rows.map(r=>r.temp));
-    const lvHb=anomalyLevel('heartbeat',aHb),lvSbp=anomalyLevel('sbp',aSbp),lvTemp=anomalyLevel('temp',aTemp);
-    const hasRed=[lvHb,lvSbp,lvTemp].includes('red'),hasOrange=[lvHb,lvSbp,lvTemp].includes('orange');
-    const chip=document.getElementById('det-status-chip');
-    chip.className='det-status-chip '+(hasRed?'err':'ok');
-    chip.textContent=hasRed?'⚠️ 發現異常':hasOrange?'⚡ 需注意':'✓ 狀態正常';
-  } else {
-    const chip=document.getElementById('det-status-chip');chip.className='det-status-chip none';chip.textContent='無今日資料';
-  }
-  // Reset tabs UI
-  ['hb','bp','temp','br'].forEach(m=>{document.getElementById('dm-'+m).classList.toggle('active',detailMetrics.has(m));});
-  ['today','7d','30d'].forEach(r=>{document.getElementById('dr-'+r).classList.toggle('active',r===detailRange);});
-  // Load note
-  document.getElementById('note-textarea').value=loadNote(memberId);
-  document.getElementById('note-saved-label').style.display='none';
-  showScreen('detail');
-  await loadDetailChart();
-  renderDetailStats(rows);
-}
 
 function toggleDetMetric(m){
   if(detailMetrics.has(m)){
@@ -1616,68 +1952,40 @@ function setDetRange(r){
   });
 }
 
-async function loadDetailChart(){
-  const body=document.getElementById('det-chart-body');
-  body.innerHTML='<div class="trend-empty">載入中…</div>';
-  const today=currentDate||todayStr();
-  // Helper: build stacked panels from series groups
-  function buildPanels(panelList,labels){
-    if(!panelList.length){body.innerHTML='<div class="trend-empty">無資料</div>';return;}
-    const h=panelList.length===1?220:Math.max(120,Math.floor(400/panelList.length));
-    if(panelList.length===1){
-      body.innerHTML=trendSVG(panelList[0],labels,{sharedCursor:true},h);
-    } else {
-      body.innerHTML=`<div class="stacked-trend">${panelList.map((s,i)=>trendSVG(s,labels,{sharedCursor:true},h)+(i<panelList.length-1?'<div class="stacked-divider"></div>':'')).join('')}</div>`;
-    }
-    initCursorDragNodes();initAvgDragNodes();
-  }
-  if(detailRange==='today'){
-    if(!detailRawData){
-      const start=today+'T00:00:00',end=today+'T23:59:59.999';
-      detailRawData=await getDetailMemberRawRows();
-    }
-    const memberMinutes=filterWarmupMinutes(aggregateToMinutes(detailRawData));
-    let minuteRows=memberMinutes;
-    const dayAxisRows=await getDetailDayAxisMinuteRows();
-    if(dayAxisRows.length){
-      const memberByTime={};
-      memberMinutes.forEach(r=>{memberByTime[r.time.slice(11,16)]=r;});
-      minuteRows=dayAxisRows.map(r=>{const t=r.time.slice(11,16);return memberByTime[t]||{time:r.time,heartbeat:null,temp:null,sbp:null,dbp:null,breath:null,pulse:null,action:null};});
-    }
-    if(!minuteRows.length){body.innerHTML='<div class="trend-empty">今日尚無資料</div>';return;}
-    const labels=minuteRows.map(r=>r.time.slice(11,16));
-    const panels=[];
-    if(detailMetrics.has('hb')) panels.push([{label:'心跳 bpm',color:'#7aaa96',values:minuteRows.map(r=>r.heartbeat)}]);
-    if(detailMetrics.has('bp')) panels.push([{label:'收縮壓 mmHg',color:'#b85450',values:minuteRows.map(r=>r.sbp)},{label:'舒張壓 mmHg',color:'#bf7a45',values:minuteRows.map(r=>r.dbp)}]);
-    if(detailMetrics.has('temp')) panels.push([{label:'體溫 °C',color:'#e07b39',values:minuteRows.map(r=>r.temp)}]);
-    if(detailMetrics.has('br')) panels.push([{label:'呼吸 rpm',color:'#bf7a45',values:minuteRows.map(r=>r.breath)}]);
-    buildPanels(panels,labels);
-  } else {
-    const days=detailRange==='7d'?7:30;
-    const dayList=Array.from({length:days},(_,i)=>{const d=new Date(today+'T00:00:00');d.setDate(d.getDate()-(days-1-i));return`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;});
-    await Promise.all(dayList.map(async ds=>{
-      if(detailDailySummary[ds]!==undefined)return;
-      const start=ds+'T00:00:00',end=ds+'T23:59:59.999';
-      const{data}=await sb.from(currentTable).select('heartbeat,temp,sbp,dbp,breath')
-        .gte('date_minute',start).lte('date_minute',end).eq('member_id',detailMemberId).limit(3000);
-      detailDailySummary[ds]=data&&data.length?{avgHb:avg(data.map(r=>r.heartbeat)),avgSbp:avg(data.map(r=>r.sbp)),avgDbp:avg(data.map(r=>r.dbp)),avgTemp:avg(data.map(r=>r.temp)),avgBr:avg(data.map(r=>r.breath))}:null;
-    }));
-    const labels=dayList.map(ds=>`${ds.slice(5,7)}/${ds.slice(8,10)}`);
-    const panels=[];
-    if(detailMetrics.has('hb')) panels.push([{label:'心跳 avg',color:'#7aaa96',values:dayList.map(ds=>detailDailySummary[ds]?.avgHb??null)}]);
-    if(detailMetrics.has('bp')) panels.push([{label:'收縮壓 avg',color:'#b85450',values:dayList.map(ds=>detailDailySummary[ds]?.avgSbp??null)},{label:'舒張壓 avg',color:'#bf7a45',values:dayList.map(ds=>detailDailySummary[ds]?.avgDbp??null)}]);
-    if(detailMetrics.has('temp')) panels.push([{label:'體溫 avg',color:'#e07b39',values:dayList.map(ds=>detailDailySummary[ds]?.avgTemp??null)}]);
-    if(detailMetrics.has('br')) panels.push([{label:'呼吸 avg',color:'#bf7a45',values:dayList.map(ds=>detailDailySummary[ds]?.avgBr??null)}]);
-    buildPanels(panels,labels);
-  }
-}
-
 function setOverviewMode(mode){
   overviewMode=mode;
   document.getElementById('ov-mode-today').classList.toggle('active',mode==='today');
   document.getElementById('ov-mode-all').classList.toggle('active',mode==='all');
   renderOverviewByMode();
 }
+let scanLastUpdatedTs=0;
+let freshnessTimer=null;
+function relativeTime(ts){
+  if(!ts)return'';
+  const m=Math.floor((Date.now()-ts)/60000);
+  if(m<1)return'資料為最新';
+  if(m<60)return`資料來自 ${m} 分鐘前`;
+  const h=Math.floor(m/60);
+  return`資料來自 ${h} 小時前`;
+}
+function updateFreshnessUI(){
+  const el=document.getElementById('ov-freshness');
+  if(!el)return;
+  if(!scanLastUpdatedTs){el.style.display='none';return;}
+  el.style.display='block';
+  el.textContent=relativeTime(scanLastUpdatedTs);
+}
+function startFreshnessTimer(){
+  if(freshnessTimer)clearInterval(freshnessTimer);
+  freshnessTimer=setInterval(updateFreshnessUI,30000);
+}
+function showOverviewErrorBanner(msg){
+  const el=document.getElementById('ov-error-banner');
+  if(!el)return;
+  el.style.display='block';
+  el.innerHTML=`${msg} <span style="cursor:pointer;text-decoration:underline;margin-left:8px;" onclick="this.parentElement.style.display='none';if(currentTable)localStorage.removeItem(getScanCacheKey(currentTable,currentDate||todayStr()));scanAndLoadCards()">重試</span>`;
+}
+function hideOverviewErrorBanner(){const el=document.getElementById('ov-error-banner');if(el)el.style.display='none';}
 function updateOverviewHeader(state){
   const tableName=TABLE_LABEL[currentTable]||currentTable||'';
   document.getElementById('ov-title').textContent=`${tableName} · ${overviewMode==='today'?'今日會員':'全部會員'}`;
@@ -1692,59 +2000,240 @@ function renderOverviewByMode(){
   overviewCardData=source;
   renderOverviewCards(source,currentDate||todayStr(),overviewMode);
 }
+// ── 快取 TTL 常數 ────────────────────────────────────────────
+const SCAN_CACHE_TTL    = 5*60*1000;
+const SCAN_CACHE_VERSION= 4; // bumped: cross-org member filter fixes (v4)
+const DAY_CACHE_TTL_NOW = 90*1000;       // 今日：90 秒 SWR
+const DAY_CACHE_TTL_OLD = 24*3600*1000;  // 歷史：24 小時
+const ANNOT_CACHE_TTL   = 2*60*1000;     // 護理備註：2 分鐘
+
+// ── 快取 eviction 工具 ───────────────────────────────────────
+function evictOldestCache(prefix,keep){
+  try{
+    const entries=[];
+    for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith(prefix)){try{const o=JSON.parse(localStorage.getItem(k));entries.push({k,ts:o.ts||0});}catch{entries.push({k,ts:0});}}}
+    entries.sort((a,b)=>a.ts-b.ts);
+    entries.slice(0,Math.max(0,entries.length-keep)).forEach(e=>localStorage.removeItem(e.k));
+  }catch{}
+}
+
+// ── Day view 快取 ────────────────────────────────────────────
+function getDayCacheKey(table,date,mid){return`vd_day__${table}__${date}__${mid||'ALL'}`;}
+function loadDayCache(table,date,mid){
+  try{
+    const raw=localStorage.getItem(getDayCacheKey(table,date,mid));
+    if(!raw)return null;
+    const obj=JSON.parse(raw);
+    const isToday=(date===todayStr());
+    const ttl=isToday?DAY_CACHE_TTL_NOW:DAY_CACHE_TTL_OLD;
+    const expired=Date.now()-obj.ts>ttl;
+    if(expired&&!isToday)return null;
+    return{rows:obj.rows,stale:expired};
+  }catch{return null;}
+}
+function saveDayCache(table,date,mid,rows){
+  try{localStorage.setItem(getDayCacheKey(table,date,mid),JSON.stringify({ts:Date.now(),rows}));}
+  catch{evictOldestCache('vd_day__',3);}
+}
+
+// ── Annotations 快取 ─────────────────────────────────────────
+function getAnnotCacheKey(table,mid){return`vd_annot__${table||''}__${mid||''}`;}
+function loadAnnotCache(table,mid){
+  try{
+    const raw=localStorage.getItem(getAnnotCacheKey(table,mid));
+    if(!raw)return null;
+    const obj=JSON.parse(raw);
+    if(Date.now()-obj.ts>ANNOT_CACHE_TTL)return null;
+    return obj.annots;
+  }catch{return null;}
+}
+function saveAnnotCache(table,mid,annots){
+  try{localStorage.setItem(getAnnotCacheKey(table,mid),JSON.stringify({ts:Date.now(),annots}));}
+  catch{evictOldestCache('vd_annot__',5);}
+}
+function invalidateAnnotCache(table,mid){
+  localStorage.removeItem(getAnnotCacheKey(table,mid));
+  localStorage.removeItem(getAnnotCacheKey(table,''));
+}
+
+function getScanCacheKey(table,date){return`vd_scan__${table}__${date}`;}
+function loadScanCache(table,date){
+  try{
+    const raw=localStorage.getItem(getScanCacheKey(table,date));
+    if(!raw)return null;
+    const obj=JSON.parse(raw);
+    if((obj.ver||1)!==SCAN_CACHE_VERSION)return null;
+    if(Date.now()-obj.ts>SCAN_CACHE_TTL)return null;
+    return obj;
+  }catch(e){return null;}
+}
+function saveScanCache(table,date,todayGroups,allGroups,mList){
+  const key=getScanCacheKey(table,date);
+  const val=JSON.stringify({ver:SCAN_CACHE_VERSION,ts:Date.now(),todayGroups,allGroups,memberList:mList});
+  try{
+    localStorage.setItem(key,val);
+  }catch(e){
+    evictOldestCache('vd_scan__',1);
+    try{localStorage.setItem(key,val);}catch(e2){}
+  }
+}
+
 async function scanAndLoadCards(){
   if(!currentTable)return;
+  const myToken=++scanToken;
+  const myTable=currentTable;
   const btn=document.getElementById('btn-scan-overview');
   const grid=document.getElementById('member-grid');
-  btn.disabled=true;
-  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 掃描中…';
-  updateOverviewHeader('loading');
-  grid.innerHTML=Array(6).fill(0).map(()=>`<div class="member-card skel-card"><div class="mc-head"><div class="mc-avatar ok skel" style="background:var(--border-light)"></div><div style="flex:1"><div class="skel skel-title"></div><div class="skel skel-sub"></div></div></div><div class="mc-vitals"><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div></div></div>`).join('');
-
   const today=currentDate||todayStr();
   const start=today+'T00:00:00',end=today+'T23:59:59.999';
 
-  // 先抓所有 member_id，再分別抓今日資料與各人最新一筆
-  const [{data:todayData,error:todayError},{data:idRows}]=await Promise.all([
-    sb.from(currentTable).select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute').gte('date_minute',start).lte('date_minute',end).limit(60000),
-    sb.from(currentTable).select('member_id').limit(100000)
-  ]);
-  const uniqueIds=[...new Set((idRows||[]).map(r=>r.member_id).filter(Boolean))].sort();
-
-  const todayGroups={};
-  (todayData||[]).forEach(r=>{
-    if(!r.member_id)return;
-    if(!todayGroups[r.member_id])todayGroups[r.member_id]=[];
-    todayGroups[r.member_id].push(r);
-  });
-
-  // 每位會員各抓最新數筆，優先選有數值的那一筆
-  const latestResults=await Promise.all(uniqueIds.map(id=>
-    sb.from(currentTable).select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute').eq('member_id',id).order('date_minute',{ascending:false}).limit(20)
-  ));
-  const allGroups={};
-  latestResults.forEach(({data})=>{
-    if(!data||!data[0])return;
-    const best=data.find(r=>r.heartbeat!==null||r.temp!==null||r.breath!==null)||data[0];
-    if(best&&best.member_id)allGroups[best.member_id]=[best];
-  });
-
-  memberList=uniqueIds;
-  renderMemberList(memberList);
-  overviewTodayData=todayGroups;
-  overviewAllData=allGroups;
-  renderOverviewByMode();
-
-  if((todayError||!todayData?.length) && !uniqueIds.length){
-    grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">📭</div><p>查無會員資料</p><small>請確認資料表是否已有量測資料，再重新掃描</small></div>`;
-    updateOverviewHeader('empty');
+  // 先嘗試從快取渲染，減少 skeleton 顯示時間
+  const cached=loadScanCache(myTable,today);
+  if(cached){
+    if(myToken!==scanToken||myTable!==currentTable)return;
+    // cache-hit：直接用 cached.memberList 填充 memberIdsByTable，完全跳過網路請求
+    // getAllowedMemberTokenSet 依賴 memberIdsByTable[myTable]，必須在此先填充
+    if(!memberIdsByTable[myTable]?.length){
+      memberIdsByTable[myTable]=(cached.memberList||[]).filter(id=>id&&isMemberIdValidForOrg(id,myTable));
+    }
+    // 過濾快取中可能殘留的跨機構 ID
+    const cachedList=cached.memberList||[];
+    const allowedSet=getAllowedMemberTokenSet(myTable);
+    memberList=allowedSet?filterMemberIdsByAllowed(myTable,cachedList):cachedList;
+    // 同步過濾 todayGroups / allGroups 的 key，防止跨機構 member_id 進入 overviewCardData
+    function filterGroupsByAllowed(groups,allowed){
+      if(!allowed||!allowed.size)return groups||{};
+      const out={};
+      Object.keys(groups||{}).forEach(k=>{if(allowed.has(memberSearchToken(k)))out[k]=groups[k];});
+      return out;
+    }
+    overviewTodayData=filterGroupsByAllowed(cached.todayGroups,allowedSet);
+    overviewAllData=filterGroupsByAllowed(cached.allGroups,allowedSet);
+    renderMemberList(memberList);
+    renderOverviewByMode();
+    updateOverviewHeader();
+    // 顯示快取年齡提示（UX：讓使用者知道資料非即時）
+    const freshnessEl=document.getElementById('ov-freshness');
+    if(freshnessEl&&cached.ts){
+      const cacheAgeMin=Math.round((Date.now()-cached.ts)/60000);
+      freshnessEl.style.display='block';
+      freshnessEl.style.color='var(--orange)';
+      freshnessEl.textContent=cacheAgeMin<1?'顯示剛更新的快取資料':`顯示 ${cacheAgeMin} 分鐘前的快取資料`;
+    }
+    // 快取仍在 TTL 內（loadScanCache 已過濾過期），直接用不重新掃描
+    btn.disabled=false;
+    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 重新掃描';
+    return;
+  }else{
+    btn.disabled=true;
+    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 掃描中…';
+    updateOverviewHeader('loading');
+    grid.innerHTML=Array(6).fill(0).map(()=>`<div class="member-card skel-card"><div class="mc-head"><div class="mc-avatar ok skel" style="background:var(--border-light)"></div><div style="flex:1"><div class="skel skel-title"></div><div class="skel skel-sub"></div></div></div><div class="mc-vitals"><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div><div><div class="skel skel-label"></div><div class="skel skel-stat"></div></div></div></div>`).join('');
   }
-  btn.disabled=false;
-  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 重新掃描';
+
+  try{
+    // 第一段：快速取得會員清單（users 小表，不掃大表）
+    const allIds=await fetchAllMemberIds(myTable);
+    if(myToken!==scanToken||myTable!==currentTable)return;
+
+    // 第二段：RPC 一次取得所有摘要（最新讀值 + 今日筆數），取代兩個大查詢
+    const orgKnown=!!orgByTable[myTable];
+    const todayGroups={};
+    const allGroups={};
+
+    const rpcRows=orgKnown&&allIds.length?await fetchOverviewViaRPC(myTable,allIds,start,end):null;
+    if(myToken!==scanToken||myTable!==currentTable)return;
+
+    if(rpcRows){
+      // RPC 成功：直接從摘要建立 groups，無需拉原始資料
+      rpcRows.forEach(r=>{
+        if(!r.member_id||!isMemberIdValidForOrg(r.member_id,myTable))return;
+        const row={member_id:r.member_id,heartbeat:r.heartbeat,temp:r.temp,
+                   sbp:r.sbp,dbp:r.dbp,breath:r.breath,date_minute:r.latest_at};
+        allGroups[r.member_id]=[row];
+        if(Number(r.today_count)>0)todayGroups[r.member_id]=[row];
+      });
+    }else{
+      // fallback：RPC 不存在或 org 未知，退回原本掃描邏輯
+      const validTokens=orgKnown?new Set(allIds.map(memberSearchToken)):null;
+      const [todayData,latestRows]=await Promise.all([
+        allIds.length?fetchTodayRowsForMembers(myTable,allIds,start,end)
+          :fetchPagedRows(myTable,q=>q.select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute').gte('date_minute',start).lte('date_minute',end).order('date_minute',{ascending:true}),1000),
+        allIds.length?fetchLatestRowsForMembers(myTable,allIds)
+          :fetchPagedRows(myTable,q=>q.select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute').order('date_minute',{ascending:false}).limit(500),500),
+      ]);
+      if(myToken!==scanToken||myTable!==currentTable)return;
+      (todayData||[]).forEach(r=>{
+        if(!r.member_id)return;
+        if(validTokens&&!validTokens.has(memberSearchToken(r.member_id)))return;
+        if(!isMemberIdValidForOrg(r.member_id,myTable))return;
+        if(!todayGroups[r.member_id])todayGroups[r.member_id]=[];
+        todayGroups[r.member_id].push(r);
+      });
+      (latestRows||[]).forEach(r=>{
+        if(!r?.member_id||allGroups[r.member_id])return;
+        if(validTokens&&!validTokens.has(memberSearchToken(r.member_id)))return;
+        if(!isMemberIdValidForOrg(r.member_id,myTable))return;
+        allGroups[r.member_id]=[r];
+      });
+    }
+
+    // org 已知時直接用 allIds，不讓 vital signs 大表的雜項會員混入
+    // fallback 時：merge 後仍須排除明顯前綴不符的跨機構 ID（例如 CY001 混入 DC 表）
+    let newList;
+    if(orgKnown){
+      newList=[...allIds].sort(memberSort);
+    }else{
+      const rawMerged=mergeMemberLists(allIds,Object.keys(todayGroups),Object.keys(allGroups));
+      // 嘗試推測本表 org_code：取最常見的 2~4 字母前綴
+      const prefixCount={};
+      rawMerged.forEach(id=>{const m=String(id).match(/^([A-Za-z]{2,4})/);if(m)prefixCount[m[1].toUpperCase()]=(prefixCount[m[1].toUpperCase()]||0)+1;});
+      const dominantPrefix=Object.entries(prefixCount).sort((a,b)=>b[1]-a[1])[0]?.[0];
+      newList=dominantPrefix
+        ?rawMerged.filter(id=>String(id).toUpperCase().startsWith(dominantPrefix))
+        :rawMerged;
+    }
+    saveScanCache(myTable,today,todayGroups,allGroups,newList);
+
+    if(myToken!==scanToken||myTable!==currentTable)return;
+    memberList=newList;
+    renderMemberList(memberList);
+    overviewTodayData=todayGroups;
+    overviewAllData=allGroups;
+    renderOverviewByMode();
+    hideOverviewErrorBanner();
+    scanLastUpdatedTs=Date.now();
+    updateFreshnessUI();
+    startFreshnessTimer();
+
+    if(!Object.keys(todayGroups).length&&!memberList.length){
+      grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">📭</div><p>查無會員資料</p><small>請確認資料表是否已有量測資料，再重新掃描</small></div>`;
+      updateOverviewHeader('empty');
+    }
+  }catch(err){
+    if(myToken!==scanToken||myTable!==currentTable)return;
+    const cachedFallback=loadScanCache(myTable,today);
+    if(!cachedFallback){
+      grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">⚠️</div><p>會員掃描失敗</p><small>${escHtml(err.message||String(err))}</small></div>`;
+      updateOverviewHeader('empty');
+    }else{
+      const cacheAge=cachedFallback.ts?Math.round((Date.now()-cachedFallback.ts)/60000):null;
+      const ts=cacheAge!==null?(cacheAge<1?'（快取剛更新）':`（快取約 ${cacheAge} 分鐘前）`):scanLastUpdatedTs?`（最後更新：${new Date(scanLastUpdatedTs).toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})}）`:'';
+      showOverviewErrorBanner(`無法取得最新資料，目前顯示快取資料${ts}`);
+    }
+  }finally{
+    if(myToken===scanToken){
+      btn.disabled=false;
+      btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 重新掃描';
+    }
+  }
 }
 function renderOverviewCards(groups,today,mode='today'){
   const grid=document.getElementById('member-grid');
-  const members=Object.keys(groups).sort();
+  const allowed=getAllowedMemberTokenSet(currentTable);
+  const members=Object.keys(groups)
+    .filter(mid=>!allowed||allowed.has(memberSearchToken(mid)))
+    .sort();
   if(!members.length){
     grid.innerHTML=`<div class="ov-empty"><div class="ov-empty-icon">📭</div><p>${mode==='today'?'今日尚無會員資料':'目前查無會員資料'}</p><small>${mode==='today'?'若裝置已開機請稍後重新掃描':'請先確認是否已有歷史會員量測資料'}</small></div>`;
     updateOverviewHeader('empty');
@@ -1768,9 +2257,9 @@ function renderOverviewCards(groups,today,mode='today'){
     const lvHb=anomalyLevel('heartbeat',aHb),lvSbp=anomalyLevel('sbp',aSbp),lvTemp=anomalyLevel('temp',aTemp);
     const levels=[lvHb,lvSbp,lvTemp].filter(l=>l!=='neutral');
     const hasRed=levels.includes('red'),hasOrange=levels.includes('orange');
-    const overallStatus=hasRed?'err':'ok';
+    const overallStatus=hasRed?'err':hasOrange?'warn':'ok';
 
-    return`<div class="member-card ${hasRed?'status-red':''}" onclick="openMemberDetail('${escHtml(mid)}')">
+    return`<div class="member-card card-appear ${hasRed?'status-red':hasOrange?'status-orange':''}" onclick="openMemberDetail('${escHtml(mid)}')">
   <div class="mc-head">
     <div class="mc-avatar ${overallStatus}">${escHtml(mid[0]?.toUpperCase()||'?')}</div>
     <div class="mc-info">
@@ -1789,14 +2278,28 @@ function renderOverviewCards(groups,today,mode='today'){
   </div>
 </div>`;
   }).join('');
+  // 錯開淡入：每張卡片延遲 30ms
+  grid.querySelectorAll('.card-appear').forEach((el,i)=>{el.style.animationDelay=`${i*30}ms`;});
 
 }
 async function openMemberDetail(memberId){
+  // Prefix guard: block cross-org member IDs at entry point (e.g. CY001 opening in DC context)
+  if(!isMemberIdValidForOrg(memberId,currentTable)){
+    console.warn('[Security] Blocked cross-org member access:',memberId,currentTable);
+    return;
+  }
+  // 存取控制守門員：若 memberIdsByTable 已知，拒絕不在合法清單內的 ID（防止跨機構卡片殘存或 URL 操控）
+  const allowed=getAllowedMemberTokenSet(currentTable);
+  if(allowed&&allowed.size>0&&!allowed.has(memberSearchToken(memberId))){
+    console.warn('[openMemberDetail] blocked cross-org member_id:',memberId,'table:',currentTable);
+    return;
+  }
+  const memberChanged=(memberId!==detailMemberId);
   detailMemberId=memberId;
   detailMetrics=new Set(['hb','bp','temp','br']);
   detailRange='today';
   detailRawData=null;
-  detailDailySummary={};
+  if(memberChanged)detailDailySummary={};
   document.getElementById('det-member-id').textContent=memberId;
   document.getElementById('det-member-sub').textContent=TABLE_LABEL[currentTable]||currentTable;
 
@@ -1804,6 +2307,10 @@ async function openMemberDetail(memberId){
 
   ['hb','bp','temp','br'].forEach(m=>document.getElementById('dm-'+m).classList.toggle('active',detailMetrics.has(m)));
   ['today','7d','30d'].forEach(r=>document.getElementById('dr-'+r).classList.toggle('active',r===detailRange));
+  const noteEl=document.getElementById('note-textarea');
+  if(noteEl){noteEl.value=loadNote(memberId);}
+  const noteSavedEl=document.getElementById('note-saved-label');
+  if(noteSavedEl)noteSavedEl.style.display='none';
   showScreen('detail');
   await renderDetAnnotList();
   await loadDetailChart();
@@ -1967,19 +2474,46 @@ function openAccountSidebar(){document.getElementById('acct-search').value='';re
 function closeAccountSidebar(){document.getElementById('acct-overlay').classList.remove('open');}
 function renderMemberList(list){
   const el=document.getElementById('acct-list');
+  // 最終防線：若 memberIdsByTable 已知，渲染前再次過濾，防止任何上游路徑遺漏的跨機構 ID 進入 UI
+  const allowed=getAllowedMemberTokenSet(currentTable);
+  // Extra prefix guard: strip any IDs whose prefix doesn't match the current org (e.g. CY001 in DC list)
+  const safeList=(allowed&&allowed.size>0)
+    ?list.filter(id=>allowed.has(memberSearchToken(id))&&isMemberIdValidForOrg(id,currentTable))
+    :list.filter(id=>isMemberIdValidForOrg(id,currentTable));
   let html=`<div class="acct-item${currentMemberId==='ALL'?' active':''}" onclick="setMember('ALL')"><span class="acct-dot all"></span><span class="acct-name">全部帳號</span><span class="acct-check">✓</span></div>`;
-  list.forEach(id=>{const eid=escHtml(id);html+=`<div class="acct-item${currentMemberId===id?' active':''}" onclick="setMember('${eid}')"><span class="acct-dot"></span><span class="acct-name">${eid}</span><span class="acct-check">✓</span></div>`;});
-  if(!list.length)html+=`<div style="padding:20px 12px;font-size:13px;color:var(--text-dim)">尚無帳號資料<br>點上方「掃描本月」</div>`;
+  safeList.forEach(id=>{const eid=escHtml(id);html+=`<div class="acct-item${currentMemberId===id?' active':''}" onclick="setMember('${eid}')"><span class="acct-dot"></span><span class="acct-name">${eid}</span><span class="acct-check">✓</span></div>`;});
+  if(!safeList.length)html+=`<div style="padding:20px 12px;font-size:13px;color:var(--text-dim)">尚無帳號資料<br>點上方「掃描本月」</div>`;
   el.innerHTML=html;
 }
-function filterMemberList(q){renderMemberList(memberList.filter(id=>id.toLowerCase().includes(q.toLowerCase())));}
+function filterMemberList(q){
+  const token=memberSearchToken(q);
+  if(!token){renderMemberList(memberList);return;}
+  renderMemberList(memberList.filter(id=>memberSearchToken(id).includes(token)));
+}
 function setMember(id){currentMemberId=id;closeAccountSidebar();updateContextLabel();currentPage=1;groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';dailySummaryCache={};clearLastUpload();loadCurrentTable();}
-function updateMemberList(){memberList=[...new Set(rawRowsCache.map(r=>r.member_id).filter(Boolean))].sort();renderMemberList(memberList);}
+function updateMemberList(){
+  // 若 memberIdsByTable 已知，代表 users 表已載入，成員清單不可被 rawRowsCache 污染
+  // 若 allowed 為 null（尚未載入），才允許從 rawRowsCache 補充但仍排除明顯跨機構 ID
+  const allowed=getAllowedMemberTokenSet(currentTable);
+  if(allowed){
+    // 已知成員集合：只保留合法 ID，不從 rawRowsCache 新增任何 ID
+    memberList=filterMemberIdsByAllowed(currentTable,memberList);
+  }else{
+    // 尚未載入成員表：保守地從 rawRowsCache 補充，之後 scanAndLoadCards 會覆蓋
+    memberList=filterMemberIdsByAllowed(currentTable,mergeMemberLists(memberList,uniqueMemberIds(rawRowsCache)));
+  }
+  renderMemberList(memberList);
+}
 async function scanMonthMembers(){
   const btn=document.getElementById('acct-scan-btn');btn.textContent='掃描中…';btn.disabled=true;
-  const{data}=await sb.from(currentTable).select('member_id').limit(100000);
-  if(data){memberList=[...new Set(data.map(r=>r.member_id).filter(Boolean))].sort();renderMemberList(memberList);}
-  btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 掃描所有帳號';btn.disabled=false;
+  try{
+    memberList=await fetchAllMemberIds(currentTable);
+    renderMemberList(memberList);
+  }catch(err){
+    alert(`掃描帳號失敗：${err.message||err}`);
+  }finally{
+    btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 掃描所有帳號';btn.disabled=false;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -2123,16 +2657,28 @@ function setDetCustomDate(dateStr){
    AUTO REFRESH
    ════════════════════════════════════════════════════════════ */
 function setAutoRefresh(){arInterval=parseInt(document.getElementById('refresh-interval').value)||0;clearInterval(arTimer);document.getElementById('refresh-countdown').textContent='';if(arInterval>0)startCountdown();}
-function startCountdown(){arCountdown=arInterval;updateCountdownUI();arTimer=setInterval(()=>{arCountdown--;updateCountdownUI();if(arCountdown<=0){arCountdown=arInterval;const isToday=(currentView==='day'&&currentDate===todayStr())||(currentView==='month'&&currentMonth===monthStr());if(isToday&&currentScreen==='dashboard')silentRefresh();}},1000);}
+function tickAutoRefresh(){arCountdown--;updateCountdownUI();if(arCountdown<=0){arCountdown=arInterval;const isToday=(currentView==='day'&&currentDate===todayStr())||(currentView==='month'&&currentMonth===monthStr());if(isToday&&currentScreen==='dashboard')silentRefresh();}}
+function startCountdown(){arCountdown=arInterval;updateCountdownUI();arTimer=setInterval(tickAutoRefresh,1000);}
 function updateCountdownUI(){const el=document.getElementById('refresh-countdown');el.textContent=arInterval?arCountdown+'s':'';}
+
+// 頁籤隱藏時暫停輪詢，顯示時恢復（省 Supabase 查詢與背景執行緒）
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'){clearInterval(arTimer);arTimer=null;}
+  else if(arInterval>0&&!arTimer){arTimer=setInterval(tickAutoRefresh,1000);if(arCountdown<=0)tickAutoRefresh();}
+});
 
 /* ════════════════════════════════════════════════════════════
    REALTIME
    ════════════════════════════════════════════════════════════ */
+let rtChannelTable=null;
 function subscribeRealtime(table){
-  if(rtChannel){sb.removeChannel(rtChannel);rtChannel=null;}
+  // idempotency guard：同 table 不重建 channel，避免競態
+  if(rtChannelTable===table&&rtChannel)return;
+  if(rtChannel){sb.removeChannel(rtChannel);rtChannel=null;rtChannelTable=null;}
   setRtBadge(false,'連線中…');
+  rtChannelTable=table;
   rtChannel=sb.channel('rt-'+table).on('postgres_changes',{event:'INSERT',schema:'public',table},handleRealtimeInsert).subscribe(status=>{
+    if(rtChannelTable!==table)return; // stale channel callback guard
     if(status==='SUBSCRIBED')setRtBadge(true,'即時');
     if(status==='CLOSED')setRtBadge(false,'離線');
     if(status==='CHANNEL_ERROR')setRtBadge(false,'錯誤');
@@ -2142,8 +2688,11 @@ function setRtBadge(active,label){const badge=document.getElementById('rt-badge'
 function handleRealtimeInsert(payload){
   if(currentScreen!=='dashboard'||currentView!=='day')return;
   const row=payload.new;if(!row||!row.date_minute||row.date_minute.slice(0,10)!==currentDate)return;
+  if(!filterRowsByAllowedMemberIds(currentTable,[row]).length)return;
   if(currentMemberId!=='ALL'&&row.member_id!==currentMemberId)return;
-  rawRowsCache.push(row);dayViewRawRowsCache.push(row);updateMemberList();setLastUpload(row.date_minute);
+  rawRowsCache.push(row);if(rawRowsCache.length>2000)rawRowsCache.shift();
+  dayViewRawRowsCache.push(row);if(dayViewRawRowsCache.length>2000)dayViewRawRowsCache.shift();
+  updateMemberList();setLastUpload(row.date_minute);
   const minuteRows=filterWarmupMinutes(aggregateToMinutes(rawRowsCache));
   groupedCache=groupByHour(minuteRows);dayStats=computeDayStats(minuteRows);
   renderPage();renderTrendPanel();
@@ -2161,7 +2710,7 @@ async function fetchDay(table,date,silent=false){
     let q=sb.from(table).select('date_minute,heartbeat,temp,breath,sbp,dbp,pulse,step,calorie,action,member_id').gte('date_minute',start).lte('date_minute',end).order('date_minute',{ascending:true}).range(page*ps,(page+1)*ps-1);
     if(currentMemberId!=='ALL')q=q.eq('member_id',currentMemberId);
     const{data,error}=await q;if(error||!data||!data.length)break;
-    all=all.concat(data);
+    all=all.concat(filterRowsByAllowedMemberIds(table,data));
     if(!silent&&pfill){pfill.style.width=Math.min(Math.round(all.length/900),95)+'%';if(plabel)plabel.textContent=`載入中… 已取得 ${all.length.toLocaleString()} 筆`;}
     if(data.length<ps)break;page++;
   }
@@ -2172,28 +2721,55 @@ async function fetchDaySummary(table,date){
   const start=date+'T00:00:00',end=date+'T23:59:59.999';
   let q=sb.from(table).select('date_minute,heartbeat,temp,sbp,dbp,breath').gte('date_minute',start).lte('date_minute',end).limit(3000);
   if(currentMemberId!=='ALL')q=q.eq('member_id',currentMemberId);
-  const{data,error}=await q;if(error||!data)return null;return data;
+  const{data,error}=await q;if(error||!data)return null;return filterRowsByAllowedMemberIds(table,data);
 }
 
 /* ════════════════════════════════════════════════════════════
    DAY VIEW
    ════════════════════════════════════════════════════════════ */
+function applyDayViewRows(rawRows,tok){
+  if(tok!==undefined&&tok!==loadToken)return;
+  const content=document.getElementById('table-content'),countEl=document.getElementById('row-count');
+  // 過濾跨機構資料（快取可能含舊有的跨機構 row；memberIdsByTable 須在此之前已載入）
+  const filteredRows=filterRowsByAllowedMemberIds(currentTable,rawRows);
+  if(!filteredRows.length){content.innerHTML=`<div class="state-card">📭 ${currentDate} 沒有資料</div>`;countEl.style.visibility='visible';countEl.innerHTML='共 <strong>0</strong> 筆';document.getElementById('trend-panel').style.display='none';return;}
+  rawRowsCache=filteredRows;dayViewRawRowsCache=filteredRows.slice();dayViewRawRowsCacheKey=dayViewCacheKey();updateMemberList();
+  const maxDm=filteredRows.reduce((m,r)=>r.date_minute>m?r.date_minute:m,filteredRows[0].date_minute);setLastUpload(maxDm);
+  const minuteRows=filterWarmupMinutes(aggregateToMinutes(filteredRows));groupedCache=groupByHour(minuteRows);dayStats=computeDayStats(minuteRows);
+  const hourKeys=Object.keys(groupedCache).sort();totalPages=Math.ceil(hourKeys.length/HOURS_PER_PAGE);if(currentPage>totalPages)currentPage=totalPages;
+  if(pendingScrollHour){const tIdx=hourKeys.findIndex(hk=>hk===pendingScrollHour);if(tIdx>=0)currentPage=Math.ceil((tIdx+1)/HOURS_PER_PAGE);}
+  const warmFiltered=aggregateToMinutes(filteredRows).length-minuteRows.length;
+  const warmNote=warmFiltered>0?'<span style="font-size:11px;color:var(--text-dim)">（已過濾暖機 '+warmFiltered+' 分）</span>':'';
+  countEl.style.visibility='visible';countEl.innerHTML='原始 <strong>'+filteredRows.length.toLocaleString()+'</strong> 筆 → 合併 <strong>'+minuteRows.length.toLocaleString()+'</strong> 分鐘'+warmNote;
+  renderPage();renderTrendPanel();
+}
 async function loadDayView(tok){
   const content=document.getElementById('table-content'),countEl=document.getElementById('row-count'),pagWrap=document.getElementById('pagination-wrap');
   countEl.style.visibility='hidden';pagWrap.innerHTML='';groupedCache=null;rawRowsCache=[];dayViewRawRowsCache=[];dayViewRawRowsCacheKey='';dayStats=null;clearLastUpload();
+
+  // 確保 memberIdsByTable 已載入，避免 filterRowsByAllowedMemberIds 無法過濾跨機構 ID
+  if(currentTable&&!(currentTable in memberIdsByTable)){
+    try{await fetchAllMemberIds(currentTable);}catch(e){console.warn('[DayView] fetchAllMemberIds failed:',e.message);}
+    if(tok!==undefined&&tok!==loadToken)return;
+  }
+
+  const cached=loadDayCache(currentTable,currentDate,currentMemberId);
+  if(cached){
+    // 快取命中：立即渲染，today 且過期時背景靜默更新
+    applyDayViewRows(cached.rows,tok);
+    if(!cached.stale)return;
+    const freshRows=await fetchDay(currentTable,currentDate,true);
+    if(tok!==undefined&&tok!==loadToken)return;
+    saveDayCache(currentTable,currentDate,currentMemberId,freshRows);
+    applyDayViewRows(freshRows,tok);
+    return;
+  }
+
   content.innerHTML=`<div class="progress-wrap"><div class="progress-label">載入中…</div><div class="progress-bar-bg"><div class="progress-bar-fill"></div></div><div class="progress-note">正在取得 ${escHtml(currentDate)}${currentMemberId!=='ALL'?' ('+escHtml(currentMemberId)+')':''} 的資料</div></div>`;
   const rawRows=await fetchDay(currentTable,currentDate);
-  if(tok!==undefined&&tok!==loadToken)return; // view switched while loading
-  if(!rawRows.length){content.innerHTML=`<div class="state-card">📭 ${currentDate} 沒有資料</div>`;countEl.style.visibility='visible';countEl.innerHTML='共 <strong>0</strong> 筆';document.getElementById('trend-panel').style.display='none';return;}
-  rawRowsCache=rawRows;dayViewRawRowsCache=rawRows.slice();dayViewRawRowsCacheKey=dayViewCacheKey();updateMemberList();
-  const maxDm=rawRows.reduce((m,r)=>r.date_minute>m?r.date_minute:m,rawRows[0].date_minute);setLastUpload(maxDm);
-  const minuteRows=filterWarmupMinutes(aggregateToMinutes(rawRows));groupedCache=groupByHour(minuteRows);dayStats=computeDayStats(minuteRows);
-  const hourKeys=Object.keys(groupedCache).sort();totalPages=Math.ceil(hourKeys.length/HOURS_PER_PAGE);if(currentPage>totalPages)currentPage=totalPages;
-  if(pendingScrollHour){const tIdx=hourKeys.findIndex(hk=>hk===pendingScrollHour);if(tIdx>=0)currentPage=Math.ceil((tIdx+1)/HOURS_PER_PAGE);}
-  const warmFiltered=aggregateToMinutes(rawRows).length-minuteRows.length;
-  const warmNote=warmFiltered>0?'<span style="font-size:11px;color:var(--text-dim)">（已過濾暖機 '+warmFiltered+' 分）</span>':'';
-  countEl.style.visibility='visible';countEl.innerHTML='原始 <strong>'+rawRows.length.toLocaleString()+'</strong> 筆 → 合併 <strong>'+minuteRows.length.toLocaleString()+'</strong> 分鐘'+warmNote;
-  renderPage();renderTrendPanel();
+  if(tok!==undefined&&tok!==loadToken)return;
+  saveDayCache(currentTable,currentDate,currentMemberId,rawRows);
+  applyDayViewRows(rawRows,tok);
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -2211,25 +2787,25 @@ async function loadMonthView(tok){
     card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">載入中</div><div class="day-stat-val" style="color:var(--text-light)">…</div></div></div>`;
     grid.appendChild(card);cardMap[ds]=card;
   }
-  const fetchPromises=Array.from({length:daysInMonth},(_,i)=>{const d=i+1;const ds=`${yr}-${p2(mo)}-${p2(d)}`;return fetchDaySummary(currentTable,ds).then(rows=>({ds,rows}));});
-  const results=await Promise.all(fetchPromises);
+  // 31 parallel HEAD COUNT 請求：每天只回傳計數 header，無 row 資料
+  // 根本解決 max_rows 截斷問題——每天獨立計數，不受其他天資料量影響
+  const dayChecks=Array.from({length:daysInMonth},(_,i)=>{
+    const d=i+1;const ds=`${yr}-${p2(mo)}-${p2(d)}`;
+    const start=ds+'T00:00:00',end=ds+'T23:59:59.999';
+    let q=sb.from(currentTable).select('*',{count:'exact',head:true}).gte('date_minute',start).lte('date_minute',end);
+    if(currentMemberId!=='ALL')q=q.eq('member_id',currentMemberId);
+    return q.then(({count,error})=>({ds,count:error?0:(count||0)}));
+  });
+  const results=await Promise.all(dayChecks);
   if(tok!==undefined&&tok!==loadToken)return; // view switched while loading
-  results.forEach(({ds,rows})=>{
+  results.forEach(({ds,count})=>{
     const card=cardMap[ds];card.classList.remove('loading-day');
-    if(!rows||!rows.length){card.classList.add('no-data');card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">無資料</div></div></div>`;dailySummaryCache[ds]=null;return;}
-    const aHb=avg(rows.map(r=>r.heartbeat)),aBr=avg(rows.map(r=>r.breath)),aSbp=avg(rows.map(r=>r.sbp)),aDbp=avg(rows.map(r=>r.dbp)),aTemp=avg(rows.map(r=>r.temp));
-    dailySummaryCache[ds]={avgHb:aHb,avgBr:aBr,avgSbp:aSbp,avgDbp:aDbp,avgTemp:aTemp};
-    const hbLvl=anomalyLevel('heartbeat',aHb),sbpLvl=anomalyLevel('sbp',aSbp);
-    const statsHtml=[
-      aHb!==null?`<div class="day-stat"><div class="day-stat-label">❤️ 心跳 avg</div><div class="day-stat-val${hbLvl==='red'?' is-red':''}">${Math.round(aHb)}</div></div>`:'',
-      `<div class="day-stat"><div class="day-stat-label">🫁 呼吸 avg</div><div class="day-stat-val">${aBr!==null?Math.round(aBr):'—'}</div></div>`,
-      aSbp!==null?`<div class="day-stat"><div class="day-stat-label">🩺 收縮壓 avg</div><div class="day-stat-val${sbpLvl==='red'?' is-red':''}">${Math.round(aSbp)}</div></div>`:'',
-      aTemp!==null?`<div class="day-stat"><div class="day-stat-label">🌡 體溫 avg</div><div class="day-stat-val">${parseFloat(aTemp).toFixed(1)}°C</div></div>`:'',
-    ].join('');
-    card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats">${statsHtml}</div><div class="day-card-footer"><span>${rows.length.toLocaleString()} 筆</span><span style="color:var(--mint-mid);font-weight:600;">查看詳細 →</span></div>`;
+    if(!count){card.classList.add('no-data');card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">無資料</div></div></div>`;dailySummaryCache[ds]=null;return;}
+    card.innerHTML=`<div class="day-card-date">📅 ${ds}</div><div class="day-card-stats"><div class="day-stat"><div class="day-stat-label">📊 量測筆數</div><div class="day-stat-val">${count.toLocaleString()}</div></div></div><div class="day-card-footer"><span>${count.toLocaleString()} 筆</span><span style="color:var(--mint-mid);font-weight:600;">查看詳細 →</span></div>`;
     card.onclick=()=>{currentDate=ds;setView('day');loadCurrentTable();};
   });
-  countEl.style.visibility='visible';countEl.innerHTML=`${currentMonth} 月份・<strong>${daysInMonth}</strong> 天`;
+  const activeDays=results.filter(r=>r.count>0).length;
+  countEl.style.visibility='visible';countEl.innerHTML=`${currentMonth} 月份・有資料 <strong>${activeDays}</strong> 天（共 ${daysInMonth} 天）`;
   renderTrendPanel();
 }
 
@@ -2259,7 +2835,8 @@ function filterWarmupMinutes(minuteRows,warmupMin=2,stableCount=55){
 }
 function aggregateToMinutes(rows){
   const buckets={};
-  rows.forEach(r=>{const d=new Date(r.date_minute);const key=`${r.date_minute.slice(0,11)}${p2(d.getHours())}:${p2(d.getMinutes())}`;if(!buckets[key])buckets[key]={time:r.date_minute.slice(0,11)+p2(d.getHours())+':'+p2(d.getMinutes())+':00',rows:[]};buckets[key].rows.push(r);});
+  // 直接字串切片取 HH:MM，避免每行建立 Date 物件（快 40-60%）
+  rows.forEach(r=>{const key=r.date_minute.slice(0,16);if(!buckets[key])buckets[key]={time:key+':00',rows:[]};buckets[key].rows.push(r);});
   const af=(arr,f)=>{const n=arr.map(r=>parseFloat(r[f])).filter(v=>!isNaN(v));if(!n.length)return null;return Math.round(n.reduce((a,b)=>a+b,0)/n.length*10)/10;};
   return Object.values(buckets).map(b=>({time:b.time,count:b.rows.length,heartbeat:af(b.rows,'heartbeat'),temp:af(b.rows,'temp'),breath:af(b.rows,'breath'),sbp:af(b.rows,'sbp'),dbp:af(b.rows,'dbp'),pulse:af(b.rows,'pulse'),step:af(b.rows,'step'),calorie:af(b.rows,'calorie'),action:modeOf(b.rows.map(r=>r.action))}));
 }
@@ -2301,7 +2878,9 @@ async function getDetailDayAxisMinuteRows(){
     .select('date_minute,heartbeat,temp,breath,sbp,dbp,pulse,step,action,member_id')
     .gte('date_minute',start).lte('date_minute',end)
     .order('date_minute',{ascending:true}).limit(60000);
-  detailDayAxisMinuteRows=filterWarmupMinutes(aggregateToMinutes(data||[]));
+  // 過濾跨機構資料：此查詢為全表無 member_id 限制，需在聚合前過濾
+  const safeData=filterRowsByAllowedMemberIds(currentTable,data||[]);
+  detailDayAxisMinuteRows=filterWarmupMinutes(aggregateToMinutes(safeData));
   detailDayAxisCacheKey=cacheKey;
   return detailDayAxisMinuteRows;
 }
@@ -2402,7 +2981,14 @@ async function manualRefresh(){const btn=document.getElementById('btn-refresh');
 async function silentRefresh(){
   if(!currentTable||currentView!=='day')return;
   const rawRows=await fetchDay(currentTable,currentDate,true);if(!rawRows.length)return;
-  rawRowsCache=rawRows;dayViewRawRowsCache=rawRows.slice();dayViewRawRowsCacheKey=dayViewCacheKey();
+  // 防線：確保 memberIdsByTable 已載入後才過濾；fetchDay 內部已呼叫 filterRowsByAllowedMemberIds，
+  // 但 silentRefresh 直接寫入 rawRowsCache，需再確認已知 allowed 集合
+  if(!(currentTable in memberIdsByTable)){
+    try{await fetchAllMemberIds(currentTable);}catch(e){console.warn('[silentRefresh] fetchAllMemberIds failed:',e.message);}
+  }
+  const safeRows=filterRowsByAllowedMemberIds(currentTable,rawRows);
+  if(!safeRows.length)return;
+  rawRowsCache=safeRows;dayViewRawRowsCache=safeRows.slice();dayViewRawRowsCacheKey=dayViewCacheKey();
   const maxDm=rawRows.reduce((m,r)=>r.date_minute>m?r.date_minute:m,rawRows[0].date_minute);setLastUpload(maxDm);
   const minuteRows=filterWarmupMinutes(aggregateToMinutes(rawRows));groupedCache=groupByHour(minuteRows);dayStats=computeDayStats(minuteRows);
   renderPage();renderTrendPanel();
@@ -2453,6 +3039,8 @@ async function deleteAnnot(id){
   if(error)throw error;
 }
 
+let cachedAnnots=[];
+
 async function openAnnotPanel(){
   const formCol=document.getElementById('annot-form-col');
   const listCol=document.getElementById('annot-list-col');
@@ -2463,11 +3051,24 @@ async function openAnnotPanel(){
   const preMember=detailMemberId||(currentMemberId!=='ALL'?currentMemberId:'');
   const tblLabel=escHtml(TABLE_LABEL[currentTable]||currentTable||'');
   listCol.innerHTML='<div class="annot-empty">讀取回報中…</div>';
+  cachedAnnots=[];
   let annots=[];
-  try{
-    annots=await fetchAnnotsFromSupabase();
-  }catch(err){
-    listCol.innerHTML=`<div class="annot-empty">讀取失敗<br><small>${escHtml(err.message||String(err))}</small></div>`;
+  const mid=detailMemberId||(currentMemberId!=='ALL'?currentMemberId:'');
+  const fromCache=loadAnnotCache(currentTable,mid);
+  if(fromCache){
+    annots=fromCache;cachedAnnots=annots;
+    // 快取命中：立即渲染，背景靜默更新
+    try{
+      fetchAnnotsFromSupabase().then(fresh=>{cachedAnnots=fresh;saveAnnotCache(currentTable,mid,fresh);}).catch(()=>{});
+    }catch{}
+  }else{
+    try{
+      annots=await fetchAnnotsFromSupabase();
+      cachedAnnots=annots;
+      saveAnnotCache(currentTable,mid,annots);
+    }catch(err){
+      listCol.innerHTML=`<div class="annot-empty">讀取失敗<br><small>${escHtml(err.message||String(err))}</small></div>`;
+    }
   }
 
   const catClass=cat=>cat==='裝置誤判'?'cat-誤判':cat==='裝置中斷'?'cat-中斷':'';
@@ -2525,6 +3126,30 @@ async function openAnnotPanel(){
 <button class="btn-annot-save" onclick="saveAnnotFromForm()">儲存回報</button>`;
 
   listCol.innerHTML=`
+<div style="border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px;">
+  <div style="font-size:12px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">📥 匯出 CSV</div>
+  <div class="annot-form-row" style="margin-bottom:6px;">
+    <div class="annot-field">
+      <label>起始日期</label>
+      <input class="annot-input" id="export-date-start" type="date" value="${escHtml(today)}">
+    </div>
+    <div class="annot-field">
+      <label>結束日期</label>
+      <input class="annot-input" id="export-date-end" type="date" placeholder="留空=同起始日">
+    </div>
+  </div>
+  <div class="annot-form-row" style="margin-bottom:10px;">
+    <div class="annot-field">
+      <label>起始時間（可選）</label>
+      <input class="annot-input" id="export-time-start" type="time" step="60" lang="en-GB" placeholder="留空=00:00">
+    </div>
+    <div class="annot-field">
+      <label>結束時間（可選）</label>
+      <input class="annot-input" id="export-time-end" type="time" step="60" lang="en-GB" placeholder="留空=23:59">
+    </div>
+  </div>
+  <button class="btn-annot-save" style="padding:8px 16px;font-size:13px;" onclick="exportAnnotCSV()">📥 匯出 CSV</button>
+</div>
 <div class="annot-list-head">📋 回報紀錄${tblLabel?' · '+tblLabel:''}${preMember?' · '+escHtml(preMember):''} <span style="font-weight:400;">(${annots.length} 筆)</span></div>
 ${listHtml}`;
 
@@ -2532,6 +3157,34 @@ ${listHtml}`;
 }
 
 function closeAnnotPanel(){document.getElementById('annot-overlay').classList.remove('open');}
+
+function exportAnnotCSV(){
+  const dateStart=document.getElementById('export-date-start')?.value||'';
+  const dateEnd=document.getElementById('export-date-end')?.value||dateStart;
+  const timeStart=document.getElementById('export-time-start')?.value||'00:00';
+  const timeEnd=document.getElementById('export-time-end')?.value||'23:59';
+  if(!dateStart){alert('請填寫起始日期');return;}
+  const dtStart=dateStart+' '+timeStart;
+  const dtEnd=(dateEnd||dateStart)+' '+timeEnd;
+  const filtered=cachedAnnots.filter(a=>{
+    const dt=a.date+' '+a.time;
+    return dt>=dtStart&&dt<=dtEnd;
+  });
+  const BOM='﻿';
+  const header='日期,時間,會員ID,分類,說明,嚴重度\n';
+  const rows=filtered.map(a=>[a.date,a.time,a.memberId,a.category,'"'+(a.text||'').replace(/"/g,'""')+'"',a.severity||''].join(',')).join('\n');
+  const csv=BOM+header+rows;
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  const fileDate=(dateStart||'').replace(/-/g,'');
+  link.href=url;
+  link.download=`nurse_reports_${fileDate}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
 
 async function renderDetAnnotList(){
   const el=document.getElementById('det-annot-list');
@@ -2573,6 +3226,8 @@ async function deleteAnnotAndRefresh(id){
   if(!confirm('確定要刪除此回報？'))return;
   try{
     await deleteAnnot(id);
+    const mid=detailMemberId||(currentMemberId!=='ALL'?currentMemberId:'');
+    invalidateAnnotCache(currentTable,mid);
     openAnnotPanel();
     renderDetAnnotList();
   }catch(err){alert(`刪除失敗：${err.message||err}`);}
@@ -2595,6 +3250,9 @@ async function saveAnnotFromForm(){
       created_at:`${date}T${time}:00+08:00`
     });
     if(error)throw error;
+    const mid=member||'ALL';
+    invalidateAnnotCache(currentTable,mid);
+    invalidateAnnotCache(currentTable,'');
     openAnnotPanel();
     renderDetAnnotList();
   }catch(err){alert(`儲存失敗：${err.message||err}`);}
@@ -2619,13 +3277,26 @@ function goToAnnotTime(date,time,memberId){
 /* ════════════════════════════════════════════════════════════
    POSTURE SCREEN
    ════════════════════════════════════════════════════════════ */
-function initPostureScreen(){
+async function initPostureScreen(){
   const dateEl=document.getElementById('ps-date-input');
   if(dateEl&&!dateEl.value)dateEl.value=currentDate||todayStr();
+  const dispEl=document.getElementById('ps-date-display');
+  if(dispEl&&dateEl)dispEl.textContent=dateEl.value||'選擇日期';
   const selEl=document.getElementById('ps-member-select');
   if(selEl){
+    selEl.innerHTML='<option value="ALL">載入中…</option>';
+    let members=memberList;
+    if(!members.length&&currentTable){
+      try{
+        members=await fetchAllMemberIds(currentTable);
+        // 用 users 表權威清單覆蓋，不 merge（避免舊 memberList 中跨機構 ID 污染）
+        memberList=members;
+      }catch(e){}
+    }
+    // 最終防線：確保 posture 畫面的成員下拉選單也經過跨機構過濾
+    const safeMembers=filterMemberIdsByAllowed(currentTable,members);
     selEl.innerHTML='<option value="ALL">全部</option>';
-    memberList.forEach(m=>{
+    safeMembers.forEach(m=>{
       const opt=document.createElement('option');
       opt.value=m;opt.textContent=m;
       selEl.appendChild(opt);
@@ -2719,53 +3390,53 @@ function renderPostureScreenContent(minuteRows,date){
   const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
   const topLbl=sorted[0]?.[0]||'—';
   const topMin=sorted[0]?.[1]||0;
+  const topPct=total?Math.round(topMin/total*100):0;
+  const topColor=ACTION_LABEL_COLOR[topLbl]||'#94a3b8';
   const activeStart=minuteRows[0].time.slice(11,16);
   const activeEnd=minuteRows[minuteRows.length-1].time.slice(11,16);
-  const badgeClass={'靜止':'ps-badge-gray','走路':'ps-badge-blue','慢跑':'ps-badge-green','快跑':'ps-badge-orange','躺姿':'ps-badge-purple','姿勢異常':'ps-badge-red'};
 
-  // Stats strip
-  const statsStrip=`
-<div class="ps-stats-strip">
-  <div class="ps-stat-card">
-    <div class="ps-stat-label">最常見姿態</div>
-    <div style="margin:8px 0 4px"><span class="ps-badge ${badgeClass[topLbl]||'ps-badge-gray'}">${escHtml(topLbl)}</span></div>
-    <div class="ps-stat-sub">${topMin} 分鐘・佔 ${total?Math.round(topMin/total*100):0}%</div>
+  // ── KPI Row ──
+  const kpiRow=`<div class="ps-kpi-row">
+  <div class="ps-kpi" style="--kc:${topColor}">
+    <div class="ps-kpi-label">主要姿態</div>
+    <div class="ps-kpi-main"><div class="ps-kpi-dot"></div><div class="ps-kpi-val">${escHtml(topLbl)}</div></div>
+    <div class="ps-kpi-sub">${topMin} 分鐘・佔 ${topPct}%</div>
   </div>
-  <div class="ps-stat-card">
-    <div class="ps-stat-label">有效分鐘數</div>
-    <div class="ps-stat-value">${minuteRows.length}</div>
-    <div class="ps-stat-sub">分鐘（已過濾暖機）</div>
+  <div class="ps-kpi" style="--kc:var(--mint)">
+    <div class="ps-kpi-label">有效分鐘</div>
+    <div class="ps-kpi-num">${minuteRows.length}</div>
+    <div class="ps-kpi-sub">分鐘（已過濾暖機）</div>
   </div>
-  <div class="ps-stat-card">
-    <div class="ps-stat-label">姿態種類</div>
-    <div class="ps-stat-value">${sorted.length}</div>
-    <div class="ps-stat-sub">種不同動作</div>
+  <div class="ps-kpi" style="--kc:#a855f7">
+    <div class="ps-kpi-label">姿態種類</div>
+    <div class="ps-kpi-num">${sorted.length}</div>
+    <div class="ps-kpi-sub">種不同動作</div>
   </div>
-  <div class="ps-stat-card">
-    <div class="ps-stat-label">活動時段</div>
-    <div style="font-size:20px;font-weight:800;color:var(--text);margin:8px 0 4px;font-variant-numeric:tabular-nums">${activeStart}</div>
-    <div class="ps-stat-sub">至 ${activeEnd}</div>
+  <div class="ps-kpi" style="--kc:#f97316">
+    <div class="ps-kpi-label">活動時段</div>
+    <div class="ps-kpi-time">${activeStart}</div>
+    <div class="ps-kpi-sub">至 ${activeEnd}</div>
   </div>
 </div>`;
 
-  // Table rows with progress bars
-  const tableRows=sorted.map(([lbl,cnt])=>{
+  // ── Activity Cards ──
+  const actCards=sorted.map(([lbl,cnt])=>{
     const pct=total?((cnt/total)*100).toFixed(1):0;
     const color=ACTION_LABEL_COLOR[lbl]||'#94a3b8';
-    const bc=badgeClass[lbl]||'ps-badge-gray';
-    return`<tr>
-      <td><span class="ps-badge ${bc}">
-        <span style="width:7px;height:7px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>
-        ${escHtml(lbl)}</span></td>
-      <td class="ps-table-num">${cnt}</td>
-      <td style="min-width:120px">
-        <div class="ps-progress-label"><span>${pct}%</span></div>
-        <div class="ps-progress-bg"><div class="ps-progress-fill" style="width:${pct}%;background:${color}"></div></div>
-      </td>
-    </tr>`;
+    return`<div class="ps-act-item" style="--ac:${color}">
+  <div class="ps-act-swatch"></div>
+  <div class="ps-act-body">
+    <div class="ps-act-top">
+      <span class="ps-act-name">${escHtml(lbl)}</span>
+      <span class="ps-act-pct">${pct}%</span>
+    </div>
+    <div class="ps-progress-bg"><div class="ps-progress-fill" style="width:${pct}%;background:${color}"></div></div>
+    <div class="ps-act-min">${cnt} 分鐘</div>
+  </div>
+</div>`;
   }).join('');
 
-  // Export pills
+  // ── Export pills ──
   const actionDefs=[{a:0,l:'靜止'},{a:1,l:'走路'},{a:3,l:'慢跑'},{a:5,l:'快跑'},{a:6,l:'躺姿'},{a:7,l:'姿勢異常'}];
   const pills=actionDefs.map(({a,l})=>{
     const on=postureCheckedActions.has(a);
@@ -2775,29 +3446,26 @@ function renderPostureScreenContent(minuteRows,date){
   }).join('');
 
   content.innerHTML=`
-${statsStrip}
-<div class="ps-grid-2 ps-grid-main">
+${kpiRow}
+<div class="ps-main-grid">
+  <div class="ps-card">
+    <div class="ps-card-header">
+      <div><div class="ps-card-title">姿態明細</div><div class="ps-card-desc">各動作佔比與時間</div></div>
+    </div>
+    <div class="ps-card-body">
+      <div class="ps-act-list">${actCards}</div>
+    </div>
+  </div>
   <div class="ps-card">
     <div class="ps-card-header">
       <div><div class="ps-card-title">姿態分佈</div><div class="ps-card-desc">各動作佔當日總時間比例</div></div>
     </div>
     <div class="ps-card-body">${renderPostureDonut(counts,total)}</div>
   </div>
-  <div class="ps-card">
-    <div class="ps-card-header">
-      <div><div class="ps-card-title">詳細統計</div><div class="ps-card-desc">依時間排序</div></div>
-    </div>
-    <div class="ps-card-body-flush">
-      <table class="ps-table">
-        <thead><tr><th>姿態</th><th>分鐘</th><th>佔比</th></tr></thead>
-        <tbody>${tableRows}</tbody>
-      </table>
-    </div>
-  </div>
 </div>
 <div class="ps-card">
   <div class="ps-card-header">
-    <div><div class="ps-card-title">全天時間軸</div><div class="ps-card-desc">24小時活動分佈，將滑鼠移至色塊查看時段</div></div>
+    <div><div class="ps-card-title">全天時間軸</div><div class="ps-card-desc">24小時活動分佈，將滑鼠移至色塊查看時段詳情</div></div>
   </div>
   <div class="ps-card-body">${renderPostureTimeline(minuteRows,counts,total)}</div>
 </div>
@@ -2813,6 +3481,84 @@ ${statsStrip}
     <div class="ps-pill-group" id="ps-check-group">${pills}</div>
   </div>
 </div>`;
+}
+
+/* ══ POSTURE CALENDAR MODAL ══ */
+let psCalYear, psCalMonth;
+
+function openPostureCal(){
+  const dateEl=document.getElementById('ps-date-input');
+  const base=dateEl&&dateEl.value?new Date(dateEl.value+'T00:00:00'):new Date();
+  psCalYear  = base.getFullYear();
+  psCalMonth = base.getMonth() + 1;
+  document.getElementById('ps-cal-overlay').classList.add('open');
+  loadPostureCalMonth(psCalYear, psCalMonth);
+}
+
+function closePostureCal(){
+  document.getElementById('ps-cal-overlay').classList.remove('open');
+}
+
+function psCalChangeMonth(delta){
+  psCalMonth += delta;
+  if(psCalMonth > 12){ psCalMonth = 1; psCalYear++; }
+  if(psCalMonth < 1) { psCalMonth = 12; psCalYear--; }
+  loadPostureCalMonth(psCalYear, psCalMonth);
+}
+
+async function loadPostureCalMonth(year, month){
+  document.getElementById('ps-cal-month-label').textContent = `${year}年${p2(month)}月`;
+  const grid = document.getElementById('ps-cal-grid');
+  grid.innerHTML = '<div class="ps-cal-loading">載入中…</div>';
+  let daysWithData = new Set();
+  if(currentTable){
+    try{
+      const daysInMonth = new Date(year, month, 0).getDate();
+      const selEl = document.getElementById('ps-member-select');
+      const filterMember = (selEl && selEl.value && selEl.value !== 'ALL')
+        ? selEl.value
+        : (detailMemberId || null);
+      // 單一查詢取整月日期清單，取代 28-31 個 count 查詢
+      const mStart=`${year}-${p2(month)}-01T00:00:00`;
+      const mEnd=`${year}-${p2(month)}-${p2(daysInMonth)}T23:59:59`;
+      let q=sb.from(currentTable).select('date_minute').gte('date_minute',mStart).lte('date_minute',mEnd).limit(150000);
+      if(filterMember)q=q.eq('member_id',filterMember);
+      const{data:calRows,error:calErr}=await q;
+      if(!calErr&&calRows)calRows.forEach(r=>{if(r.date_minute)daysWithData.add(r.date_minute.slice(0,10));});
+    }catch(e){ console.warn('psCalLoad error', e); }
+  }
+  renderPostureCal(year, month, daysWithData);
+}
+
+function renderPostureCal(year, month, daysWithData){
+  const grid = document.getElementById('ps-cal-grid');
+  const today = todayStr();
+  const dows = ['日','一','二','三','四','五','六'];
+  let html = dows.map(d => `<div class="ps-cal-dow">${d}</div>`).join('');
+  const firstDay = new Date(year, month - 1, 1).getDay(); // 0=Sun
+  const daysInMonth = new Date(year, month, 0).getDate();
+  for(let i = 0; i < firstDay; i++) html += '<div class="ps-cal-day empty"></div>';
+  for(let d = 1; d <= daysInMonth; d++){
+    const dateStr = `${year}-${p2(month)}-${p2(d)}`;
+    const hasData = daysWithData.has(dateStr);
+    const isToday = dateStr === today;
+    let cls = 'ps-cal-day';
+    if(hasData) cls += ' has-data';
+    if(isToday) cls += ' is-today';
+    const click = hasData ? `onclick="pickPostureDay('${dateStr}')"` : '';
+    html += `<div class="${cls}" ${click}>${d}</div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function pickPostureDay(dateStr){
+  closePostureCal();
+  const dateEl = document.getElementById('ps-date-input');
+  if(dateEl) dateEl.value = dateStr;
+  const dispEl = document.getElementById('ps-date-display');
+  if(dispEl) dispEl.textContent = dateStr;
+  goScreen('posture');
+  setTimeout(() => loadPostureScreen(), 100);
 }
 
 async function loadPostureScreen(){
