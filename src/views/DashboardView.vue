@@ -51,8 +51,8 @@
       </div>
     </div>
 
-    <!-- Trend panel (day view) -->
-    <div class="trend-panel" v-if="currentView === 'day' && trendHtml">
+    <!-- Trend panel (day view) — @click handles data-range / data-metric buttons inside v-html -->
+    <div class="trend-panel" v-if="currentView === 'day' && trendHtml" @click="handleTrendClick">
       <div class="trend-body" v-html="trendHtml"></div>
     </div>
 
@@ -285,9 +285,9 @@ async function renderTrendPanel() {
   if (currentView.value !== 'day' || !groupedCache) { trendHtml.value = ''; return }
   const minuteRows = Object.values(groupedCache).flat().sort((a, b) => a.time.localeCompare(b.time))
   if (!minuteRows.length) { trendHtml.value = '<div class="trend-empty">無資料</div>'; return }
-  const mkBtn = (r, l) => `<button class="trend-range-btn${hbBreathRange === r ? ' active' : ''}" data-range="${r}" onclick="window.__dashSetTrendRange('${r}')">${l}</button>`
+  const mkBtn = (r, l) => `<button class="trend-range-btn${hbBreathRange === r ? ' active' : ''}" data-range="${r}">${l}</button>`
   const baseBtns = mkBtn('day', '一天') + mkBtn('week', '一週') + mkBtn('month', '一個月')
-  const mkMBtn = (k, l) => `<button class="trend-metric-toggle${trendLineSet.has(k) ? ' active' : ''}" onclick="window.__dashToggleTrendLine('${k}')">${l}</button>`
+  const mkMBtn = (k, l) => `<button class="trend-metric-toggle${trendLineSet.has(k) ? ' active' : ''}" data-metric="${k}">${l}</button>`
   const metricBtns = `<div class="trend-metric-btns">${mkMBtn('hb', '❤️ 心跳') + mkMBtn('br', '🫁 呼吸') + mkMBtn('sbp', '🩺 收縮壓') + mkMBtn('temp', '🌡 體溫')}</div>`
   function mkSeries(src, mode) {
     const s = []
@@ -303,10 +303,13 @@ async function renderTrendPanel() {
   nextTick(() => { initCursorDragNodes() })
 }
 
-// expose toggle functions to v-html onclick
-if (typeof window !== 'undefined') {
-  window.__dashSetTrendRange = (r) => { hbBreathRange = r; renderTrendPanel() }
-  window.__dashToggleTrendLine = (k) => {
+// Event delegation for v-html trend panel buttons (data-range / data-metric)
+function handleTrendClick(e) {
+  const rangeBtn = e.target.closest('[data-range]')
+  if (rangeBtn) { hbBreathRange = rangeBtn.dataset.range; renderTrendPanel(); return }
+  const metricBtn = e.target.closest('[data-metric]')
+  if (metricBtn) {
+    const k = metricBtn.dataset.metric
     if (trendLineSet.has(k)) { if (trendLineSet.size === 1) return; trendLineSet.delete(k) } else trendLineSet.add(k)
     renderTrendPanel()
   }
@@ -526,12 +529,8 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (arTimer) clearInterval(arTimer)
-  // Save state
   dashStore.currentDate = currentDate.value
   dashStore.currentMonth = currentMonth.value
-  // cleanup globals
-  delete window.__dashSetTrendRange
-  delete window.__dashToggleTrendLine
 })
 
 watch(() => navStore.currentTable, (newTable) => {

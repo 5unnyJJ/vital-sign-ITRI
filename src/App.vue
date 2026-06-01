@@ -115,7 +115,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute, RouterView } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
 import { useNavStore } from '@/stores/nav.js'
@@ -129,6 +129,32 @@ const navStore = useNavStore()
 const base = import.meta.env.BASE_URL
 const sidebarOpen = ref(false)
 const rtActive = ref(false)
+
+// ── Realtime subscription ─────────────────────────────────
+let rtChannel = null
+let rtTable = null
+
+function subscribeRealtime(table) {
+  if (rtChannel && rtTable === table) return
+  if (rtChannel) { sb.removeChannel(rtChannel); rtChannel = null }
+  rtTable = table
+  rtChannel = sb.channel(`rt-${table}`)
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table }, () => {
+      rtActive.value = true
+    })
+    .subscribe(status => {
+      rtActive.value = status === 'SUBSCRIBED'
+    })
+}
+
+function unsubscribeRealtime() {
+  if (rtChannel) { sb.removeChannel(rtChannel); rtChannel = null }
+  rtActive.value = false
+}
+
+// Subscribe when table changes, unsubscribe on logout
+watch(() => navStore.currentTable, (t) => { if (t) subscribeRealtime(t) })
+watch(() => authStore.isLoggedIn, (v) => { if (!v) unsubscribeRealtime() })
 
 // Font size cycling
 const fontSizes = ['標準', '大字', '特大']
@@ -168,7 +194,8 @@ function navToDash(view) {
 }
 
 async function doLogout() {
-  await sb.auth.signOut()
+  unsubscribeRealtime()
+  await sb.auth.signOut({ scope: 'global' })
   authStore.logout()
   router.push('/login')
 }
