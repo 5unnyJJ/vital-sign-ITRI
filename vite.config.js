@@ -20,7 +20,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     rollupOptions: {
-      input: 'vite-index.html',
+      input: 'index.html',
       output: {
         manualChunks: {
           'vendor': ['vue', 'vue-router', 'pinia'],
