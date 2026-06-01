@@ -20,7 +20,10 @@
       </div>
       <div class="ps-toolbar-group">
         <span class="ps-toolbar-label">📅 日期</span>
-        <input type="date" class="ps-date-input" v-model="selectedDate" />
+        <button class="ps-date-btn" @click="openPsCal">
+          {{ selectedDate || '選擇日期' }}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-left:6px;flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </button>
       </div>
       <button type="button" class="ps-btn ps-btn-primary" :disabled="loading" @click="loadData" style="align-self:flex-end">
         <svg v-if="loading" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin .7s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
@@ -182,6 +185,27 @@
       </template>
     </div>
   </div>
+
+  <!-- 姿態日期月曆 Modal -->
+  <div v-if="psCalOpen" class="det-cal-overlay" @click.self="psCalOpen = false">
+    <div class="det-cal-panel">
+      <div class="ps-cal-header">
+        <button class="ps-cal-nav" @click="psCalChangeMonth(-1)">&#8592;</button>
+        <span class="ps-cal-month-label">{{ psCalYearMonth }}</span>
+        <button class="ps-cal-nav" @click="psCalChangeMonth(1)">&#8594;</button>
+        <button class="det-cal-close" @click="psCalOpen = false">✕</button>
+      </div>
+      <div v-if="psCalLoading" class="ps-cal-loading">載入中…</div>
+      <div v-else class="ps-cal-grid">
+        <div v-for="d in ['日','一','二','三','四','五','六']" :key="d" class="ps-cal-dow">{{ d }}</div>
+        <div v-for="cell in psCalCells" :key="cell.key"
+          class="ps-cal-day"
+          :class="{ 'has-data': cell.hasData, 'is-today': cell.isToday, 'empty': cell.empty }"
+          @click="cell.hasData ? pickPsDay(cell.ds) : null"
+        >{{ cell.label }}</div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -290,6 +314,73 @@ const timelineHtml = computed(() => {
 
 // ── Methods ───────────────────────────────────────────────
 function updateDetailBtnVisible() { /* computed handles it */ }
+
+// ── 姿態月曆 ─────────────────────────────────────────────
+const psCalOpen = ref(false)
+const psCalLoading = ref(false)
+const psCalYear = ref(new Date().getFullYear())
+const psCalMonth = ref(new Date().getMonth() + 1)
+const psCalDaysWithData = ref(new Set())
+
+const psCalYearMonth = computed(() => `${psCalYear.value}年${p2(psCalMonth.value)}月`)
+const psCalCells = computed(() => {
+  const year = psCalYear.value, month = psCalMonth.value
+  const today = todayStr()
+  const firstDay = new Date(year, month - 1, 1).getDay()
+  const daysInMonth = new Date(year, month, 0).getDate()
+  const cells = []
+  for (let i = 0; i < firstDay; i++) cells.push({ key: 'e' + i, empty: true, label: '' })
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = `${year}-${p2(month)}-${p2(d)}`
+    cells.push({ key: ds, ds, empty: false, label: d, hasData: psCalDaysWithData.value.has(ds), isToday: ds === today })
+  }
+  return cells
+})
+
+async function openPsCal() {
+  const base = selectedDate.value || todayStr()
+  const d = new Date(base)
+  psCalYear.value = d.getFullYear()
+  psCalMonth.value = d.getMonth() + 1
+  psCalOpen.value = true
+  await loadPsCalMonth()
+}
+
+async function psCalChangeMonth(delta) {
+  psCalMonth.value += delta
+  if (psCalMonth.value < 1) { psCalMonth.value = 12; psCalYear.value-- }
+  else if (psCalMonth.value > 12) { psCalMonth.value = 1; psCalYear.value++ }
+  await loadPsCalMonth()
+}
+
+async function loadPsCalMonth() {
+  const table = navStore.currentTable
+  if (!table) return
+  psCalLoading.value = true
+  psCalDaysWithData.value = new Set()
+  try {
+    const year = psCalYear.value, month = psCalMonth.value
+    const daysInMonth = new Date(year, month, 0).getDate()
+    const filterMember = selectedMemberId.value !== 'ALL' ? selectedMemberId.value : null
+    let q = sb.from(table).select('date_minute')
+      .gte('date_minute', `${year}-${p2(month)}-01T00:00:00`)
+      .lte('date_minute', `${year}-${p2(month)}-${p2(daysInMonth)}T23:59:59`)
+      .limit(150000)
+    if (filterMember) q = q.eq('member_id', filterMember)
+    const { data, error } = await q
+    if (!error && data) {
+      const days = new Set()
+      data.forEach(r => { if (r.date_minute) days.add(r.date_minute.slice(0, 10)) })
+      psCalDaysWithData.value = days
+    }
+  } catch (e) { console.warn('psCalLoad error', e) }
+  finally { psCalLoading.value = false }
+}
+
+function pickPsDay(dateStr) {
+  selectedDate.value = dateStr
+  psCalOpen.value = false
+}
 
 function toggleCheck(action) {
   const s = new Set(checkedActions.value)
@@ -417,6 +508,25 @@ onMounted(() => {
 .ps-toolbar-label{font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.7px;white-space:nowrap;}
 .ps-date-input,.ps-select{height:38px;padding:0 14px;background:#fff;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit;color:var(--text);outline:none;cursor:pointer;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:auto;}
 .ps-date-input{min-width:175px;width:175px;}
+.ps-date-btn{height:38px;padding:0 14px;background:#fff;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;color:var(--text);outline:none;cursor:pointer;transition:border-color .15s,box-shadow .15s;min-width:175px;display:flex;align-items:center;font-weight:500;}
+.ps-date-btn:hover{border-color:var(--mint);box-shadow:0 0 0 3px rgba(122,170,150,.18);}
+/* 月曆 Modal（scoped 版，共用 det-cal-* 命名） */
+.det-cal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:500;display:flex;align-items:center;justify-content:center;}
+.det-cal-panel{background:#fff;border-radius:var(--r-xl);box-shadow:0 20px 60px rgba(40,70,55,.18);padding:20px;min-width:300px;max-width:340px;width:90vw;}
+.det-cal-close{margin-left:auto;background:transparent;border:none;font-size:16px;color:var(--text-dim);cursor:pointer;padding:4px 8px;border-radius:var(--r-sm);}
+.det-cal-close:hover{background:var(--bg-alt);color:var(--text);}
+.ps-cal-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.ps-cal-month-label{flex:1;text-align:center;font-size:15px;font-weight:700;color:var(--text);}
+.ps-cal-nav{background:transparent;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:5px 12px;color:var(--text-mid);cursor:pointer;font-size:16px;transition:all .13s;}
+.ps-cal-nav:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
+.ps-cal-loading{text-align:center;padding:24px;font-size:13px;color:var(--text-dim);}
+.ps-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.ps-cal-dow{display:flex;align-items:center;justify-content:center;height:32px;font-size:11px;font-weight:600;color:var(--text-dim);}
+.ps-cal-day{display:flex;align-items:center;justify-content:center;height:36px;border-radius:var(--r-sm);font-size:13px;color:var(--text-dim);opacity:.35;cursor:default;position:relative;}
+.ps-cal-day.has-data{opacity:1;color:var(--mint-dark);background:var(--mint-xlight);border:1px solid var(--mint-light);cursor:pointer;font-weight:600;}
+.ps-cal-day.has-data:hover{background:var(--mint-light);border-color:var(--mint);transform:scale(1.06);}
+.ps-cal-day.is-today::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--orange);}
+.ps-cal-day.empty{opacity:0;pointer-events:none;}
 .ps-select{min-width:150px;}
 .ps-date-input:focus,.ps-select:focus{border-color:var(--mint);box-shadow:0 0 0 3px rgba(122,170,150,.18);}
 
