@@ -2041,6 +2041,7 @@ async function checkExistingSession(){
     preloadLoginBg();
   }
   // Only reach here when there is genuinely no usable session
+  document.getElementById('bottom-nav').style.display='none';
   document.getElementById('login-screen').style.display='flex';
 }
 async function resumeSession(){
@@ -2119,6 +2120,7 @@ async function doLogout(){
   detailMemberId=null;overviewCardData={};overviewTodayData={};overviewAllData={};
   orgByTable={};memberIdsByTable={};scanToken++;loadToken++;
   Els['shared-topbar'].style.display='none';
+  document.getElementById('bottom-nav').style.display='none';
   hideAllScreens();
   Els['login-screen'].style.display='flex';
   Els['session-banner'].style.display='none';
@@ -2233,6 +2235,7 @@ function cacheEls(){
 function initApp(email,tables){
   Els['login-screen'].style.display='none';
   Els['shared-topbar'].style.display='flex';
+  document.getElementById('bottom-nav').style.display='';
   applyFontSize();
   Els['user-email'].textContent=email;
   Els['user-avatar'].textContent=email[0].toUpperCase();
