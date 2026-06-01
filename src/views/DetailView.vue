@@ -41,13 +41,12 @@
           <button class="det-range-btn" :class="{ active: detailRange === '7d' }" @click="setRange('7d')">7 天</button>
           <button class="det-range-btn" :class="{ active: detailRange === '30d' }" @click="setRange('30d')">30 天</button>
           <div class="det-date-pick-wrap">
-            <button class="det-range-btn date-pick-btn" :class="{ active: detailRange === 'custom' }" @click="openDatePicker">
+            <button class="det-range-btn date-pick-btn" :class="{ active: detailRange === 'custom' }" @click="openDetCal">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                 <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
               </svg>
               <span>{{ customDateLabel }}</span>
             </button>
-            <input ref="datePickerRef" type="date" class="det-date-input" @change="setCustomDate($event.target.value)">
           </div>
         </div>
       </div>
@@ -120,6 +119,27 @@
       <div class="note-hint">回報紀錄會同步到雲端，供後續查詢與交班使用。</div>
     </div>
   </div>
+
+  <!-- 日期月曆 Modal -->
+  <div v-if="calOpen" class="det-cal-overlay" @click.self="calOpen = false">
+    <div class="det-cal-panel">
+      <div class="ps-cal-header">
+        <button class="ps-cal-nav" @click="calChangeMonth(-1)">&#8592;</button>
+        <span class="ps-cal-month-label">{{ calYearMonth }}</span>
+        <button class="ps-cal-nav" @click="calChangeMonth(1)">&#8594;</button>
+        <button class="det-cal-close" @click="calOpen = false">✕</button>
+      </div>
+      <div v-if="calLoading" class="ps-cal-loading">載入中…</div>
+      <div v-else class="ps-cal-grid">
+        <div v-for="d in ['日','一','二','三','四','五','六']" :key="d" class="ps-cal-dow">{{ d }}</div>
+        <div v-for="cell in calCells" :key="cell.key"
+          class="ps-cal-day"
+          :class="{ 'has-data': cell.hasData, 'is-today': cell.isToday, 'empty': cell.empty }"
+          @click="cell.hasData ? pickDetDay(cell.ds) : null"
+        >{{ cell.label }}</div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -150,8 +170,28 @@ const detailRange = ref('today')
 const detailRawData = ref(null)
 const detailDailySummary = ref({})
 const customDateLabel = ref('選日期')
-const datePickerRef = ref(null)
 const currentDate = ref(todayStr())
+
+// ── 月曆 state ──────────────────────────────────────────────
+const calOpen = ref(false)
+const calLoading = ref(false)
+const calYear = ref(new Date().getFullYear())
+const calMonth = ref(new Date().getMonth() + 1)
+const calDaysWithData = ref(new Set())
+const calYearMonth = computed(() => `${calYear.value}年${p2(calMonth.value)}月`)
+const calCells = computed(() => {
+  const year = calYear.value, month = calMonth.value
+  const today = todayStr()
+  const firstDay = new Date(year, month - 1, 1).getDay()
+  const daysInMonth = new Date(year, month, 0).getDate()
+  const cells = []
+  for (let i = 0; i < firstDay; i++) cells.push({ key: 'e' + i, empty: true, label: '' })
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = `${year}-${p2(month)}-${p2(d)}`
+    cells.push({ key: ds, ds, empty: false, label: d, hasData: calDaysWithData.value.has(ds), isToday: ds === today })
+  }
+  return cells
+})
 
 const chartLoading = ref(false)
 const chartHtml = ref('')
@@ -323,11 +363,47 @@ function setRange(r) {
   loadDetailChart().then(() => { if (r === 'today') renderDetailStats(detailRawData.value || []) })
 }
 
-function openDatePicker() {
-  const inp = datePickerRef.value
-  if (!inp) return
-  inp.value = currentDate.value
-  try { inp.showPicker() } catch { inp.click() }
+async function openDetCal() {
+  const d = new Date(currentDate.value || todayStr())
+  calYear.value = d.getFullYear()
+  calMonth.value = d.getMonth() + 1
+  calOpen.value = true
+  await loadDetCalMonth()
+}
+
+async function calChangeMonth(delta) {
+  calMonth.value += delta
+  if (calMonth.value < 1) { calMonth.value = 12; calYear.value-- }
+  else if (calMonth.value > 12) { calMonth.value = 1; calYear.value++ }
+  await loadDetCalMonth()
+}
+
+async function loadDetCalMonth() {
+  const table = navStore.currentTable
+  if (!table || !memberId.value) return
+  calLoading.value = true
+  calDaysWithData.value = new Set()
+  try {
+    const year = calYear.value, month = calMonth.value
+    const daysInMonth = new Date(year, month, 0).getDate()
+    const { data, error } = await sb.from(table)
+      .select('date_minute')
+      .eq('member_id', memberId.value)
+      .gte('date_minute', `${year}-${p2(month)}-01T00:00:00`)
+      .lte('date_minute', `${year}-${p2(month)}-${p2(daysInMonth)}T23:59:59`)
+      .limit(50000)
+    if (!error && data) {
+      const days = new Set()
+      data.forEach(r => { if (r.date_minute) days.add(r.date_minute.slice(0, 10)) })
+      calDaysWithData.value = days
+    }
+  } catch (e) { console.warn('detCalLoad error', e) }
+  finally { calLoading.value = false }
+}
+
+function pickDetDay(dateStr) {
+  calOpen.value = false
+  setCustomDate(dateStr)
 }
 
 function setCustomDate(dateStr) {
@@ -475,7 +551,24 @@ watch(() => route.params.id, async (newId) => {
 .det-range-btn:hover{border-color:var(--mint);color:var(--mint-dark);}
 .det-range-btn.active{background:var(--mint-xlight);border-color:var(--mint);color:var(--mint-dark);}
 .det-date-pick-wrap{position:relative;}
-.det-date-input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;top:0;left:0;}
+
+/* ── 日期月曆 Modal ── */
+.det-cal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:500;display:flex;align-items:center;justify-content:center;}
+.det-cal-panel{background:#fff;border-radius:var(--r-xl);box-shadow:0 20px 60px rgba(40,70,55,.18);padding:20px;min-width:300px;max-width:340px;width:90vw;}
+.det-cal-close{margin-left:auto;background:transparent;border:none;font-size:16px;color:var(--text-dim);cursor:pointer;padding:4px 8px;border-radius:var(--r-sm);}
+.det-cal-close:hover{background:var(--bg-alt);color:var(--text);}
+.ps-cal-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.ps-cal-month-label{flex:1;text-align:center;font-size:15px;font-weight:700;color:var(--text);}
+.ps-cal-nav{background:transparent;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:5px 12px;color:var(--text-mid);cursor:pointer;font-size:16px;transition:all .13s;}
+.ps-cal-nav:hover{border-color:var(--mint);color:var(--mint-dark);background:var(--mint-xlight);}
+.ps-cal-loading{text-align:center;padding:24px;font-size:13px;color:var(--text-dim);}
+.ps-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.ps-cal-dow{display:flex;align-items:center;justify-content:center;height:32px;font-size:11px;font-weight:600;color:var(--text-dim);}
+.ps-cal-day{display:flex;align-items:center;justify-content:center;height:36px;border-radius:var(--r-sm);font-size:13px;color:var(--text-dim);opacity:.35;cursor:default;position:relative;}
+.ps-cal-day.has-data{opacity:1;color:var(--mint-dark);background:var(--mint-xlight);border:1px solid var(--mint-light);cursor:pointer;font-weight:600;}
+.ps-cal-day.has-data:hover{background:var(--mint-light);border-color:var(--mint);transform:scale(1.06);}
+.ps-cal-day.is-today::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--orange);}
+.ps-cal-day.empty{opacity:0;pointer-events:none;}
 .det-range-btn.date-pick-btn{display:flex;align-items:center;gap:4px;}
 .det-chart-body{padding:18px 22px 22px;min-height:200px;}
 
