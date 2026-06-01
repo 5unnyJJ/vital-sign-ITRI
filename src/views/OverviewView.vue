@@ -209,6 +209,35 @@ function getAllowedMemberTokenSet(table) {
   const ids = authStore.memberIdsByTable[table] || []
   return new Set(ids.map(memberSearchToken).filter(Boolean))
 }
+
+// 分頁抓全部列（對應原版 fetchPagedRows）
+async function fetchPagedRows(table, applyQuery, pageSize = 1000) {
+  let all = [], page = 0
+  while (true) {
+    let q = sb.from(table).select('member_id').order('member_id', { ascending: true })
+    q = applyQuery ? applyQuery(q) : q
+    const { data, error } = await q.range(page * pageSize, (page + 1) * pageSize - 1)
+    if (error || !data || !data.length) break
+    all = all.concat(data)
+    if (data.length < pageSize) break
+    page++
+  }
+  return all
+}
+
+// 載入機構對照表（orgByTable）— 原版 loadOrganizations()
+async function loadOrganizations() {
+  if (Object.keys(authStore.orgByTable).length > 0) return // 已載入，跳過
+  try {
+    const { data, error } = await sb.from('organizations').select('id,org_code,org_name,table_name').not('table_name', 'is', null)
+    if (!error && data) {
+      const map = {}
+      data.forEach(org => { map[org.table_name] = { id: org.id, org_code: org.org_code, org_name: org.org_name } })
+      authStore.orgByTable = map
+    }
+  } catch (e) { console.warn('[Org] loadOrganizations failed:', e.message) }
+}
+
 async function fetchAllMemberIds(table) {
   const org = authStore.orgByTable[table]
   if (org) {
@@ -219,11 +248,18 @@ async function fetchAllMemberIds(table) {
       return ids
     }
   }
-  // fallback: scan vital signs table
-  const { data: rows } = await sb.from(table).select('member_id').order('member_id', { ascending: true }).limit(5000)
-  const rawIds = uniqueMemberIds(rows || []).filter(id => id && isMemberIdValidForOrg(id, table))
-  authStore.memberIdsByTable[table] = rawIds
-  return rawIds
+  // fallback：分頁掃描 vital signs table + dominant prefix 過濾（防止跨機構 ID 混入）
+  const rows = await fetchPagedRows(table, null, 1000)
+  const rawIds = uniqueMemberIds(rows).filter(id => id && isMemberIdValidForOrg(id, table))
+  const prefixCount = {}
+  rawIds.forEach(id => {
+    const m = String(id).match(/^([A-Za-z]{2,4})/)
+    if (m) prefixCount[m[1].toUpperCase()] = (prefixCount[m[1].toUpperCase()] || 0) + 1
+  })
+  const dominant = Object.entries(prefixCount).sort((a, b) => b[1] - a[1])[0]?.[0]
+  const ids = dominant ? rawIds.filter(id => String(id).toUpperCase().startsWith(dominant)) : rawIds
+  authStore.memberIdsByTable[table] = ids
+  return ids
 }
 
 // ── Computed display ──────────────────────────────────────
@@ -486,7 +522,7 @@ async function scanAndLoadCards() {
 }
 
 // ── Lifecycle ─────────────────────────────────────────────
-onMounted(() => {
+onMounted(async () => {
   // Restore session table if needed
   const savedTable = localStorage.getItem('vd_session_table')
   if (savedTable && authStore.tables.includes(savedTable) && !navStore.currentTable) {
@@ -494,6 +530,8 @@ onMounted(() => {
   } else if (!navStore.currentTable && authStore.tables.length) {
     navStore.currentTable = authStore.tables[0]
   }
+  // 先載入機構對照表再掃描（確保 fetchAllMemberIds 走 users 表而非 fallback）
+  await loadOrganizations()
   if (navStore.currentTable) {
     scanAndLoadCards()
   }
