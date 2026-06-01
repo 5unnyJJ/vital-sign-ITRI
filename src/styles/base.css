@@ -1,0 +1,17 @@
+/* Base reset and body styles - will be populated in Phase 2 */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.view-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 12px;
+  font-family: 'Noto Sans TC', sans-serif;
+  color: #486055;
+}

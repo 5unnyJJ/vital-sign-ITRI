@@ -1,2 +1,4 @@
 .claude/
 FETCH_HEAD
+node_modules/
+dist/
