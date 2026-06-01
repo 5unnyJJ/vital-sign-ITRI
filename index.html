@@ -76,7 +76,7 @@ background-position:center center,center center;
 opacity:1;
 z-index:0;
 }
-#login-screen,#member-overview,#member-detail,#dashboard,#posture-screen,.shared-topbar,.sidebar-drawer,.sidebar-overlay{position:relative;z-index:1;}
+#login-screen,#member-overview,#member-detail,#dashboard,#posture-screen,#hf-screen,#hf-detail,.shared-topbar,.sidebar-drawer,.sidebar-overlay{position:relative;z-index:1;}
 
 /* ══ LOGIN ══ */
 #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;
@@ -451,6 +451,10 @@ background-attachment:fixed;}
 .hb-day-sel.has-day{border-color:var(--mint-mid);color:var(--mint-dark);background:var(--mint-xlight);}
 .trend-chart-wrap{width:100%;overflow:hidden;}
 .trend-empty{text-align:center;padding:32px;color:var(--text-dim);font-size:13px;}
+@keyframes det-spin{to{transform:rotate(360deg);}}
+.det-loading{display:flex;flex-direction:column;align-items:center;gap:10px;padding:40px 32px;}
+.det-spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--mint-mid);border-radius:50%;animation:det-spin .7s linear infinite;}
+.det-loading-text{font-size:13px;color:var(--text-dim);}
 .trend-note{font-size:11px;color:var(--text-dim);margin-top:8px;text-align:right;}
 #table-content{display:flex;flex-direction:column;gap:14px;}
 .date-card{background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(249,252,250,.84));border:1px solid var(--glass-line);border-radius:var(--r-xl);overflow:hidden;box-shadow:0 12px 32px rgba(66,98,81,.08);backdrop-filter:blur(10px);transition:box-shadow .2s,border-color .2s;}
@@ -853,6 +857,46 @@ body.pref-dark #pref-panel{background:#1e2b26;color:var(--text);}
 .compare-fab.show{display:flex;}
 .compare-chart-wrap{display:flex;flex-direction:column;gap:16px;}
 .compare-metric-title{font-size:13px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+
+/* ══ 心衰模組 ══ */
+.hf-main{max-width:900px;margin:0 auto;padding:20px 16px 100px;}
+.hf-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+.hf-title{font-size:20px;font-weight:700;color:var(--mint-dark);}
+.hf-subtitle{font-size:13px;color:var(--text-dim);margin-top:2px;}
+.hf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.hf-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
+.hf-card:hover{box-shadow:var(--shadow);border-color:var(--mint);}
+.hf-card-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.hf-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--mint),var(--mint-mid));color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;}
+.hf-card-name{font-size:15px;font-weight:700;color:var(--text);}
+.hf-card-room{font-size:12px;color:var(--text-dim);}
+.hf-vitals{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-bottom:10px;}
+.hf-vital-item{display:flex;flex-direction:column;gap:1px;}
+.hf-vital-label{font-size:10px;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+.hf-vital-val{font-size:14px;font-weight:700;color:var(--text);}
+.hf-vital-val.no-data{color:var(--text-light);font-weight:400;}
+.hf-io-row{display:flex;gap:12px;padding-top:8px;border-top:1px solid var(--border-light);}
+.hf-io-badge{flex:1;text-align:center;background:var(--bg-alt);border-radius:var(--r-sm);padding:6px 4px;}
+.hf-io-badge-label{font-size:9px;color:var(--text-light);font-weight:600;letter-spacing:.4px;}
+.hf-io-badge-val{font-size:13px;font-weight:700;color:var(--mint-dark);}
+.hf-card-footer{font-size:11px;color:var(--text-light);margin-top:8px;}
+.hf-api-banner{background:var(--orange-light);border:1px solid var(--orange);border-radius:var(--r-md);padding:10px 14px;font-size:12px;color:var(--orange);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+/* HF detail */
+.hf-det-main{max-width:760px;margin:0 auto;padding:20px 16px 100px;}
+.hf-det-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+.hf-det-info{flex:1;}
+.hf-det-name{font-size:18px;font-weight:700;color:var(--text);}
+.hf-det-sub{font-size:12px;color:var(--text-dim);}
+.hf-det-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:14px;}
+.hf-det-section-title{font-size:13px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+.hf-io-table{width:100%;border-collapse:collapse;font-size:13px;}
+.hf-io-table th{text-align:left;padding:6px 8px;color:var(--text-dim);font-size:11px;font-weight:600;border-bottom:2px solid var(--border-light);}
+.hf-io-table td{padding:7px 8px;border-bottom:1px solid var(--border-light);color:var(--text);}
+.hf-io-table tr:last-child td{border-bottom:none;}
+.hf-io-intake{color:var(--green);font-weight:600;}
+.hf-io-output{color:var(--red);font-weight:600;}
+.hf-io-day-group td{background:var(--bg-alt);font-weight:600;font-size:12px;color:var(--text-mid);}
+.hf-io-subtotal{background:var(--mint-xlight) !important;font-size:12px;color:var(--mint-dark) !important;font-weight:700 !important;}
 </style>
 </head>
 <body>
@@ -890,6 +934,9 @@ body.pref-dark #pref-panel{background:#1e2b26;color:var(--text);}
       </button>
       <button class="sidebar-nav-btn" id="snb-posture" onclick="goScreen('posture')">
         <span class="snb-icon">🧘</span>動作姿態統計
+      </button>
+      <button class="sidebar-nav-btn" id="snb-hf" onclick="goScreen('hf');closeSidebar()">
+        <span class="snb-icon">🫀</span>心衰生理資料
       </button>
     </div>
     <div class="sidebar-divider"></div>
@@ -1072,9 +1119,9 @@ body.pref-dark #pref-panel{background:#1e2b26;color:var(--text);}
 <!-- ══ BOTTOM NAV（手機專用，≤600px 顯示）══ -->
 <nav id="bottom-nav" class="bottom-nav">
   <button class="bnav-btn" id="bnav-overview" onclick="goScreen('overview')"><span class="bnav-icon">👥</span><span>總覽</span></button>
-  <button class="bnav-btn" id="bnav-day" onclick="goScreen('dashboard','day')"><span class="bnav-icon">📅</span><span>日報</span></button>
-  <button class="bnav-btn" id="bnav-month" onclick="goScreen('dashboard','month')"><span class="bnav-icon">📊</span><span>月報</span></button>
+  <button class="bnav-btn" id="bnav-data" onclick="goScreen('dashboard')"><span class="bnav-icon">📊</span><span>資料</span></button>
   <button class="bnav-btn" id="bnav-posture" onclick="goScreen('posture')"><span class="bnav-icon">🏃</span><span>姿態</span></button>
+  <button class="bnav-btn" id="bnav-settings" onclick="openSidebar()"><span class="bnav-icon">⚙️</span><span>設定</span></button>
 </nav>
 
 <!-- ══ MEMBER OVERVIEW SCREEN ══ -->
@@ -1096,8 +1143,11 @@ body.pref-dark #pref-panel{background:#1e2b26;color:var(--text);}
           <button class="ov-view-btn active" id="ov-mode-today" onclick="setOverviewMode('today')">今日會員</button>
           <button class="ov-view-btn" id="ov-mode-all" onclick="setOverviewMode('all')">全部會員</button>
         </div>
-        <button class="btn-scan" id="btn-compare-mode" onclick="toggleCompareMode()" style="margin-right:6px;" title="選擇多位成員進行比較">
-          ⚖️ 比較模式
+        <button class="btn-scan" onclick="goScreen('hf')" style="margin-right:6px;" title="心衰生理資料模組">
+          🫀 心衰資料
+        </button>
+        <button class="btn-scan" id="btn-compare-mode" onclick="toggleCompareMode()" style="margin-right:6px;" title="選擇多位成員進行同時監測">
+          ⚖️ 多人監測模式
         </button>
         <button class="btn-scan" id="btn-scan-overview" onclick="if(currentTable&&(currentDate||todayStr()))localStorage.removeItem(getScanCacheKey(currentTable,currentDate||todayStr()));scanAndLoadCards()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
@@ -1291,7 +1341,7 @@ body.pref-dark #pref-panel{background:#1e2b26;color:var(--text);}
     <div class="ps-toolbar">
       <div class="ps-toolbar-group">
         <span class="ps-toolbar-label">👤 會員</span>
-        <select class="ps-select" id="ps-member-select">
+        <select class="ps-select" id="ps-member-select" onchange="updatePsDetailBtn()">
           <option value="ALL">全部</option>
         </select>
       </div>
@@ -1310,9 +1360,63 @@ body.pref-dark #pref-panel{background:#1e2b26;color:var(--text);}
       <button type="button" class="ps-btn" onclick="downloadPostureCSV()" style="align-self:flex-end;background:#fff;border:1.5px solid var(--border);">
         📥 匯出數據
       </button>
+      <button type="button" class="ps-btn" id="ps-to-detail-btn" onclick="psGoMemberDetail()" style="display:none;align-self:flex-end;background:#fff;border:1.5px solid var(--border);">
+        👤 查看詳情
+      </button>
     </div>
     <div id="ps-content">
       <div class="ps-empty">請選擇條件後載入資料</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HF OVERVIEW SCREEN ══ -->
+<div id="hf-screen" style="display:none">
+  <div class="hf-main screen-shell">
+    <div class="hf-header">
+      <div>
+        <div class="hf-title">🫀 心衰生理資料</div>
+        <div class="hf-subtitle" id="hf-subtitle">測試用資料（API 尚未串接）</div>
+      </div>
+      <button class="btn-back" onclick="goScreen('overview')" aria-label="返回總覽">← 返回總覽</button>
+    </div>
+    <div class="hf-api-banner" id="hf-api-banner">
+      ⚠️ 目前顯示測試用 Mock 資料，真實 API 串接後將自動切換。
+    </div>
+    <div class="hf-grid" id="hf-grid">
+      <div class="trend-empty">載入中…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HF DETAIL SCREEN ══ -->
+<div id="hf-detail" style="display:none">
+  <div class="det-main screen-shell">
+    <!-- Header -->
+    <div class="det-header">
+      <button class="btn-back" onclick="goScreen('hf')" aria-label="返回心衰總覽">← 返回</button>
+      <div class="det-member-info">
+        <div class="det-member-id" id="hf-det-name">—</div>
+        <div class="det-member-sub" id="hf-det-sub">—</div>
+      </div>
+    </div>
+    <!-- 生理趨勢圖（血壓 + 額溫合併） -->
+    <div class="det-chart-card">
+      <div class="det-chart-ctrl">
+        <div class="det-metric-tabs">
+          <button class="det-metric-btn active" id="hfm-bp" onclick="toggleHfMetric('bp')">🩺 血壓</button>
+          <button class="det-metric-btn active" id="hfm-temp" onclick="toggleHfMetric('temp')">🌡 額溫</button>
+        </div>
+        <span style="font-size:11px;color:var(--text-dim);margin-left:auto">近 7 天</span>
+      </div>
+      <div class="det-chart-body" id="hf-chart-body">
+        <div class="trend-empty">載入中…</div>
+      </div>
+    </div>
+    <!-- 攝入排出表 -->
+    <div class="det-stats-card">
+      <div class="det-stats-head">💧 攝入排出記錄（近 5 天）</div>
+      <div id="hf-io-table-wrap"><div class="trend-empty">載入中…</div></div>
     </div>
   </div>
 </div>
@@ -1332,6 +1436,74 @@ const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const TABLE_LABEL={'DC_data_base':'都蘭診所','CY_data_base':'嘉義醫院','YK_data_base':'員郭醫院','T1_data_base':'紡綜所'};
 const TABLE_RPC={'DC_data_base':'get_dc_overview','CY_data_base':'get_cy_overview','YK_data_base':'get_yk_overview','T1_data_base':'get_t1_overview'};
 const ACTION_COLORS={0:'#94a3b8',1:'#3b82f6',2:'#3b82f6',3:'#22c55e',4:'#22c55e',5:'#f97316',6:'#a855f7',7:'#ef4444'};
+
+/* ── HF Mock Data (替換為真實 API 後移除) ── */
+const HF_MOCK_PATIENTS=[
+  {id:'HF001',alias:'病患 A',age:72,room:'301-A',ward:'心臟科'},
+  {id:'HF002',alias:'病患 B',age:68,room:'302-B',ward:'心臟科'},
+  {id:'HF003',alias:'病患 C',age:75,room:'303-C',ward:'心臟科'},
+];
+const _d=(offset,hh,mm)=>{const d=new Date();d.setDate(d.getDate()-offset);return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${hh}:${mm}`;};
+const HF_MOCK_VITALS={
+  'HF001':[
+    {ts:_d(0,'08','10'),sbp:138,dbp:88,temp:36.9},{ts:_d(0,'14','00'),sbp:142,dbp:91,temp:37.1},{ts:_d(0,'20','30'),sbp:135,dbp:85,temp:36.8},
+    {ts:_d(1,'08','05'),sbp:140,dbp:90,temp:36.7},{ts:_d(1,'14','10'),sbp:145,dbp:93,temp:37.0},{ts:_d(1,'20','00'),sbp:138,dbp:87,temp:36.9},
+    {ts:_d(2,'08','15'),sbp:136,dbp:86,temp:36.8},{ts:_d(2,'14','20'),sbp:141,dbp:89,temp:37.2},
+    {ts:_d(3,'09','00'),sbp:143,dbp:92,temp:37.0},{ts:_d(3,'15','00'),sbp:139,dbp:88,temp:36.9},
+    {ts:_d(4,'08','30'),sbp:137,dbp:85,temp:36.7},{ts:_d(4,'14','30'),sbp:140,dbp:89,temp:37.1},
+    {ts:_d(5,'08','00'),sbp:144,dbp:91,temp:37.0},{ts:_d(5,'14','00'),sbp:141,dbp:90,temp:36.8},
+    {ts:_d(6,'08','20'),sbp:139,dbp:87,temp:36.9},{ts:_d(6,'14','10'),sbp:142,dbp:90,temp:37.1},
+  ],
+  'HF002':[
+    {ts:_d(0,'07','50'),sbp:125,dbp:78,temp:36.5},{ts:_d(0,'13','30'),sbp:128,dbp:80,temp:36.7},{ts:_d(0,'19','45'),sbp:122,dbp:76,temp:36.6},
+    {ts:_d(1,'08','10'),sbp:130,dbp:82,temp:36.8},{ts:_d(1,'14','00'),sbp:127,dbp:79,temp:36.6},
+    {ts:_d(2,'08','00'),sbp:124,dbp:77,temp:36.5},{ts:_d(2,'14','15'),sbp:129,dbp:81,temp:36.9},
+    {ts:_d(3,'09','10'),sbp:126,dbp:78,temp:36.7},{ts:_d(4,'08','00'),sbp:131,dbp:83,temp:36.8},
+    {ts:_d(5,'09','00'),sbp:123,dbp:76,temp:36.5},{ts:_d(6,'08','30'),sbp:128,dbp:80,temp:36.6},
+  ],
+  'HF003':[
+    {ts:_d(0,'08','30'),sbp:152,dbp:95,temp:37.3},{ts:_d(0,'14','00'),sbp:158,dbp:99,temp:37.5},{ts:_d(0,'21','00'),sbp:150,dbp:94,temp:37.2},
+    {ts:_d(1,'08','15'),sbp:155,dbp:97,temp:37.4},{ts:_d(1,'13','50'),sbp:160,dbp:100,temp:37.6},
+    {ts:_d(2,'08','00'),sbp:153,dbp:96,temp:37.3},{ts:_d(2,'14','30'),sbp:156,dbp:98,temp:37.4},
+    {ts:_d(3,'08','45'),sbp:154,dbp:97,temp:37.2},{ts:_d(4,'09','00'),sbp:157,dbp:99,temp:37.5},
+    {ts:_d(5,'08','00'),sbp:151,dbp:95,temp:37.3},{ts:_d(6,'08','30'),sbp:155,dbp:98,temp:37.4},
+  ],
+};
+const HF_MOCK_IO={
+  'HF001':[
+    {ts:_d(0,'07','30'),type:'intake',amount:200,note:'水'},{ts:_d(0,'07','45'),type:'intake',amount:150,note:'牛奶'},
+    {ts:_d(0,'10','00'),type:'output',amount:300,note:'尿'},{ts:_d(0,'12','00'),type:'intake',amount:250,note:'湯'},
+    {ts:_d(0,'12','30'),type:'intake',amount:100,note:'飲料'},{ts:_d(0,'15','00'),type:'output',amount:250,note:'尿'},
+    {ts:_d(0,'18','00'),type:'intake',amount:200,note:'水'},{ts:_d(0,'18','15'),type:'intake',amount:180,note:'稀飯'},
+    {ts:_d(1,'07','30'),type:'intake',amount:180,note:'水'},{ts:_d(1,'08','00'),type:'intake',amount:200,note:'牛奶'},
+    {ts:_d(1,'10','30'),type:'output',amount:350,note:'尿'},{ts:_d(1,'12','00'),type:'intake',amount:300,note:'湯'},
+    {ts:_d(1,'15','30'),type:'output',amount:280,note:'尿'},{ts:_d(1,'18','00'),type:'intake',amount:150,note:'水'},
+    {ts:_d(2,'07','45'),type:'intake',amount:200,note:'水'},{ts:_d(2,'10','00'),type:'output',amount:320,note:'尿'},
+    {ts:_d(2,'12','00'),type:'intake',amount:250,note:'湯'},{ts:_d(2,'15','00'),type:'output',amount:260,note:'尿'},
+    {ts:_d(3,'08','00'),type:'intake',amount:180,note:'水'},{ts:_d(3,'10','30'),type:'output',amount:300,note:'尿'},
+    {ts:_d(4,'07','30'),type:'intake',amount:200,note:'水'},{ts:_d(4,'09','30'),type:'output',amount:280,note:'尿'},
+  ],
+  'HF002':[
+    {ts:_d(0,'07','00'),type:'intake',amount:250,note:'水'},{ts:_d(0,'09','00'),type:'output',amount:200,note:'尿'},
+    {ts:_d(0,'12','00'),type:'intake',amount:300,note:'湯'},{ts:_d(0,'14','00'),type:'output',amount:250,note:'尿'},
+    {ts:_d(0,'18','00'),type:'intake',amount:200,note:'水'},
+    {ts:_d(1,'07','30'),type:'intake',amount:200,note:'水'},{ts:_d(1,'10','00'),type:'output',amount:220,note:'尿'},
+    {ts:_d(1,'12','00'),type:'intake',amount:280,note:'湯'},{ts:_d(1,'15','00'),type:'output',amount:230,note:'尿'},
+    {ts:_d(2,'08','00'),type:'intake',amount:220,note:'水'},{ts:_d(2,'10','30'),type:'output',amount:240,note:'尿'},
+    {ts:_d(3,'08','00'),type:'intake',amount:200,note:'水'},{ts:_d(3,'10','00'),type:'output',amount:210,note:'尿'},
+    {ts:_d(4,'07','45'),type:'intake',amount:230,note:'水'},{ts:_d(4,'09','30'),type:'output',amount:200,note:'尿'},
+  ],
+  'HF003':[
+    {ts:_d(0,'06','00'),type:'intake',amount:100,note:'水'},{ts:_d(0,'08','30'),type:'output',amount:400,note:'尿'},
+    {ts:_d(0,'12','00'),type:'intake',amount:350,note:'湯'},{ts:_d(0,'13','00'),type:'output',amount:350,note:'尿'},
+    {ts:_d(0,'18','00'),type:'intake',amount:200,note:'水'},{ts:_d(0,'20','00'),type:'output',amount:180,note:'尿'},
+    {ts:_d(1,'06','30'),type:'intake',amount:150,note:'水'},{ts:_d(1,'09','00'),type:'output',amount:420,note:'尿'},
+    {ts:_d(1,'12','00'),type:'intake',amount:300,note:'湯'},{ts:_d(1,'14','00'),type:'output',amount:360,note:'尿'},
+    {ts:_d(2,'07','00'),type:'intake',amount:200,note:'水'},{ts:_d(2,'09','30'),type:'output',amount:390,note:'尿'},
+    {ts:_d(3,'07','00'),type:'intake',amount:180,note:'水'},{ts:_d(3,'09','00'),type:'output',amount:380,note:'尿'},
+    {ts:_d(4,'07','30'),type:'intake',amount:160,note:'水'},{ts:_d(4,'09','30'),type:'output',amount:350,note:'尿'},
+  ],
+};
 const ACTION_LABEL_COLOR={'靜止':'#94a3b8','走路':'#3b82f6','慢跑':'#22c55e','快跑':'#f97316','躺姿':'#a855f7','姿勢異常':'#ef4444'};
 
 const AGG_COLS=[
@@ -1375,6 +1547,12 @@ let orgByTable={}; // { table_name: { id, org_code, org_name } } — loaded from
 let memberIdsByTable={}; // { table_name: string[] } — sourced from users table when available
 let overviewMode='today';
 let postureScreenDate=null;
+// HF module state
+let currentHfMemberId=null;
+let hfMembersCache=[];
+let hfMetrics=new Set(['bp','temp']);
+let _hfVitalsCache=null;
+const HF_API_CONNECTED=false;
 let postureScreenMemberId='ALL';
 let postureCheckedActions=new Set([0,1,2,3,4,5,6,7]);
 let postureScreenMinuteRows=[];
@@ -1952,7 +2130,7 @@ async function doLogout(){
 /* ════════════════════════════════════════════════════════════
    SCREEN CONSTANTS
    ════════════════════════════════════════════════════════════ */
-const SCREEN_IDS=['member-overview','member-detail','dashboard','posture-screen'];
+const SCREEN_IDS=['member-overview','member-detail','dashboard','posture-screen','hf-screen','hf-detail'];
 function hideAllScreens(){SCREEN_IDS.forEach(id=>{const el=Els[id]||document.getElementById(id);if(el)el.style.display='none';});}
 
 /* ════════════════════════════════════════════════════════════
@@ -1974,11 +2152,11 @@ function cycleFontSize(){fsIdx=(fsIdx+1)%FS_LEVELS.length;applyFontSize();closeS
 function openSidebar(){Els['sidebar-drawer'].classList.add('open');Els['sidebar-overlay'].classList.add('open');}
 function closeSidebar(){Els['sidebar-drawer'].classList.remove('open');Els['sidebar-overlay'].classList.remove('open');}
 function updateSidebarActive(){
-  const map={'snb-overview':currentScreen==='overview','snb-day':currentScreen==='dashboard'&&currentView==='day','snb-month':currentScreen==='dashboard'&&currentView==='month','snb-posture':currentScreen==='posture'};
+  const map={'snb-overview':currentScreen==='overview'||currentScreen==='detail','snb-day':currentScreen==='dashboard'&&currentView==='day','snb-month':currentScreen==='dashboard'&&currentView==='month','snb-posture':currentScreen==='posture','snb-hf':currentScreen==='hf'||currentScreen==='hf-detail'};
   Object.entries(map).forEach(([id,active])=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',active);});
 }
 function updateBottomNav(){
-  const map={'bnav-overview':currentScreen==='overview','bnav-day':currentScreen==='dashboard'&&currentView==='day','bnav-month':currentScreen==='dashboard'&&currentView==='month','bnav-posture':currentScreen==='posture'};
+  const map={'bnav-overview':currentScreen==='overview'||currentScreen==='detail'||currentScreen==='hf'||currentScreen==='hf-detail','bnav-data':currentScreen==='dashboard','bnav-posture':currentScreen==='posture'};
   Object.entries(map).forEach(([id,active])=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',active);});
 }
 let _progressTimer=null;
@@ -1993,7 +2171,7 @@ function showScreen(name){
   // 離開 overview 時儲存捲動位置
   if(currentScreen==='overview')lastOverviewScrollY=window.scrollY;
   hideAllScreens();
-  const idMap={overview:'member-overview',detail:'member-detail',dashboard:'dashboard',posture:'posture-screen'};
+  const idMap={overview:'member-overview',detail:'member-detail',dashboard:'dashboard',posture:'posture-screen',hf:'hf-screen','hf-detail':'hf-detail'};
   const targetId=idMap[name]||'member-overview';
   (Els[targetId]||document.getElementById(targetId)).style.display='block';
   currentScreen=name;
@@ -2022,6 +2200,12 @@ function goScreen(target,view){
   } else if(target==='posture'){
     showScreen('posture');
     initPostureScreen();
+  } else if(target==='hf'){
+    showScreen('hf');
+    initHfScreen();
+  } else if(target==='hf-detail'){
+    showScreen('hf-detail');
+    loadHfDetail(currentHfMemberId);
   }
   closeSidebar();
 }
@@ -2564,7 +2748,7 @@ async function openMemberDetail(memberId){
 }
 async function loadDetailChart(){
   const body=document.getElementById('det-chart-body');
-  body.innerHTML='<div class="trend-empty">載入中…</div>';
+  body.innerHTML='<div class="det-loading"><div class="det-spinner"></div><div class="det-loading-text">📡 載入資料中…</div></div>';
   const today=currentDate||todayStr();
   const buildSeries=(source,mode)=>[
     ...(detailMetrics.has('hb')?[{label:mode==='daily'?'心跳 avg':'心跳 bpm',color:'#7aaa96',values:source.map(r=>mode==='daily'?r?.avgHb??null:r.heartbeat)}]:[]),
@@ -2594,17 +2778,11 @@ async function loadDetailChart(){
     const memberMinutes=filterWarmupMinutes(aggregateToMinutes(detailRawData));
     if(!memberMinutes.length){body.innerHTML='<div class="trend-empty">今日尚無資料</div>';return;}
     let minuteRows=memberMinutes;
-    // 只有當日視圖快取已存在時才對齊共同時間軸（不主動觸發 60K row 全表查詢）
-    const hasDayCache=dayViewRawRowsCache.length&&dayViewRawRowsCacheKey===dayViewCacheKey();
-    const hasSyncCache=detailSyncedDayRowsCache.length&&detailSyncedDayRowsCacheKey===detailDayAxisKey();
-    const hasCachedAxis=hasDayCache||hasSyncCache||!!groupedCache;
-    if(hasCachedAxis){
-      const dayAxisRows=await getDetailDayAxisMinuteRows();
-      if(dayAxisRows.length){
-        const memberByTime={};
-        memberMinutes.forEach(r=>{memberByTime[r.time.slice(11,16)]=r;});
-        minuteRows=dayAxisRows.map(r=>{const t=r.time.slice(11,16);return memberByTime[t]||{time:r.time,heartbeat:null,temp:null,sbp:null,dbp:null,breath:null,pulse:null,action:null};});
-      }
+    const dayAxisRows=await getDetailDayAxisMinuteRows();
+    if(dayAxisRows.length){
+      const memberByTime={};
+      memberMinutes.forEach(r=>{memberByTime[r.time.slice(11,16)]=r;});
+      minuteRows=dayAxisRows.map(r=>{const t=r.time.slice(11,16);return memberByTime[t]||{time:r.time,heartbeat:null,temp:null,sbp:null,dbp:null,breath:null,pulse:null,action:null};});
     }
     renderChart(buildSeries(minuteRows,'raw'),minuteRows.map(r=>r.time.slice(11,16)),minuteRows.map(r=>r.action));
     return;
@@ -3001,17 +3179,31 @@ function subscribeRealtime(table){
 }
 function setRtBadge(active,label){const badge=document.getElementById('rt-badge'),dot=document.getElementById('rt-dot'),lbl=document.getElementById('rt-label');badge.classList.toggle('active',active);dot.classList.toggle('pulse',active);lbl.textContent=label;}
 function handleRealtimeInsert(payload){
-  if(currentScreen!=='dashboard'||currentView!=='day')return;
-  const row=payload.new;if(!row||!row.date_minute||row.date_minute.slice(0,10)!==currentDate)return;
+  const row=payload.new;
+  if(!row||!row.date_minute||row.date_minute.slice(0,10)!==currentDate)return;
   if(!filterRowsByAllowedMemberIds(currentTable,[row]).length)return;
-  if(currentMemberId!=='ALL'&&row.member_id!==currentMemberId)return;
-  rawRowsCache.push(row);if(rawRowsCache.length>2000)rawRowsCache.shift();
-  dayViewRawRowsCache.push(row);if(dayViewRawRowsCache.length>2000)dayViewRawRowsCache.shift();
-  updateMemberList();setLastUpload(row.date_minute);
-  const minuteRows=filterWarmupMinutes(aggregateToMinutes(rawRowsCache));
-  groupedCache=groupByHour(minuteRows);dayStats=computeDayStats(minuteRows);
-  renderPage();renderTrendPanel();
-  setTimeout(()=>{const tb=document.querySelector('.data-table tbody');if(tb&&tb.firstElementChild)tb.firstElementChild.classList.add('row-new');},50);
+  if(currentScreen==='dashboard'&&currentView==='day'){
+    if(currentMemberId!=='ALL'&&row.member_id!==currentMemberId)return;
+    rawRowsCache.push(row);if(rawRowsCache.length>2000)rawRowsCache.shift();
+    dayViewRawRowsCache.push(row);if(dayViewRawRowsCache.length>2000)dayViewRawRowsCache.shift();
+    updateMemberList();setLastUpload(row.date_minute);
+    const minuteRows=filterWarmupMinutes(aggregateToMinutes(rawRowsCache));
+    groupedCache=groupByHour(minuteRows);dayStats=computeDayStats(minuteRows);
+    renderPage();renderTrendPanel();
+    setTimeout(()=>{const tb=document.querySelector('.data-table tbody');if(tb&&tb.firstElementChild)tb.firstElementChild.classList.add('row-new');},50);
+    return;
+  }
+  if(currentScreen==='detail'&&detailRange==='today'&&row.member_id===detailMemberId){
+    if(detailRawData){
+      detailRawData.push(row);
+      detailRawData.sort((a,b)=>a.date_minute.localeCompare(b.date_minute));
+    }
+    if(detailSyncedDayRowsCache.length&&detailSyncedDayRowsCacheKey===detailDayAxisKey()){
+      detailSyncedDayRowsCache.push(row);
+    }
+    loadDetailChart();
+    renderDetailStats(detailRawData||[]);
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -3174,12 +3366,17 @@ async function getDetailMemberRawRows(){
     return dayViewRawRowsCache.filter(r=>r.member_id===detailMemberId).sort((a,b)=>a.date_minute.localeCompare(b.date_minute));
   }
   const start=currentDate+'T00:00:00',end=currentDate+'T23:59:59.999';
-  const {data}=await sb.from(currentTable)
-    .select('date_minute,heartbeat,temp,breath,sbp,dbp,pulse,step,action,member_id')
-    .gte('date_minute',start).lte('date_minute',end)
-    .eq('member_id',detailMemberId)
-    .order('date_minute',{ascending:true}).limit(5000);
-  return data||[];
+  let all=[],pg=0;const ps=1000;
+  while(true){
+    const{data,error}=await sb.from(currentTable)
+      .select('date_minute,heartbeat,temp,breath,sbp,dbp,pulse,step,action,member_id')
+      .gte('date_minute',start).lte('date_minute',end)
+      .eq('member_id',detailMemberId)
+      .order('date_minute',{ascending:true}).range(pg*ps,(pg+1)*ps-1);
+    if(error||!data||!data.length)break;
+    all=all.concat(data);pg++;
+  }
+  return all;
 }
 function detailDayAxisKey(){return currentTable&&currentDate?`${currentTable}__${currentDate}`:'';}
 async function getDetailDayAxisMinuteRows(){
@@ -3197,13 +3394,17 @@ async function getDetailDayAxisMinuteRows(){
   if(!cacheKey)return[];
   if(detailDayAxisCacheKey===cacheKey&&detailDayAxisMinuteRows.length)return detailDayAxisMinuteRows;
   const start=currentDate+'T00:00:00',end=currentDate+'T23:59:59.999';
-  const{data}=await sb.from(currentTable)
-    .select('date_minute,heartbeat,temp,breath,sbp,dbp,pulse,step,action,member_id')
-    .gte('date_minute',start).lte('date_minute',end)
-    .order('date_minute',{ascending:true}).limit(60000);
-  // 過濾跨機構資料：此查詢為全表無 member_id 限制，需在聚合前過濾
-  const safeData=filterRowsByAllowedMemberIds(currentTable,data||[]);
-  detailDayAxisMinuteRows=filterWarmupMinutes(aggregateToMinutes(safeData));
+  let allAxis=[],pgA=0;const psA=1000;
+  while(true){
+    const{data,error}=await sb.from(currentTable)
+      .select('date_minute,heartbeat,temp,breath,sbp,dbp,pulse,step,action,member_id')
+      .gte('date_minute',start).lte('date_minute',end)
+      .order('date_minute',{ascending:true}).range(pgA*psA,(pgA+1)*psA-1);
+    if(error||!data||!data.length)break;
+    // 過濾跨機構資料：此查詢為全表無 member_id 限制，需在聚合前過濾
+    allAxis=allAxis.concat(filterRowsByAllowedMemberIds(currentTable,data));pgA++;
+  }
+  detailDayAxisMinuteRows=filterWarmupMinutes(aggregateToMinutes(allAxis));
   detailDayAxisCacheKey=cacheKey;
   return detailDayAxisMinuteRows;
 }
@@ -3961,6 +4162,16 @@ function downloadPostureCSV(){
   URL.revokeObjectURL(url);
 }
 
+function updatePsDetailBtn(){
+  const sel=document.getElementById('ps-member-select');
+  const btn=document.getElementById('ps-to-detail-btn');
+  if(btn)btn.style.display=(sel&&sel.value&&sel.value!=='ALL')?'':'none';
+}
+function psGoMemberDetail(){
+  const sel=document.getElementById('ps-member-select');
+  if(sel&&sel.value&&sel.value!=='ALL')openMemberDetail(sel.value);
+}
+
 /* ════════════════════════════════════════════════════════════
    APP MODAL & TOAST
    ════════════════════════════════════════════════════════════ */
@@ -4107,6 +4318,143 @@ async function openCompareModal(){
     const chartBody=modal.querySelector('#compare-charts-body');
     if(chartBody)chartBody.innerHTML=`<p style="color:var(--red)">載入失敗：${escHtml(e.message)}</p>`;
   }
+}
+
+/* ════════════════════════════════════════════════════════════
+   HF MODULE — 心衰生理資料
+   ════════════════════════════════════════════════════════════ */
+
+async function fetchHfPatientData(id){
+  // API 佔位：HF_API_CONNECTED=true 後替換為真實 fetch
+  if(!HF_API_CONNECTED){
+    return {vitals:HF_MOCK_VITALS[id]||[],io:HF_MOCK_IO[id]||[]};
+  }
+  // TODO: 替換為真實 API endpoint
+  // const res=await fetch(`/api/hf/patient/${id}/data`);
+  // return res.json();
+  return {vitals:[],io:[]};
+}
+
+function hfTodayIoSummary(ioRows){
+  const today=todayStr();
+  let intake=0,output=0;
+  (ioRows||[]).forEach(r=>{if(r.ts.slice(0,10)===today){if(r.type==='intake')intake+=r.amount;else output+=r.amount;}});
+  return{intake,output};
+}
+
+function initHfScreen(){
+  hfMembersCache=HF_API_CONNECTED?[]:HF_MOCK_PATIENTS;
+  const banner=document.getElementById('hf-api-banner');
+  if(banner)banner.style.display=HF_API_CONNECTED?'none':'flex';
+  renderHfGrid(hfMembersCache);
+  hideProgress();
+}
+
+function renderHfGrid(patients){
+  const grid=document.getElementById('hf-grid');
+  if(!grid)return;
+  if(!patients||!patients.length){grid.innerHTML='<div class="trend-empty">無資料</div>';return;}
+  grid.innerHTML=patients.map(p=>{
+    const vitalRows=HF_MOCK_VITALS[p.id]||[];
+    const last=vitalRows.length?vitalRows[vitalRows.length-1]:null;
+    const ioRows=HF_MOCK_IO[p.id]||[];
+    const {intake,output}=hfTodayIoSummary(ioRows);
+    const lastTime=last?last.ts.slice(11,16):'—';
+    return`<div class="hf-card" onclick="goHfDetail('${p.id}')">
+      <div class="hf-card-top">
+        <div class="hf-avatar">${p.alias[0]}</div>
+        <div><div class="hf-card-name">${escHtml(p.alias)}</div><div class="hf-card-room">${escHtml(p.room)} · ${escHtml(p.ward)}</div></div>
+      </div>
+      <div class="hf-vitals">
+        <div class="hf-vital-item"><div class="hf-vital-label">血壓</div><div class="hf-vital-val${last?'':' no-data'}">${last?`${last.sbp}/${last.dbp} mmHg`:'—'}</div></div>
+        <div class="hf-vital-item"><div class="hf-vital-label">額溫</div><div class="hf-vital-val${last?'':' no-data'}">${last?`${last.temp} °C`:'—'}</div></div>
+      </div>
+      <div class="hf-io-row">
+        <div class="hf-io-badge"><div class="hf-io-badge-label">今日攝入</div><div class="hf-io-badge-val">${intake?intake+' ml':'—'}</div></div>
+        <div class="hf-io-badge"><div class="hf-io-badge-label">今日排出</div><div class="hf-io-badge-val">${output?output+' ml':'—'}</div></div>
+      </div>
+      <div class="hf-card-footer">最後量測 ${lastTime}</div>
+    </div>`;
+  }).join('');
+}
+
+function goHfDetail(id){
+  currentHfMemberId=id;
+  goScreen('hf-detail');
+}
+
+async function loadHfDetail(id){
+  if(!id)return;
+  const patient=(hfMembersCache.length?hfMembersCache:HF_MOCK_PATIENTS).find(p=>p.id===id);
+  if(patient){
+    document.getElementById('hf-det-name').textContent=patient.alias;
+    document.getElementById('hf-det-sub').textContent=`${patient.room} · ${patient.ward} · ${patient.age}歲`;
+  }
+  const {vitals,io}=await fetchHfPatientData(id);
+  renderHfCharts(vitals);
+  renderHfIoTable(io);
+  hideProgress();
+}
+
+function toggleHfMetric(m){
+  if(hfMetrics.has(m)){
+    if(hfMetrics.size===1)return;
+    hfMetrics.delete(m);
+  }else{
+    hfMetrics.add(m);
+  }
+  ['bp','temp'].forEach(x=>{const el=document.getElementById('hfm-'+x);if(el)el.classList.toggle('active',hfMetrics.has(x));});
+  if(_hfVitalsCache)renderHfCharts(_hfVitalsCache);
+}
+
+function renderHfCharts(vitals){
+  _hfVitalsCache=vitals;
+  const body=document.getElementById('hf-chart-body');
+  if(!body)return;
+  ['bp','temp'].forEach(x=>{const el=document.getElementById('hfm-'+x);if(el)el.classList.toggle('active',hfMetrics.has(x));});
+  if(!vitals||!vitals.length){body.innerHTML='<div class="trend-empty">無資料</div>';return;}
+  const sorted=[...vitals].sort((a,b)=>a.ts.localeCompare(b.ts));
+  const labels=sorted.map(r=>r.ts.slice(5,10)+' '+r.ts.slice(11,16));
+  const series=[
+    ...(hfMetrics.has('bp')?[
+      {label:'收縮壓 mmHg',color:'#b85450',values:sorted.map(r=>r.sbp)},
+      {label:'舒張壓 mmHg',color:'#bf7a45',values:sorted.map(r=>r.dbp)},
+    ]:[]),
+    ...(hfMetrics.has('temp')?[
+      {label:'額溫 °C',color:'#e07b39',values:sorted.map(r=>r.temp)},
+    ]:[]),
+  ];
+  if(!series.length){body.innerHTML='<div class="trend-empty">請至少勾選一項指標</div>';return;}
+  body.innerHTML=trendSVG(series,labels,{sharedCursor:true,minRange:hfMetrics.has('bp')&&!hfMetrics.has('temp')?30:0},280);
+  initCursorDragNodes();
+  initAvgDragNodes();
+}
+
+function renderHfIoTable(ioRows){
+  const wrap=document.getElementById('hf-io-table-wrap');
+  if(!wrap)return;
+  if(!ioRows||!ioRows.length){wrap.innerHTML='<div class="trend-empty">無攝入排出記錄</div>';return;}
+  const sorted=[...ioRows].sort((a,b)=>b.ts.localeCompare(a.ts));
+  // 按日分組
+  const byDay={};
+  sorted.forEach(r=>{const d=r.ts.slice(0,10);if(!byDay[d])byDay[d]=[];byDay[d].push(r);});
+  const days=Object.keys(byDay).sort((a,b)=>b.localeCompare(a)).slice(0,5);
+  let rows='<table class="hf-io-table"><thead><tr><th>時間</th><th>類型</th><th>量（ml）</th><th>備註</th></tr></thead><tbody>';
+  days.forEach(day=>{
+    const dayRecs=byDay[day];
+    const totalIn=dayRecs.filter(r=>r.type==='intake').reduce((s,r)=>s+r.amount,0);
+    const totalOut=dayRecs.filter(r=>r.type==='output').reduce((s,r)=>s+r.amount,0);
+    const mm=day.slice(5,7),dd=day.slice(8,10);
+    rows+=`<tr class="hf-io-day-group"><td colspan="4">${mm}/${dd}</td></tr>`;
+    dayRecs.forEach(r=>{
+      const typeLabel=r.type==='intake'?'攝入':'排出';
+      const cls=r.type==='intake'?'hf-io-intake':'hf-io-output';
+      rows+=`<tr><td>${r.ts.slice(11,16)}</td><td class="${cls}">${typeLabel}</td><td>${r.amount}</td><td>${escHtml(r.note||'')}</td></tr>`;
+    });
+    rows+=`<tr class="hf-io-subtotal"><td colspan="2">小計</td><td>攝入 ${totalIn} ml / 排出 ${totalOut} ml</td><td></td></tr>`;
+  });
+  rows+='</tbody></table>';
+  wrap.innerHTML=rows;
 }
 
 cacheEls();
