@@ -242,6 +242,7 @@ function isMemberIdValidForOrg(memberId, table) {
 function getAllowedMemberTokenSet(table) {
   if (!(table in authStore.memberIdsByTable)) return null
   const ids = authStore.memberIdsByTable[table] || []
+  if (!ids.length) return null  // empty list = no filter (don't block all members)
   return new Set(ids.map(memberSearchToken).filter(Boolean))
 }
 
@@ -441,8 +442,7 @@ function switchTable(name) {
   if (name === navStore.currentTable) return
   navStore.currentTable = name
   localStorage.setItem('vd_session_table', name)
-  todayGroups.value = {}; allGroups.value = {}; memberList.value = []; skeletonIds.value = []
-  scanAndLoadCards()
+  // data clearing and scan are handled by the navStore.currentTable watcher
 }
 function rescan() {
   const t = navStore.currentTable
