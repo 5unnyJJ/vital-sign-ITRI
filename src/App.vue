@@ -115,7 +115,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter, useRoute, RouterView } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
 import { useNavStore } from '@/stores/nav.js'
@@ -155,6 +155,30 @@ function unsubscribeRealtime() {
 // Subscribe when table changes, unsubscribe on logout
 watch(() => navStore.currentTable, (t) => { if (t) subscribeRealtime(t) })
 watch(() => authStore.isLoggedIn, (v) => { if (!v) unsubscribeRealtime() })
+
+// Restore session on page refresh (runs for all routes, not just /login)
+onMounted(async () => {
+  if (authStore.isLoggedIn) return
+  try {
+    const { data: { session } } = await sb.auth.getSession()
+    if (session?.user?.email) {
+      const { data, error } = await sb.from('user_access').select('table_name')
+      if (!error && data?.length) {
+        const tables = data.map(r => r.table_name)
+        authStore.setLoggedIn(session.user.email, tables)
+        const saved = localStorage.getItem('vd_session_table')
+        navStore.currentTable = (saved && tables.includes(saved)) ? saved : tables[0]
+      } else {
+        if (route.path !== '/login') router.push('/login')
+      }
+    } else {
+      if (route.path !== '/login') router.push('/login')
+    }
+  } catch (e) {
+    console.warn('[App] session restore failed:', e.message)
+    if (route.path !== '/login') router.push('/login')
+  }
+})
 
 // Font size cycling
 const fontSizes = ['標準', '大字', '特大']
