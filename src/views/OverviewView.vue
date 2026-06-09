@@ -612,28 +612,30 @@ async function scanAndLoadCards() {
 }
 
 // ── Lifecycle ─────────────────────────────────────────────
-onMounted(async () => {
-  // Restore session table if needed
-  const savedTable = localStorage.getItem('vd_session_table')
-  if (savedTable && authStore.tables.includes(savedTable) && !navStore.currentTable) {
-    navStore.currentTable = savedTable
-  } else if (!navStore.currentTable && authStore.tables.length) {
-    navStore.currentTable = authStore.tables[0]
-  }
-  // 先載入機構對照表再掃描（確保 fetchAllMemberIds 走 users 表而非 fallback）
-  await loadOrganizations()
-  if (navStore.currentTable) {
-    scanAndLoadCards()
+onMounted(() => {
+  // Only set the table if not yet set; actual scan is handled by the watcher below
+  if (!navStore.currentTable) {
+    const savedTable = localStorage.getItem('vd_session_table')
+    if (savedTable && authStore.tables.includes(savedTable)) {
+      navStore.currentTable = savedTable
+    } else if (authStore.tables.length) {
+      navStore.currentTable = authStore.tables[0]
+    }
+    // If tables still empty (auth not restored yet), App.vue will set currentTable → watcher fires
   }
 })
 
-// Watch for table changes from outside (e.g., auth store)
-watch(() => navStore.currentTable, (newTable, oldTable) => {
-  if (newTable && newTable !== oldTable) {
+// Single entry point for all scans: initial load, table switch, App.vue session restore
+// immediate:true handles the case where currentTable is already set (navigating from another view)
+watch(() => navStore.currentTable, async (newTable, oldTable) => {
+  if (!newTable) return
+  if (oldTable !== undefined) {
+    // Table was changed (not initial immediate fire): clear stale data first
     todayGroups.value = {}; allGroups.value = {}; memberList.value = []; skeletonIds.value = []
-    scanAndLoadCards()
   }
-})
+  await loadOrganizations()
+  scanAndLoadCards()
+}, { immediate: true })
 
 // TODO: subscribeRealtime — Supabase realtime subscription for live updates
 // When implemented, subscribe to INSERT events on the current table and refresh cards
