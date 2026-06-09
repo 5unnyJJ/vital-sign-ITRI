@@ -41,9 +41,12 @@
         <button class="btn-scan" @click="router.push('/hf')" title="心衰生理資料模組" style="margin-right:6px;">
           🫀 心衰資料
         </button>
-        <!-- Compare mode (stubbed) -->
-        <button class="btn-scan" @click="stubCompare" title="選擇多位成員進行同時監測" style="margin-right:6px;">
-          ⚖️ 多人監測模式
+        <!-- Compare mode -->
+        <button class="btn-scan" :class="{ 'btn-scan-active': compareMode }" @click="toggleCompareMode" title="選擇多位成員進行同時監測" style="margin-right:6px;">
+          ⚖️ {{ compareMode ? `已選 ${compareSet.size} 位` : '多人監測' }}
+        </button>
+        <button v-if="compareMode && compareSet.size >= 2" class="btn-scan btn-compare-go" @click="openCompareModal" style="margin-right:6px;">
+          查看比較 →
         </button>
         <!-- Scan button -->
         <button class="btn-scan" :disabled="scanning" @click="rescan">
@@ -110,8 +113,8 @@
           v-for="mid in displayMembers"
           :key="mid"
           class="member-card"
-          :class="cardStatusClass(mid)"
-          @click="goDetail(mid)"
+          :class="[cardStatusClass(mid), compareMode && compareSet.has(mid) ? 'compare-selected' : '']"
+          @click="compareMode ? toggleCompareSelect(mid) : goDetail(mid)"
         >
           <div class="mc-head">
             <div class="mc-avatar" :class="cardAvatarClass(mid)">{{ (mid[0] || '?').toUpperCase() }}</div>
@@ -152,6 +155,30 @@
       </template>
     </div>
   </div>
+
+  <!-- Compare modal -->
+  <div v-if="compareModalOpen" class="compare-overlay" @click.self="compareModalOpen = false">
+    <div class="compare-modal">
+      <div class="compare-modal-header">
+        <span class="compare-modal-title">⚖️ 多人監測比較</span>
+        <button class="compare-modal-close" @click="compareModalOpen = false">✕</button>
+      </div>
+      <div v-if="compareLoading" class="compare-loading">載入中…</div>
+      <div v-else class="compare-modal-body">
+        <div v-for="item in compareResults" :key="item.mid" class="compare-member-block">
+          <div class="compare-member-title">{{ item.mid }}</div>
+          <div class="compare-vitals">
+            <div class="compare-vital-chip">❤️ 心跳 <strong>{{ item.hb ?? '--' }}</strong></div>
+            <div class="compare-vital-chip">🩺 收縮壓 <strong>{{ item.sbp ?? '--' }}</strong></div>
+            <div class="compare-vital-chip">🌡 體溫 <strong>{{ item.temp ?? '--' }}</strong></div>
+            <div class="compare-vital-chip">🫁 呼吸 <strong>{{ item.br ?? '--' }}</strong></div>
+          </div>
+          <div v-if="item.chartHtml" v-html="item.chartHtml" class="compare-chart"></div>
+          <div v-else class="compare-no-data">今日無量測資料</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -164,6 +191,7 @@ import { sb, TABLE_LABELS, RPC_TABLE_MAP } from '@/lib/supabase.js'
 import { todayStr } from '@/utils/format.js'
 import { avg, anomalyLevel } from '@/utils/math.js'
 import { loadScanCache, saveScanCache } from '@/utils/cache.js'
+import { trendSVG } from '@/utils/chart.js'
 
 const router = useRouter()
 const navStore = useNavStore()
@@ -184,6 +212,13 @@ const skeletonIds = ref([])
 const todayGroups = ref({})
 const allGroups = ref({})
 const memberList = ref([])
+
+// Compare mode
+const compareMode = ref(false)
+const compareSet = ref(new Set())
+const compareModalOpen = ref(false)
+const compareLoading = ref(false)
+const compareResults = ref([])
 
 // ── Helpers ────────────────────────────────────────────────
 function memberSearchToken(v) { return String(v ?? '').trim().replace(/\s+/g, '').toLowerCase() }
@@ -347,6 +382,61 @@ function goDetail(mid) { router.push('/detail/' + mid) }
 
 // ── Mode & table ─────────────────────────────────────────
 function setMode(mode) { overviewMode.value = mode }
+
+// ── Compare mode ──────────────────────────────────────────
+function toggleCompareMode() {
+  compareMode.value = !compareMode.value
+  if (!compareMode.value) { compareSet.value = new Set(); compareModalOpen.value = false }
+}
+function toggleCompareSelect(mid) {
+  const s = new Set(compareSet.value)
+  if (s.has(mid)) s.delete(mid); else s.add(mid)
+  compareSet.value = s
+}
+async function openCompareModal() {
+  compareModalOpen.value = true
+  compareLoading.value = true
+  compareResults.value = []
+  const table = navStore.currentTable
+  const today = todayStr()
+  const ids = [...compareSet.value]
+  try {
+    const results = await Promise.all(ids.map(async mid => {
+      const { data } = await sb.from(table)
+        .select('member_id,heartbeat,temp,sbp,dbp,breath,date_minute')
+        .eq('member_id', mid)
+        .gte('date_minute', today + 'T00:00:00')
+        .lte('date_minute', today + 'T23:59:59.999')
+        .order('date_minute', { ascending: true })
+        .limit(200)
+      const rows = data || []
+      const hb = rows.length ? avg(rows.map(r => r.heartbeat)) : null
+      const sbp = rows.length ? avg(rows.map(r => r.sbp)) : null
+      const temp = rows.length ? avg(rows.map(r => r.temp)) : null
+      const br = rows.length ? avg(rows.map(r => r.breath)) : null
+      let chartHtml = ''
+      if (rows.length) {
+        const labels = rows.map(r => r.date_minute.slice(11, 16))
+        const series = [
+          { label: '心跳 bpm', color: '#7aaa96', values: rows.map(r => r.heartbeat) },
+          { label: '收縮壓 mmHg', color: '#b85450', values: rows.map(r => r.sbp) },
+        ]
+        chartHtml = trendSVG(series, labels, { sharedCursor: false }, 140)
+      }
+      return {
+        mid,
+        hb: hb !== null ? Math.round(hb) : null,
+        sbp: sbp !== null ? Math.round(sbp) : null,
+        temp: temp !== null ? parseFloat(temp).toFixed(1) : null,
+        br: br !== null ? Math.round(br) : null,
+        chartHtml,
+      }
+    }))
+    compareResults.value = results
+  } catch (e) { console.error('[Compare]', e) }
+  finally { compareLoading.value = false }
+}
+
 function switchTable(name) {
   if (name === navStore.currentTable) return
   navStore.currentTable = name
@@ -627,4 +717,22 @@ watch(() => navStore.currentTable, (newTable, oldTable) => {
 
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:768px){.ov-main{padding:16px;}.ov-header-right{gap:6px;}.member-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}}
+/* Compare mode */
+.btn-scan-active{background:var(--mint)!important;color:#fff!important;border-color:var(--mint)!important;}
+.btn-compare-go{background:var(--mint-dark)!important;color:#fff!important;}
+.compare-selected{outline:3px solid var(--mint);outline-offset:2px;}
+.compare-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;}
+.compare-modal{background:#fff;border-radius:var(--r-xl);box-shadow:0 20px 60px rgba(40,70,55,.2);padding:24px;max-width:92vw;width:640px;max-height:80vh;overflow-y:auto;}
+.compare-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.compare-modal-title{font-size:16px;font-weight:700;color:var(--text);}
+.compare-modal-close{background:transparent;border:none;font-size:18px;color:var(--text-dim);cursor:pointer;padding:4px 8px;border-radius:var(--r-sm);}
+.compare-modal-close:hover{background:var(--bg-alt);}
+.compare-loading{text-align:center;padding:32px;color:var(--text-dim);}
+.compare-modal-body{display:flex;flex-direction:column;gap:20px;}
+.compare-member-block{background:var(--bg-alt);border-radius:var(--r-lg);padding:16px;}
+.compare-member-title{font-size:15px;font-weight:700;color:var(--mint-dark);margin-bottom:10px;}
+.compare-vitals{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.compare-vital-chip{background:#fff;border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:13px;color:var(--text-mid);}
+.compare-chart{margin-top:8px;}
+.compare-no-data{font-size:13px;color:var(--text-dim);padding:8px 0;}
 </style>
