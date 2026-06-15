@@ -96,6 +96,13 @@
     <!-- Main router view -->
     <RouterView />
 
+    <!-- Global chart tooltip for drag interactions -->
+    <div id="chart-tooltip" style="position:fixed;display:none;pointer-events:none;z-index:9999;background:rgba(25,42,33,.92);border-radius:10px;padding:8px 14px;min-width:120px;box-shadow:0 4px 20px rgba(0,0,0,.28);">
+      <div id="tt-time" style="font-size:11px;color:rgba(255,255,255,.55);margin-bottom:5px;font-weight:700;letter-spacing:.04em;"></div>
+      <div id="tt-rows"></div>
+      <div id="tt-posture" style="display:none;font-size:11px;color:rgba(255,255,255,.6);margin-top:4px;"></div>
+    </div>
+
     <!-- Bottom nav (mobile) -->
     <nav v-if="authStore.isLoggedIn" id="bottom-nav" class="bottom-nav">
       <button class="bnav-btn" :class="{ active: isOverviewActive }" @click="router.push('/overview')">
@@ -377,4 +384,9 @@ button, select { font-family: inherit; cursor: pointer; }
 /* Font size variants */
 body.font-lg { font-size: 15px; }
 body.font-xl { font-size: 17px; }
+
+/* Global chart tooltip */
+#chart-tooltip .tt-row { display:flex; justify-content:space-between; gap:14px; margin-bottom:3px; }
+#chart-tooltip .tt-label { font-size:12px; color:rgba(255,255,255,.7); }
+#chart-tooltip .tt-val { font-size:13px; font-weight:700; color:#fff; }
 </style>

@@ -494,6 +494,8 @@ async function scanAndLoadCards() {
     memberList.value = cachedList
     todayGroups.value = cached.todayGroups || {}
     allGroups.value = cached.allGroups || {}
+    overviewStore.overviewTodayData = cached.todayGroups || {}
+    overviewStore.overviewAllData = cached.allGroups || {}
     state.value = displayMembers.value.length ? 'loaded' : 'empty'
     scanning.value = false
     scanPct.value = 0
@@ -592,6 +594,8 @@ async function scanAndLoadCards() {
 
     const newList = orgKnown ? [...allIds].sort(memberSort) : [...new Set([...allIds, ...Object.keys(newTodayGroups), ...Object.keys(newAllGroups)])].sort(memberSort)
     saveScanCache(table, today, newTodayGroups, newAllGroups, newList)
+    overviewStore.overviewTodayData = newTodayGroups
+    overviewStore.overviewAllData = newAllGroups
 
     if (myToken !== _scanToken) return
     memberList.value = newList

@@ -146,7 +146,9 @@ const currentDate = ref(todayStr())
 const currentMonth = ref(monthStr())
 const currentPage = ref(1)
 const totalPages = ref(1)
-const currentMemberId = ref('ALL')
+const currentMemberId = ref(dashStore.currentMemberId || 'ALL')
+// Reset the store so the next visit starts fresh
+dashStore.currentMemberId = 'ALL'
 const memberList = ref([])
 const refreshing = ref(false)
 const acctSidebarOpen = ref(false)

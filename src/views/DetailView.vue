@@ -69,7 +69,7 @@
 
     <!-- 4 Action buttons -->
     <div class="det-actions">
-      <button class="det-action-btn" @click="router.push('/dashboard')">
+      <button class="det-action-btn" @click="goToDayView">
         <span class="det-action-icon">📅</span>
         <span class="det-action-label">日視圖</span>
         <span class="det-action-sub">查看逐小時紀錄</span>
@@ -148,6 +148,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useNavStore } from '@/stores/nav.js'
 import { useDetailStore } from '@/stores/detail.js'
 import { useDashboardStore } from '@/stores/dashboard.js'
+import { useOverviewStore } from '@/stores/overview.js'
 import { sb, TABLE_LABELS } from '@/lib/supabase.js'
 import { trendSVG, initCursorDragNodes, initAvgDragNodes } from '@/utils/chart.js'
 import { avg, stdOf, anomalyLevel, filterWarmupMinutes, aggregateToMinutes } from '@/utils/math.js'
@@ -158,6 +159,7 @@ const router = useRouter()
 const navStore = useNavStore()
 const detailStore = useDetailStore()
 const dashStore = useDashboardStore()
+const overviewStore = useOverviewStore()
 
 const base = import.meta.env.BASE_URL
 
@@ -451,6 +453,12 @@ function exportCSV() {
   URL.revokeObjectURL(url)
 }
 
+function goToDayView() {
+  dashStore.currentMemberId = memberId.value
+  navStore.currentView = 'day'
+  router.push('/dashboard')
+}
+
 function goDashboardMonth() {
   dashStore.currentMonth = monthStr()
   navStore.currentView = 'month'
@@ -503,6 +511,11 @@ onMounted(async () => {
   updateStatsHead()
 
   await loadAnnotations()
+  // Show cached overview data immediately while fetch runs
+  const initRows = overviewStore.overviewTodayData[memberId.value]
+    || overviewStore.overviewAllData[memberId.value]
+    || []
+  if (initRows.length) renderDetailStats(initRows)
   await loadDetailChart()
   if (detailRange.value === 'today') renderDetailStats(detailRawData.value || [])
 })
@@ -517,6 +530,11 @@ watch(() => route.params.id, async (newId) => {
   customDateLabel.value = '選日期'
   updateStatsHead()
   await loadAnnotations()
+  // Show cached overview data immediately while fetch runs
+  const initRows = overviewStore.overviewTodayData[newId]
+    || overviewStore.overviewAllData[newId]
+    || []
+  if (initRows.length) renderDetailStats(initRows)
   await loadDetailChart()
   if (detailRange.value === 'today') renderDetailStats(detailRawData.value || [])
 })

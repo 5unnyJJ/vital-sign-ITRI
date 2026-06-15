@@ -14,9 +14,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const hbBreathSelectedDay = ref(null)
   const trendLineSet = ref(new Set(['hb', 'br']))
   const dayStats = ref(null)
+  const currentMemberId = ref('ALL')
   return {
     currentDate, currentMonth, groupedCache, rawRowsCache,
     dayViewRawRowsCache, dayViewRawRowsCacheKey, dailySummaryCache,
-    trendTab, hbBreathRange, hbBreathSelectedDay, trendLineSet, dayStats
+    trendTab, hbBreathRange, hbBreathSelectedDay, trendLineSet, dayStats,
+    currentMemberId
   }
 })
