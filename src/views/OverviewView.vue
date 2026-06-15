@@ -37,6 +37,11 @@
             @click="setMode('all')"
           >全部會員</button>
         </div>
+        <!-- LINE button -->
+        <button class="btn-scan btn-line" @click="router.push('/xiao-guanjia')" title="加入 LINE 健康小管家">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+          語音小管家
+        </button>
         <!-- HF button -->
         <button class="btn-scan" @click="router.push('/hf')" title="心衰生理資料模組" style="margin-right:6px;">
           🫀 心衰資料
@@ -156,6 +161,25 @@
     </div>
   </div>
 
+  <!-- LINE modal -->
+  <div v-if="lineModalOpen" class="compare-overlay" @click.self="lineModalOpen = false">
+    <div class="line-modal">
+      <div class="compare-modal-header">
+        <span class="compare-modal-title" style="color:#06C755;">LINE 國衛院健康小管家</span>
+        <button class="compare-modal-close" @click="lineModalOpen = false">✕</button>
+      </div>
+      <div class="line-modal-body">
+        <canvas ref="qrCanvas" class="line-qr"></canvas>
+        <p class="line-id">LINE ID：<strong>@081jsdge</strong></p>
+        <a href="https://line.me/ti/p/@081jsdge" target="_blank" rel="noopener" class="line-link-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.630 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+          點此加入好友
+        </a>
+        <p class="line-hint">用手機掃描 QR code 或點上方連結加入</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Compare modal -->
   <div v-if="compareModalOpen" class="compare-overlay" @click.self="compareModalOpen = false">
     <div class="compare-modal">
@@ -182,8 +206,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
+import QRCode from 'qrcode'
 import { useNavStore } from '@/stores/nav.js'
 import { useAuthStore } from '@/stores/auth.js'
 import { useOverviewStore } from '@/stores/overview.js'
@@ -212,6 +237,18 @@ const skeletonIds = ref([])
 const todayGroups = ref({})
 const allGroups = ref({})
 const memberList = ref([])
+
+// LINE modal
+const lineModalOpen = ref(false)
+const qrCanvas = ref(null)
+const LINE_URL = 'https://line.me/ti/p/@081jsdge'
+watch(lineModalOpen, async (open) => {
+  if (!open) return
+  await nextTick()
+  if (qrCanvas.value) {
+    QRCode.toCanvas(qrCanvas.value, LINE_URL, { width: 200, margin: 2, color: { dark: '#000000', light: '#ffffff' } })
+  }
+})
 
 // Compare mode
 const compareMode = ref(false)
@@ -735,6 +772,19 @@ watch(() => navStore.currentTable, async (newTable, oldTable) => {
 .ov-empty-icon{font-size:48px;margin-bottom:12px;}
 .ov-empty p{font-size:15px;}
 .ov-empty small{font-size:13px;margin-top:6px;display:block;}
+
+/* LINE button */
+.btn-line{color:#06C755!important;border-color:rgba(6,199,85,.3)!important;}
+.btn-line:hover{background:rgba(6,199,85,.08)!important;border-color:#06C755!important;}
+
+/* LINE modal */
+.line-modal{background:#fff;border-radius:var(--r-xl);box-shadow:0 20px 60px rgba(40,70,55,.2);padding:28px 32px;width:300px;text-align:center;}
+.line-modal-body{display:flex;flex-direction:column;align-items:center;gap:14px;}
+.line-qr{border-radius:8px;border:2px solid #e8f8ee;}
+.line-id{font-size:15px;color:var(--text-mid);margin:0;}
+.line-link-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:#06C755;color:#fff;border-radius:24px;font-size:15px;font-weight:700;text-decoration:none;transition:background .18s;}
+.line-link-btn:hover{background:#05b34c;}
+.line-hint{font-size:12px;color:var(--text-dim);margin:0;}
 
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:768px){.ov-main{padding:16px;}.ov-header-right{gap:6px;}.member-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}}

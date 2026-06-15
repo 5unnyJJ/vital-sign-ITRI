@@ -32,5 +32,9 @@ export const router = createRouter({
       path: '/hf/:id',
       component: () => import('../views/HfDetailView.vue')
     },
+    {
+      path: '/xiao-guanjia',
+      component: () => import('../views/XiaoGuanjiaView.vue')
+    },
   ]
 })

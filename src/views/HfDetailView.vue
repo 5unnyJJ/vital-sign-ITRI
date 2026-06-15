@@ -9,6 +9,14 @@
       </div>
     </div>
 
+    <!-- 個案資訊列 -->
+    <div class="hf-info-bar">
+      <div class="hf-info-item" v-for="item in patientInfoItems" :key="item.label">
+        <div class="hf-info-label">{{ item.label }}</div>
+        <div class="hf-info-value">{{ item.value }}</div>
+      </div>
+    </div>
+
     <!-- 生理趨勢圖 -->
     <div class="det-chart-card">
       <div class="det-chart-ctrl">
@@ -29,10 +37,16 @@
       <div class="det-chart-body" v-html="chartHtml" ref="chartBodyRef"></div>
     </div>
 
-    <!-- 攝入排出表 -->
+    <!-- 每日綜合生理資訊 -->
     <div class="det-stats-card">
-      <div class="det-stats-head">💧 攝入排出記錄（近 5 天）</div>
-      <div v-html="ioTableHtml"></div>
+      <div class="det-stats-head">每日綜合生理資訊</div>
+      <div v-html="dailySummaryHtml"></div>
+    </div>
+
+    <!-- 明細量測紀錄 -->
+    <div class="det-stats-card">
+      <div class="det-stats-head">明細量測紀錄</div>
+      <div v-html="detailRecordsHtml"></div>
     </div>
   </div>
 </template>
@@ -42,7 +56,6 @@ import { ref, computed, watch, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { trendSVG, initCursorDragNodes, initAvgDragNodes } from '@/utils/chart.js'
 import { useHfStore } from '@/stores/hf.js'
-import { escHtml } from '@/utils/format.js'
 import { HF_MOCK_PATIENTS, HF_MOCK_VITALS, HF_MOCK_IO } from '@/data/hfMock.js'
 
 const route = useRoute()
@@ -52,7 +65,6 @@ const chartBodyRef = ref(null)
 
 const patientId = computed(() => route.params.id)
 
-// Find patient info
 const patient = computed(() => {
   const cache = hfStore.hfMembersCache
   const list = (Array.isArray(cache) ? cache : [])
@@ -60,10 +72,22 @@ const patient = computed(() => {
   return found || HF_MOCK_PATIENTS.find(p => p.id === patientId.value) || null
 })
 
-const patientName = computed(() => patient.value?.alias || '—')
+const patientName = computed(() => patient.value?.name || patient.value?.alias || '—')
 const patientSub = computed(() => {
   if (!patient.value) return '—'
-  return `${patient.value.room} · ${patient.value.ward} · ${patient.value.age}歲`
+  return `${patient.value.room} · ${patient.value.ward}`
+})
+
+const patientInfoItems = computed(() => {
+  const p = patient.value
+  if (!p) return []
+  return [
+    { label: '病歷號',   value: p.chartNo || '—' },
+    { label: '姓名',     value: p.name || p.alias || '—' },
+    { label: '性別',     value: p.gender || '—' },
+    { label: '年齡',     value: p.age ? `${p.age} 歲` : '—' },
+    { label: '個案狀態', value: p.status || '—' },
+  ]
 })
 
 // Chart
@@ -95,16 +119,14 @@ function buildChartHtml(vitals) {
   )
 }
 
-// IO table
-const ioTableHtml = computed(() => {
-  const ioRows = hfStore.hfVitalsCache ? (currentIoRows.value || []) : []
-  return buildIoTable(ioRows)
-})
-
+// IO data
 const currentIoRows = ref([])
 
-function buildIoTable(ioRows) {
-  if (!ioRows || !ioRows.length) return '<div class="trend-empty">無攝入排出記錄</div>'
+// 每日綜合生理資訊
+const dailySummaryHtml = computed(() => buildDailySummary(currentIoRows.value))
+
+function buildDailySummary(ioRows) {
+  if (!ioRows || !ioRows.length) return '<div class="trend-empty">無生理資訊紀錄</div>'
   const sorted = [...ioRows].sort((a, b) => b.ts.localeCompare(a.ts))
   const byDay = {}
   sorted.forEach(r => {
@@ -113,27 +135,64 @@ function buildIoTable(ioRows) {
     byDay[d].push(r)
   })
   const days = Object.keys(byDay).sort((a, b) => b.localeCompare(a)).slice(0, 5)
-  let rows = '<table class="hf-io-table"><thead><tr><th>時間</th><th>類型</th><th>量（ml）</th><th>備註</th></tr></thead><tbody>'
+  let html = '<table class="hf-daily-table"><thead><tr>'
+    + '<th>量測日期</th>'
+    + '<th>當日點滴量 (cc)</th>'
+    + '<th>當日總攝入量_含點滴 (g)</th>'
+    + '<th>當日小便次數 (次)</th>'
+    + '<th>當日總尿量 (g)</th>'
+    + '<th>當日排便次數 (次)</th>'
+    + '<th>當日總排便量 (g)</th>'
+    + '</tr></thead><tbody>'
   days.forEach(day => {
-    const dayRecs = byDay[day]
-    const totalIn = dayRecs.filter(r => r.type === 'intake').reduce((s, r) => s + r.amount, 0)
-    const totalOut = dayRecs.filter(r => r.type === 'output').reduce((s, r) => s + r.amount, 0)
-    const mm = day.slice(5, 7), dd = day.slice(8, 10)
-    rows += `<tr class="hf-io-day-group"><td colspan="4">${mm}/${dd}</td></tr>`
-    dayRecs.forEach(r => {
-      const typeLabel = r.type === 'intake' ? '攝入' : '排出'
-      const cls = r.type === 'intake' ? 'hf-io-intake' : 'hf-io-output'
-      rows += `<tr><td>${r.ts.slice(11, 16)}</td><td class="${cls}">${typeLabel}</td><td>${r.amount}</td><td>${escHtml(r.note || '')}</td></tr>`
-    })
-    rows += `<tr class="hf-io-subtotal"><td colspan="2">小計</td><td>攝入 ${totalIn} ml / 排出 ${totalOut} ml</td><td></td></tr>`
+    const recs = byDay[day]
+    const drip    = recs.filter(r => r.type === '點滴').reduce((s, r) => s + r.value, 0)
+    const intake  = recs.filter(r => r.type === '飯前' || r.type === '點滴').reduce((s, r) => s + r.value, 0)
+    const urineN  = recs.filter(r => r.type === '小便').length
+    const urineV  = recs.filter(r => r.type === '小便').reduce((s, r) => s + r.value, 0)
+    const stoolN  = recs.filter(r => r.type === '大便').length
+    const stoolV  = recs.filter(r => r.type === '大便').reduce((s, r) => s + r.value, 0)
+    html += `<tr>`
+      + `<td>${day}</td>`
+      + `<td>${drip}</td>`
+      + `<td>${intake % 1 === 0 ? intake : intake.toFixed(1)}</td>`
+      + `<td>${urineN}</td>`
+      + `<td>${urineV}</td>`
+      + `<td>${stoolN}</td>`
+      + `<td>${stoolV}</td>`
+      + `</tr>`
   })
-  rows += '</tbody></table>'
-  return rows
+  html += '</tbody></table>'
+  return html
+}
+
+// 明細量測紀錄
+const detailRecordsHtml = computed(() => buildDetailRecords(currentIoRows.value))
+
+const _TYPE_CLASS = { '飯前': 'hf-type-meal', '小便': 'hf-type-urine', '大便': 'hf-type-stool', '點滴': 'hf-type-drip' }
+
+function buildDetailRecords(ioRows) {
+  if (!ioRows || !ioRows.length) return '<div class="trend-empty">無量測紀錄</div>'
+  const sorted = [...ioRows].sort((a, b) => b.ts.localeCompare(a.ts))
+  let html = '<table class="hf-detail-table"><thead><tr>'
+    + '<th>日期</th><th>時間</th><th>量測類型</th><th>量測數值</th>'
+    + '</tr></thead><tbody>'
+  sorted.forEach(r => {
+    const cls = _TYPE_CLASS[r.type] || ''
+    const valStr = Number.isInteger(r.value) ? `${r.value} ${r.unit}` : `${r.value.toFixed(1)} ${r.unit}`
+    html += `<tr>`
+      + `<td>${r.ts.slice(0, 10)}</td>`
+      + `<td>${r.ts.slice(11, 16)}</td>`
+      + `<td><span class="hf-type-badge ${cls}">${r.type}</span></td>`
+      + `<td>${valStr}</td>`
+      + `</tr>`
+  })
+  html += '</tbody></table>'
+  return html
 }
 
 async function loadDetail(id) {
   if (!id) return
-  // Fetch vitals & IO (mock or real)
   let vitals = [], io = []
   if (!hfStore.HF_API_CONNECTED) {
     vitals = HF_MOCK_VITALS[id] || []
@@ -150,19 +209,17 @@ async function loadDetail(id) {
 function toggleMetric(m) {
   const metrics = hfStore.hfMetrics
   if (metrics.has(m)) {
-    if (metrics.size === 1) return // always keep at least one
+    if (metrics.size === 1) return
     metrics.delete(m)
   } else {
     metrics.add(m)
   }
-  // Trigger chart re-render via nextTick
   nextTick(() => {
     initCursorDragNodes()
     initAvgDragNodes()
   })
 }
 
-// Re-init drag nodes whenever chart HTML updates
 watch(chartHtml, async () => {
   await nextTick()
   initCursorDragNodes()
@@ -185,7 +242,7 @@ watch(patientId, (id) => {
 
 .det-main {
   padding: 24px 32px;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -237,6 +294,43 @@ watch(patientId, (id) => {
   margin-top: 2px;
 }
 
+/* 個案資訊列 */
+.hf-info-bar {
+  display: flex;
+  gap: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(249,252,250,.84));
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-xl);
+  box-shadow: 0 4px 16px rgba(66,98,81,.06);
+  overflow: hidden;
+}
+
+.hf-info-item {
+  flex: 1;
+  padding: 14px 20px;
+  border-right: 1px solid var(--border-light);
+}
+
+.hf-info-item:last-child {
+  border-right: none;
+}
+
+.hf-info-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 5px;
+}
+
+.hf-info-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Chart card */
 .det-chart-card {
   background: linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(249, 252, 250, .84));
   border: 1px solid var(--glass-line);
@@ -289,6 +383,7 @@ watch(patientId, (id) => {
   min-height: 200px;
 }
 
+/* Stats cards */
 .det-stats-card {
   background: linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(249, 252, 250, .84));
   border: 1px solid var(--glass-line);
@@ -296,6 +391,7 @@ watch(patientId, (id) => {
   box-shadow: 0 12px 34px rgba(66, 98, 81, .08);
   backdrop-filter: blur(10px);
   padding: 20px 24px;
+  overflow-x: auto;
 }
 
 .det-stats-head {
@@ -314,59 +410,99 @@ watch(patientId, (id) => {
   font-size: 14px;
 }
 
-/* IO table styles (not scoped — injected via v-html, use :deep) */
-:deep(.hf-io-table) {
+/* 每日綜合生理資訊表格 */
+:deep(.hf-daily-table) {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
+  min-width: 640px;
 }
 
-:deep(.hf-io-table th) {
+:deep(.hf-daily-table th) {
   text-align: left;
-  padding: 6px 8px;
+  padding: 8px 10px;
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 600;
+  border-bottom: 2px solid var(--border-light);
+  white-space: nowrap;
+}
+
+:deep(.hf-daily-table td) {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text);
+  font-size: 13px;
+}
+
+:deep(.hf-daily-table tbody tr:last-child td) {
+  border-bottom: none;
+}
+
+:deep(.hf-daily-table tbody tr:hover td) {
+  background: var(--mint-xlight);
+}
+
+/* 明細量測紀錄表格 */
+:deep(.hf-detail-table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 400px;
+}
+
+:deep(.hf-detail-table th) {
+  text-align: left;
+  padding: 8px 10px;
   color: var(--text-dim);
   font-size: 11px;
   font-weight: 600;
   border-bottom: 2px solid var(--border-light);
 }
 
-:deep(.hf-io-table td) {
-  padding: 7px 8px;
+:deep(.hf-detail-table td) {
+  padding: 9px 10px;
   border-bottom: 1px solid var(--border-light);
   color: var(--text);
+  font-size: 13px;
 }
 
-:deep(.hf-io-table tr:last-child td) {
+:deep(.hf-detail-table tbody tr:last-child td) {
   border-bottom: none;
 }
 
-:deep(.hf-io-intake) {
-  color: var(--green);
-  font-weight: 600;
+:deep(.hf-detail-table tbody tr:hover td) {
+  background: var(--mint-xlight);
 }
 
-:deep(.hf-io-output) {
-  color: var(--red);
-  font-weight: 600;
-}
-
-:deep(.hf-io-day-group td) {
-  background: var(--bg-alt);
-  font-weight: 600;
+/* 類型 badge */
+:deep(.hf-type-badge) {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
   font-size: 12px;
-  color: var(--text-mid);
+  font-weight: 700;
+  color: #fff;
 }
 
-:deep(.hf-io-subtotal) {
-  background: var(--mint-xlight) !important;
-  font-size: 12px;
-  color: var(--mint-dark) !important;
-  font-weight: 700 !important;
-}
+:deep(.hf-type-meal)  { background: #e07b39; }
+:deep(.hf-type-urine) { background: #c9a400; }
+:deep(.hf-type-stool) { background: #6b4a2a; }
+:deep(.hf-type-drip)  { background: #2d7ed4; }
 
 @media (max-width: 600px) {
   .det-main {
     padding: 16px 12px 60px;
+  }
+
+  .hf-info-bar {
+    flex-wrap: wrap;
+  }
+
+  .hf-info-item {
+    flex: 1 1 45%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-light);
   }
 }
 </style>

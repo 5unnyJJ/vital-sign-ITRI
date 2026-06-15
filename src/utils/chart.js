@@ -103,12 +103,19 @@ export function trendSVG(series,labels,opts,hParam){
   </svg><div class="chart-overlay"></div>${hasPartial?'<div class="trend-note">部分時段無資料（斷線處）</div>':''}</div>`;
 }
 
-/* Cursor drag */
+/* Cursor drag — event delegation, set up once regardless of DOM changes */
 let _cursorDrag=null;
-export function initCursorDragNodes() { /* handled by chart-drag.js */ }
-function _cursorDragStart(e){
-  e.preventDefault();e.stopPropagation();
-  const nd=e.currentTarget;const cid=nd.getAttribute('data-cid');
+let _cursorDragInited=false;
+export function initCursorDragNodes(){
+  if(_cursorDragInited)return;_cursorDragInited=true;
+  document.addEventListener('mousedown',_onCursorDown);
+  document.addEventListener('touchstart',_onCursorDown,{passive:false});
+}
+function _onCursorDown(e){
+  const nd=e.target.closest('.cursor-drag-node');
+  if(!nd)return;
+  e.preventDefault();
+  const cid=nd.getAttribute('data-cid');
   const wrap=document.getElementById(cid);if(!wrap)return;
   let d;try{d=JSON.parse(wrap.dataset.chart.replace(/&#39;/g,"'"));}catch{return;}
   _cursorDrag={nd,wrap,d};

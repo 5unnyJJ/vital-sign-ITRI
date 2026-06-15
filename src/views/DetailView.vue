@@ -266,12 +266,13 @@ async function loadDetailChart() {
   chartEmptyMsg.value = ''
 
   try {
-    if (detailRange.value === 'today') {
+    if (detailRange.value === 'today' || detailRange.value === 'custom') {
       if (!detailRawData.value) {
         detailRawData.value = await getDetailMemberRawRows()
       }
       const memberMinutes = filterWarmupMinutes(aggregateToMinutes(detailRawData.value))
-      if (!memberMinutes.length) { chartEmptyMsg.value = '今日尚無資料'; chartLoading.value = false; return }
+      const dayLabel = detailRange.value === 'today' ? '今日' : currentDate.value.slice(5)
+      if (!memberMinutes.length) { chartEmptyMsg.value = `${dayLabel} 尚無資料`; chartLoading.value = false; return }
       renderChart(buildSeries(memberMinutes, 'raw'), memberMinutes.map(r => r.time.slice(11, 16)), memberMinutes.map(r => r.action))
       chartLoading.value = false
       return
@@ -315,7 +316,8 @@ async function loadDetailChart() {
 }
 
 function renderDetailStats(rows) {
-  if (!rows || !rows.length) { statsHtml.value = '<div class="det-stat-box"><div class="det-stat-label">今日無資料</div></div>'; return }
+  const dateLabel = (detailRange.value === 'today' || currentDate.value === todayStr()) ? '今日' : currentDate.value.slice(5)
+  if (!rows || !rows.length) { statsHtml.value = `<div class="det-stat-box"><div class="det-stat-label">${dateLabel} 無資料</div></div>`; return }
   const aHb = avg(rows.map(r => r.heartbeat))
   const stdHb = stdOf(rows.map(r => r.heartbeat).filter(v => v !== null && v !== undefined))
   const aTemp = avg(rows.map(r => r.temp))
@@ -336,7 +338,7 @@ function renderDetailStats(rows) {
     aSbp !== null ? stat('🩺 收縮壓', Math.round(aSbp) + ' mmHg', aDbp !== null ? `舒張壓平均 ${Math.round(aDbp)} mmHg` : '', lvSbp) : '',
     aTemp !== null ? stat('🌡 平均體溫', parseFloat(aTemp).toFixed(1) + '°C', stdTemp !== null ? ` ±${stdTemp}°C` : '', lvTemp) : '',
     aBr !== null ? stat('🫁 平均呼吸', Math.round(aBr) + ' rpm', '') : '',
-    stat('📊 今日資料', rows.length + ' 筆', ''),
+    stat(`📊 ${dateLabel}資料`, rows.length + ' 筆', ''),
   ].join('')
 }
 
@@ -382,8 +384,12 @@ async function goToLatestDate() {
 async function openDetCal() {
   calOpen.value = true
   const table = navStore.currentTable
-  // 抽樣查最新一筆，開啟到有資料的月份
-  if (table && memberId.value) {
+  // 若已有選定日期，直接開到該月；否則查最新一筆有資料的月份
+  if (detailRange.value === 'custom' || currentDate.value !== todayStr()) {
+    const d = new Date(currentDate.value)
+    calYear.value = d.getFullYear()
+    calMonth.value = d.getMonth() + 1
+  } else if (table && memberId.value) {
     const { data } = await sb.from(table)
       .select('date_minute')
       .eq('member_id', memberId.value)
@@ -421,17 +427,21 @@ async function loadDetCalMonth() {
   try {
     const year = calYear.value, month = calMonth.value
     const daysInMonth = new Date(year, month, 0).getDate()
-    const { data, error } = await sb.from(table)
-      .select('date_minute')
-      .eq('member_id', memberId.value)
-      .gte('date_minute', `${year}-${p2(month)}-01T00:00:00`)
-      .lte('date_minute', `${year}-${p2(month)}-${p2(daysInMonth)}T23:59:59`)
-      .limit(50000)
-    if (!error && data) {
-      const days = new Set()
-      data.forEach(r => { if (r.date_minute) days.add(r.date_minute.slice(0, 10)) })
-      calDaysWithData.value = days
-    }
+    const mid = memberId.value
+    // One lightweight HEAD count per day to avoid PostgREST max_rows limit
+    const checks = Array.from({ length: daysInMonth }, (_, i) => {
+      const ds = `${year}-${p2(month)}-${p2(i + 1)}`
+      return sb.from(table)
+        .select('date_minute', { count: 'exact', head: true })
+        .eq('member_id', mid)
+        .gte('date_minute', ds + 'T00:00:00')
+        .lte('date_minute', ds + 'T23:59:59')
+        .then(({ count, error }) => ({ ds, has: !error && count > 0 }))
+    })
+    const results = await Promise.all(checks)
+    const days = new Set()
+    results.forEach(({ ds, has }) => { if (has) days.add(ds) })
+    calDaysWithData.value = days
   } catch (e) { console.warn('detCalLoad error', e) }
   finally { calLoading.value = false }
 }
@@ -488,12 +498,14 @@ function exportCSV() {
 
 function goToDayView() {
   dashStore.currentMemberId = memberId.value
+  dashStore.currentDate = currentDate.value
   navStore.currentView = 'day'
   router.push('/dashboard')
 }
 
 function goDashboardMonth() {
-  dashStore.currentMonth = monthStr()
+  dashStore.currentMemberId = memberId.value
+  dashStore.currentMonth = currentDate.value.slice(0, 7)
   navStore.currentView = 'month'
   router.push('/dashboard')
 }
