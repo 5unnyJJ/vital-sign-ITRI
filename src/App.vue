@@ -97,10 +97,10 @@
     <RouterView />
 
     <!-- Global chart tooltip for drag interactions -->
-    <div id="chart-tooltip" style="position:fixed;display:none;pointer-events:none;z-index:9999;background:rgba(25,42,33,.92);border-radius:10px;padding:8px 14px;min-width:120px;box-shadow:0 4px 20px rgba(0,0,0,.28);">
-      <div id="tt-time" style="font-size:11px;color:rgba(255,255,255,.55);margin-bottom:5px;font-weight:700;letter-spacing:.04em;"></div>
+    <div id="chart-tooltip" style="position:fixed;display:none;pointer-events:none;z-index:2000;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-md);padding:14px 18px;box-shadow:var(--shadow-md);min-width:160px;">
+      <div class="tt-time" id="tt-time"></div>
       <div id="tt-rows"></div>
-      <div id="tt-posture" style="display:none;font-size:11px;color:rgba(255,255,255,.6);margin-top:4px;"></div>
+      <div class="tt-posture" id="tt-posture" style="display:none"></div>
     </div>
 
     <!-- Bottom nav (mobile) -->
@@ -386,7 +386,9 @@ body.font-lg { font-size: 15px; }
 body.font-xl { font-size: 17px; }
 
 /* Global chart tooltip */
-#chart-tooltip .tt-row { display:flex; justify-content:space-between; gap:14px; margin-bottom:3px; }
-#chart-tooltip .tt-label { font-size:12px; color:rgba(255,255,255,.7); }
-#chart-tooltip .tt-val { font-size:13px; font-weight:700; color:#fff; }
+#chart-tooltip .tt-time { font-size:12px; font-weight:700; color:var(--text-muted,rgba(0,0,0,.45)); margin-bottom:6px; letter-spacing:.03em; }
+#chart-tooltip .tt-row { display:flex; gap:18px; margin-bottom:3px; }
+#chart-tooltip .tt-label { font-size:13px; font-weight:600; }
+#chart-tooltip .tt-val { font-size:20px; font-weight:800; font-variant-numeric:tabular-nums; margin-left:auto; }
+#chart-tooltip .tt-posture { font-size:11px; text-align:center; padding:2px 8px; border-radius:20px; margin-top:4px; background:var(--mint,rgba(60,180,120,.12)); }
 </style>

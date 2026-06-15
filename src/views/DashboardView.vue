@@ -453,6 +453,7 @@ function setView(v) {
   currentPage.value = 1
   if (v === 'month') { hbBreathRange = 'month'; trendHtml.value = '' }
   else hbBreathRange = 'day'
+  loadCurrentTable()
 }
 
 function navPrev() {

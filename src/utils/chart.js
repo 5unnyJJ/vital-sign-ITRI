@@ -105,12 +105,7 @@ export function trendSVG(series,labels,opts,hParam){
 
 /* Cursor drag */
 let _cursorDrag=null;
-export function initCursorDragNodes(){
-  document.querySelectorAll('.cursor-drag-node').forEach(nd=>{
-    nd.addEventListener('mousedown',_cursorDragStart);
-    nd.addEventListener('touchstart',_cursorDragStart,{passive:false});
-  });
-}
+export function initCursorDragNodes() { /* handled by chart-drag.js */ }
 function _cursorDragStart(e){
   e.preventDefault();e.stopPropagation();
   const nd=e.currentTarget;const cid=nd.getAttribute('data-cid');
