@@ -366,10 +366,29 @@ function setRange(r) {
 }
 
 async function openDetCal() {
-  const d = new Date(currentDate.value || todayStr())
-  calYear.value = d.getFullYear()
-  calMonth.value = d.getMonth() + 1
   calOpen.value = true
+  const table = navStore.currentTable
+  // 抽樣查最新一筆，開啟到有資料的月份
+  if (table && memberId.value) {
+    const { data } = await sb.from(table)
+      .select('date_minute')
+      .eq('member_id', memberId.value)
+      .order('date_minute', { ascending: false })
+      .limit(1)
+    if (data && data.length) {
+      const latest = new Date(data[0].date_minute)
+      calYear.value = latest.getFullYear()
+      calMonth.value = latest.getMonth() + 1
+    } else {
+      const d = new Date(currentDate.value || todayStr())
+      calYear.value = d.getFullYear()
+      calMonth.value = d.getMonth() + 1
+    }
+  } else {
+    const d = new Date(currentDate.value || todayStr())
+    calYear.value = d.getFullYear()
+    calMonth.value = d.getMonth() + 1
+  }
   await loadDetCalMonth()
 }
 

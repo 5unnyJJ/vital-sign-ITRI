@@ -1,4 +1,10 @@
 (function(){
+  function actionLabel(n){
+    const m={0:'靜止',1:'走路',2:'走路',3:'慢跑',4:'慢跑',5:'快跑',6:'躺姿',7:'姿勢異常'}
+    if(n===null||n===undefined||n==='') return null
+    const k=parseInt(n); return isNaN(k)?null:(m[k]||null)
+  }
+
   let _drag = null
 
   function onDragStart(e){
@@ -47,8 +53,9 @@
       ttRows.innerHTML = html
     }
     if(ttPost){
-      const action = d.actions && d.actions[i]
-      if(action){ ttPost.textContent = action; ttPost.style.display='block' }
+      const raw = d.actions && d.actions[i]
+      const lbl = actionLabel(raw)
+      if(lbl){ ttPost.textContent = '姿位：'+lbl; ttPost.style.display='block' }
       else ttPost.style.display='none'
     }
     const ty = (e.touches?e.touches[0].clientY:e.clientY) - 20

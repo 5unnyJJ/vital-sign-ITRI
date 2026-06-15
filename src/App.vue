@@ -97,7 +97,7 @@
     <RouterView />
 
     <!-- Global chart tooltip for drag interactions -->
-    <div id="chart-tooltip" style="position:fixed;display:none;pointer-events:none;z-index:2000;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-md);padding:14px 18px;box-shadow:var(--shadow-md);min-width:160px;">
+    <div id="chart-tooltip" style="position:fixed;display:none;pointer-events:none;z-index:2000;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-md);padding:20px 26px;box-shadow:var(--shadow-md);min-width:220px;">
       <div class="tt-time" id="tt-time"></div>
       <div id="tt-rows"></div>
       <div class="tt-posture" id="tt-posture" style="display:none"></div>
@@ -386,9 +386,9 @@ body.font-lg { font-size: 15px; }
 body.font-xl { font-size: 17px; }
 
 /* Global chart tooltip */
-#chart-tooltip .tt-time { font-size:12px; font-weight:700; color:var(--text-muted,rgba(0,0,0,.45)); margin-bottom:6px; letter-spacing:.03em; }
-#chart-tooltip .tt-row { display:flex; gap:18px; margin-bottom:3px; }
-#chart-tooltip .tt-label { font-size:13px; font-weight:600; }
-#chart-tooltip .tt-val { font-size:20px; font-weight:800; font-variant-numeric:tabular-nums; margin-left:auto; }
-#chart-tooltip .tt-posture { font-size:11px; text-align:center; padding:2px 8px; border-radius:20px; margin-top:4px; background:var(--mint,rgba(60,180,120,.12)); }
+#chart-tooltip .tt-time { font-size:15px; font-weight:700; color:var(--text-muted,rgba(0,0,0,.45)); margin-bottom:8px; letter-spacing:.03em; }
+#chart-tooltip .tt-row { display:flex; gap:24px; margin-bottom:5px; }
+#chart-tooltip .tt-label { font-size:15px; font-weight:600; }
+#chart-tooltip .tt-val { font-size:28px; font-weight:800; font-variant-numeric:tabular-nums; margin-left:auto; }
+#chart-tooltip .tt-posture { font-size:14px; text-align:center; padding:4px 12px; border-radius:20px; margin-top:6px; background:var(--mint-xlight,rgba(60,180,120,.12)); color:var(--mint-dark,#3d6b5a); font-weight:600; }
 </style>
