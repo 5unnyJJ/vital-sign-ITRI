@@ -308,8 +308,16 @@ const sourceData = computed(() => {
   const today = todayGroups.value
   return (all && Object.keys(all).length) ? all : today
 })
+const displaySource = computed(() => {
+  if (overviewMode.value !== 'today') return sourceData.value
+  const base = sourceData.value || {}
+  const today = todayGroups.value || {}
+  if (!Object.keys(base).length) return today
+  if (!Object.keys(today).length) return base
+  return { ...base, ...today }
+})
 const displayMembers = computed(() => {
-  const src = overviewMode.value === 'today' ? todayGroups.value : sourceData.value
+  const src = displaySource.value
   const allowed = getAllowedMemberTokenSet(navStore.currentTable)
   const keys = Object.keys(src).filter(mid => !allowed || allowed.has(memberSearchToken(mid)))
   return keys.sort(memberSort)
@@ -331,7 +339,7 @@ const headerSubtitle = computed(() => {
 
 // ── Card data helpers ─────────────────────────────────────
 function cardRows(mid) {
-  const src = overviewMode.value === 'today' ? todayGroups.value : sourceData.value
+  const src = displaySource.value
   return src[mid] || []
 }
 function cardVal(mid, field) {
@@ -486,7 +494,7 @@ async function scanAndLoadCards() {
     memberList.value = cachedList
     todayGroups.value = cached.todayGroups || {}
     allGroups.value = cached.allGroups || {}
-    state.value = Object.keys(cachedList).length || displayMembers.value.length ? 'loaded' : 'empty'
+    state.value = displayMembers.value.length ? 'loaded' : 'empty'
     scanning.value = false
     scanPct.value = 0
     if (cached.ts) {
@@ -605,7 +613,7 @@ async function scanAndLoadCards() {
       todayGroups.value = fb.todayGroups || {}
       allGroups.value = fb.allGroups || {}
       memberList.value = fb.memberList || []
-      state.value = 'loaded'
+      state.value = displayMembers.value.length ? 'loaded' : 'empty'
       errorBanner.value = `無法取得最新資料，目前顯示快取資料`
     } else {
       state.value = 'empty'
