@@ -278,10 +278,14 @@ async function fetchAllMemberIds(table) {
   const org = authStore.orgByTable[table]
   if (org) {
     const { data, error } = await sb.from('users').select('member_id').eq('org_id', org.id).order('member_id', { ascending: true })
-    if (!error) {
-      const ids = uniqueMemberIds(data || []).filter(id => id && isMemberIdValidForOrg(id, table))
-      authStore.memberIdsByTable[table] = ids
-      return ids
+    if (!error && data?.length) {
+      // org_id filter already ensures correct org; no additional prefix check needed here
+      // (users.member_id format may differ from data table format, e.g. TEST_DC001 vs DC001)
+      const ids = uniqueMemberIds(data)
+      if (ids.length) {
+        authStore.memberIdsByTable[table] = ids
+        return ids
+      }
     }
   }
   // fallback：分頁掃描 vital signs table + dominant prefix 過濾（防止跨機構 ID 混入）
@@ -584,7 +588,10 @@ async function scanAndLoadCards() {
     if (myToken !== _scanToken) return
     memberList.value = newList
     todayGroups.value = newTodayGroups
-    allGroups.value = newAllGroups
+    // Safety net: only overwrite allGroups if new scan got members, or existing is empty
+    if (Object.keys(newAllGroups).length || !Object.keys(allGroups.value).length) {
+      allGroups.value = newAllGroups
+    }
     skeletonIds.value = []
     scanPct.value = 100
     scanLabel.value = '載入完成'
