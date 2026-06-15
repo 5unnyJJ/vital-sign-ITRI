@@ -365,6 +365,20 @@ function setRange(r) {
   loadDetailChart().then(() => { if (r === 'today') renderDetailStats(detailRawData.value || []) })
 }
 
+async function goToLatestDate() {
+  const table = navStore.currentTable
+  if (!table || !memberId.value) return
+  const { data } = await sb.from(table)
+    .select('date_minute')
+    .eq('member_id', memberId.value)
+    .order('date_minute', { ascending: false })
+    .limit(1)
+  if (data && data.length) {
+    const latestDate = data[0].date_minute.slice(0, 10)
+    if (latestDate !== currentDate.value) setCustomDate(latestDate)
+  }
+}
+
 async function openDetCal() {
   calOpen.value = true
   const table = navStore.currentTable
@@ -536,7 +550,10 @@ onMounted(async () => {
     || []
   if (initRows.length) renderDetailStats(initRows)
   await loadDetailChart()
-  if (detailRange.value === 'today') renderDetailStats(detailRawData.value || [])
+  if (detailRange.value === 'today') {
+    renderDetailStats(detailRawData.value || [])
+    if (!detailRawData.value?.length) await goToLatestDate()
+  }
 })
 
 watch(() => route.params.id, async (newId) => {
@@ -555,7 +572,10 @@ watch(() => route.params.id, async (newId) => {
     || []
   if (initRows.length) renderDetailStats(initRows)
   await loadDetailChart()
-  if (detailRange.value === 'today') renderDetailStats(detailRawData.value || [])
+  if (detailRange.value === 'today') {
+    renderDetailStats(detailRawData.value || [])
+    if (!detailRawData.value?.length) await goToLatestDate()
+  }
 })
 </script>
 
