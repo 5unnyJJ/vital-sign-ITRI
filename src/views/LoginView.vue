@@ -263,7 +263,7 @@ onMounted(() => {
   min-height: 100vh;
   background:
     linear-gradient(rgba(16, 27, 42, .38), rgba(24, 39, 58, .44)),
-    url('/vital-sign-ITRI/images/timthumb.jpg');
+    url('/images/timthumb.jpg');
   background-size: cover, cover;
   background-repeat: no-repeat, no-repeat;
   background-position: center center, center center;

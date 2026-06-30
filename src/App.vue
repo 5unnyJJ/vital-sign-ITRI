@@ -271,7 +271,7 @@ body {
   font-family: 'Noto Sans TC', 'DM Sans', sans-serif;
   background:
     linear-gradient(rgba(243, 248, 244, .76), rgba(234, 242, 236, .82)),
-    url('/vital-sign-ITRI/images/zipN-4240-00-000027-wpu.jpg');
+    url('/images/zipN-4240-00-000027-wpu.jpg');
   background-size: cover, cover;
   background-attachment: fixed;
   color: var(--text);
