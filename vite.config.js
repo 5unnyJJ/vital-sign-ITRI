@@ -13,7 +13,7 @@ export default defineConfig({
       ]
     }),
   ],
-  base: '/vital-sign-ITRI/',
+  base: '/',
   server: {
     proxy: {
       '/hf-api': {
