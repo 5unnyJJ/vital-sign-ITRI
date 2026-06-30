@@ -56,7 +56,7 @@ import { ref, computed, watch, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { trendSVG, initCursorDragNodes, initAvgDragNodes } from '@/utils/chart.js'
 import { useHfStore } from '@/stores/hf.js'
-import { HF_MOCK_PATIENTS, HF_MOCK_VITALS, HF_MOCK_IO } from '@/data/hfMock.js'
+import { fetchPhysiData, normalizeVitals } from '@/services/hfApi.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -66,10 +66,8 @@ const chartBodyRef = ref(null)
 const patientId = computed(() => route.params.id)
 
 const patient = computed(() => {
-  const cache = hfStore.hfMembersCache
-  const list = (Array.isArray(cache) ? cache : [])
-  const found = list.find(p => p.id === patientId.value)
-  return found || HF_MOCK_PATIENTS.find(p => p.id === patientId.value) || null
+  const list = Array.isArray(hfStore.hfMembersCache) ? hfStore.hfMembersCache : []
+  return list.find(p => p.id === patientId.value) || null
 })
 
 const patientName = computed(() => patient.value?.name || patient.value?.alias || '—')
@@ -81,10 +79,11 @@ const patientSub = computed(() => {
 const patientInfoItems = computed(() => {
   const p = patient.value
   if (!p) return []
+  const genderMap = { M: '男', F: '女' }
   return [
-    { label: '病歷號',   value: p.chartNo || '—' },
+    { label: '病歷號',   value: p.idno || p.chartNo || '—' },
     { label: '姓名',     value: p.name || p.alias || '—' },
-    { label: '性別',     value: p.gender || '—' },
+    { label: '性別',     value: genderMap[p.gender] || p.gender || '—' },
     { label: '年齡',     value: p.age ? `${p.age} 歲` : '—' },
     { label: '個案狀態', value: p.status || '—' },
   ]
@@ -119,22 +118,17 @@ function buildChartHtml(vitals) {
   )
 }
 
-// IO data
-const currentIoRows = ref([])
+// inoutdata (每日彙總，後端計算好的)
+const currentInoutData = ref([])
+// behaviorData (行為量測明細)
+const currentBehavior = ref([])
 
-// 每日綜合生理資訊
-const dailySummaryHtml = computed(() => buildDailySummary(currentIoRows.value))
+// 每日綜合生理資訊 — 直接讀後端給的 inoutdata，不在前端重算
+const dailySummaryHtml = computed(() => buildDailySummary(currentInoutData.value))
 
-function buildDailySummary(ioRows) {
-  if (!ioRows || !ioRows.length) return '<div class="trend-empty">無生理資訊紀錄</div>'
-  const sorted = [...ioRows].sort((a, b) => b.ts.localeCompare(a.ts))
-  const byDay = {}
-  sorted.forEach(r => {
-    const d = r.ts.slice(0, 10)
-    if (!byDay[d]) byDay[d] = []
-    byDay[d].push(r)
-  })
-  const days = Object.keys(byDay).sort((a, b) => b.localeCompare(a)).slice(0, 5)
+function buildDailySummary(rows) {
+  if (!rows || !rows.length) return '<div class="trend-empty">無生理資訊紀錄</div>'
+  const sorted = [...rows].sort((a, b) => b.evalDate.localeCompare(a.evalDate))
   let html = '<table class="hf-daily-table"><thead><tr>'
     + '<th>量測日期</th>'
     + '<th>當日點滴量 (cc)</th>'
@@ -144,46 +138,50 @@ function buildDailySummary(ioRows) {
     + '<th>當日排便次數 (次)</th>'
     + '<th>當日總排便量 (g)</th>'
     + '</tr></thead><tbody>'
-  days.forEach(day => {
-    const recs = byDay[day]
-    const drip    = recs.filter(r => r.type === '點滴').reduce((s, r) => s + r.value, 0)
-    const intake  = recs.filter(r => r.type === '飯前' || r.type === '點滴').reduce((s, r) => s + r.value, 0)
-    const urineN  = recs.filter(r => r.type === '小便').length
-    const urineV  = recs.filter(r => r.type === '小便').reduce((s, r) => s + r.value, 0)
-    const stoolN  = recs.filter(r => r.type === '大便').length
-    const stoolV  = recs.filter(r => r.type === '大便').reduce((s, r) => s + r.value, 0)
+  sorted.forEach(r => {
     html += `<tr>`
-      + `<td>${day}</td>`
-      + `<td>${drip}</td>`
-      + `<td>${intake % 1 === 0 ? intake : intake.toFixed(1)}</td>`
-      + `<td>${urineN}</td>`
-      + `<td>${urineV}</td>`
-      + `<td>${stoolN}</td>`
-      + `<td>${stoolV}</td>`
+      + `<td>${r.evalDate}</td>`
+      + `<td>${r.dripW}</td>`
+      + `<td>${r.intake}</td>`
+      + `<td>${r.urineC}</td>`
+      + `<td>${r.urineW}</td>`
+      + `<td>${r.fecesC}</td>`
+      + `<td>${r.fecesW}</td>`
       + `</tr>`
   })
   html += '</tbody></table>'
   return html
 }
 
-// 明細量測紀錄
-const detailRecordsHtml = computed(() => buildDetailRecords(currentIoRows.value))
+// 明細量測紀錄 — 從 behaviorData 讀取
+// type 英文代碼對應中文顯示與 badge 顏色
+const detailRecordsHtml = computed(() => buildDetailRecords(currentBehavior.value))
 
-const _TYPE_CLASS = { '飯前': 'hf-type-meal', '小便': 'hf-type-urine', '大便': 'hf-type-stool', '點滴': 'hf-type-drip' }
+const _TYPE_MAP = {
+  pre_meal:  { label: '飯前', cls: 'hf-type-meal'  },
+  post_meal: { label: '飯後', cls: 'hf-type-meal'  },
+  urine:     { label: '小便', cls: 'hf-type-urine' },
+  feces:     { label: '大便', cls: 'hf-type-stool' },
+  drip:      { label: '點滴', cls: 'hf-type-drip'  },
+}
 
-function buildDetailRecords(ioRows) {
-  if (!ioRows || !ioRows.length) return '<div class="trend-empty">無量測紀錄</div>'
-  const sorted = [...ioRows].sort((a, b) => b.ts.localeCompare(a.ts))
+function buildDetailRecords(rows) {
+  if (!rows || !rows.length) return '<div class="trend-empty">無量測紀錄</div>'
+  const sorted = [...rows]
+    .filter(r => !r.deleteFlag)
+    .sort((a, b) => b.ts - a.ts)
   let html = '<table class="hf-detail-table"><thead><tr>'
     + '<th>日期</th><th>時間</th><th>量測類型</th><th>量測數值</th>'
     + '</tr></thead><tbody>'
   sorted.forEach(r => {
-    const cls = _TYPE_CLASS[r.type] || ''
-    const valStr = Number.isInteger(r.value) ? `${r.value} ${r.unit}` : `${r.value.toFixed(1)} ${r.unit}`
+    const typeInfo = _TYPE_MAP[r.type] || { label: r.type, cls: '' }
+    const net = r.weight - (r.containerWeight || 0)
+    const unit = r.type === 'drip' ? 'cc' : 'g'
+    const valStr = Number.isInteger(net) ? `${net} ${unit}` : `${net.toFixed(1)} ${unit}`
     html += `<tr>`
-      + `<td>${r.ts.slice(0, 10)}</td>`
-      + `<td>${r.ts.slice(11, 16)}</td>`
-      + `<td><span class="hf-type-badge ${cls}">${r.type}</span></td>`
+      + `<td>${r.date}</td>`
+      + `<td>${r.time}</td>`
+      + `<td><span class="hf-type-badge ${typeInfo.cls}">${typeInfo.label}</span></td>`
       + `<td>${valStr}</td>`
       + `</tr>`
   })
@@ -193,14 +191,17 @@ function buildDetailRecords(ioRows) {
 
 async function loadDetail(id) {
   if (!id) return
-  let vitals = [], io = []
-  if (!hfStore.HF_API_CONNECTED) {
-    vitals = HF_MOCK_VITALS[id] || []
-    io = HF_MOCK_IO[id] || []
+  try {
+    const resp = await fetchPhysiData(id, 50)
+    hfStore.hfVitalsCache  = normalizeVitals(resp.data || [])
+    currentInoutData.value = resp.inoutdata    || []
+    currentBehavior.value  = resp.behaviorData || []
+  } catch (e) {
+    console.warn('[HF API] 個案明細載入失敗：', e.message)
+    hfStore.hfVitalsCache  = []
+    currentInoutData.value = []
+    currentBehavior.value  = []
   }
-  hfStore.hfVitalsCache = vitals
-  currentIoRows.value = io
-
   await nextTick()
   initCursorDragNodes()
   initAvgDragNodes()

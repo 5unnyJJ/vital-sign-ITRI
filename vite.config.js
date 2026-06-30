@@ -14,6 +14,15 @@ export default defineConfig({
     }),
   ],
   base: '/vital-sign-ITRI/',
+  server: {
+    proxy: {
+      '/hf-api': {
+        target: 'https://www.sstcmedicare.com',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/hf-api/, '/imedical/division/api'),
+      }
+    }
+  },
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) }
   },

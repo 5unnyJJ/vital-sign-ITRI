@@ -3,14 +3,9 @@
     <div class="hf-header">
       <div>
         <div class="hf-title">🫀 心衰生理資料</div>
-        <div class="hf-subtitle">{{ hfStore.HF_API_CONNECTED ? '即時資料' : '測試用資料（API 尚未串接）' }}</div>
+        <div class="hf-subtitle">即時資料</div>
       </div>
       <button class="btn-back" @click="router.push('/overview')" aria-label="返回總覽">← 返回總覽</button>
-    </div>
-
-    <!-- API 狀態 banner -->
-    <div class="hf-api-banner" v-if="!hfStore.HF_API_CONNECTED">
-      ⚠️ 目前顯示測試用 Mock 資料，真實 API 串接後將自動切換。
     </div>
 
     <!-- Patient grid -->
@@ -31,14 +26,14 @@
         <div class="hf-vitals">
           <div class="hf-vital-item">
             <div class="hf-vital-label">血壓</div>
-            <div class="hf-vital-val" :class="{ 'no-data': !lastVital(p.id) }">
-              {{ lastVital(p.id) ? `${lastVital(p.id).sbp}/${lastVital(p.id).dbp} mmHg` : '—' }}
+            <div class="hf-vital-val" :class="{ 'no-data': !lastVital(p) }">
+              {{ lastVital(p) ? `${lastVital(p).sbp}/${lastVital(p).dbp} mmHg` : '—' }}
             </div>
           </div>
           <div class="hf-vital-item">
             <div class="hf-vital-label">額溫</div>
-            <div class="hf-vital-val" :class="{ 'no-data': !lastVital(p.id) }">
-              {{ lastVital(p.id) ? `${lastVital(p.id).temp} °C` : '—' }}
+            <div class="hf-vital-val" :class="{ 'no-data': !lastVital(p) }">
+              {{ lastVital(p) ? `${lastVital(p).temp} °C` : '—' }}
             </div>
           </div>
           <div class="hf-vital-item">
@@ -47,17 +42,17 @@
           </div>
           <div class="hf-vital-item">
             <div class="hf-vital-label">最後量測</div>
-            <div class="hf-vital-val">{{ lastVital(p.id) ? lastVital(p.id).ts.slice(11, 16) : '—' }}</div>
+            <div class="hf-vital-val">{{ lastVital(p) ? lastVital(p).ts.slice(11, 16) : '—' }}</div>
           </div>
         </div>
         <div class="hf-io-row">
           <div class="hf-io-badge">
             <div class="hf-io-badge-label">今日攝入</div>
-            <div class="hf-io-badge-val">{{ todayIntake(p.id) ? todayIntake(p.id) + ' ml' : '—' }}</div>
+            <div class="hf-io-badge-val">{{ todayIntake(p) ? todayIntake(p) + ' ml' : '—' }}</div>
           </div>
           <div class="hf-io-badge">
             <div class="hf-io-badge-label">今日排出</div>
-            <div class="hf-io-badge-val">{{ todayOutput(p.id) ? todayOutput(p.id) + ' ml' : '—' }}</div>
+            <div class="hf-io-badge-val">{{ todayOutput(p) ? todayOutput(p) + ' ml' : '—' }}</div>
           </div>
         </div>
       </div>
@@ -71,46 +66,32 @@
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useHfStore } from '@/stores/hf.js'
-import { HF_MOCK_PATIENTS, HF_MOCK_VITALS, HF_MOCK_IO } from '@/data/hfMock.js'
-import { todayStr } from '@/utils/format.js'
+import { fetchPatientSummaries, normalizePatientList } from '@/services/hfApi.js'
 
 const router = useRouter()
 const hfStore = useHfStore()
 
-// patients list — real API would replace this
-const patients = computed(() => {
-  return hfStore.HF_API_CONNECTED
-    ? hfStore.hfMembersCache.value
-    : HF_MOCK_PATIENTS
-})
+const patients = computed(() => hfStore.hfMembersCache)
 
-function lastVital(id) {
-  const rows = HF_MOCK_VITALS[id] || []
-  return rows.length ? rows[rows.length - 1] : null
+function lastVital(p) {
+  if (!p.sbp && !p.dbp && !p.temp) return null
+  return { sbp: p.sbp, dbp: p.dbp, temp: p.temp, ts: `0000-00-00T${p.lastMeasurementTime || ''}` }
 }
 
-function todayIntake(id) {
-  const today = todayStr()
-  return (HF_MOCK_IO[id] || [])
-    .filter(r => r.ts.slice(0, 10) === today && r.type === 'intake')
-    .reduce((s, r) => s + r.amount, 0)
-}
-
-function todayOutput(id) {
-  const today = todayStr()
-  return (HF_MOCK_IO[id] || [])
-    .filter(r => r.ts.slice(0, 10) === today && r.type === 'output')
-    .reduce((s, r) => s + r.amount, 0)
-}
+function todayIntake(p) { return p.dailyIntake || 0 }
+function todayOutput(p) { return p.dailyOutput || 0 }
 
 function goHfDetail(id) {
   hfStore.currentHfMemberId = id
   router.push(`/hf/${id}`)
 }
 
-onMounted(() => {
-  if (!hfStore.HF_API_CONNECTED) {
-    hfStore.hfMembersCache = HF_MOCK_PATIENTS
+onMounted(async () => {
+  try {
+    const raw = await fetchPatientSummaries(20)
+    hfStore.hfMembersCache = normalizePatientList(raw)
+  } catch (e) {
+    console.warn('[HF] 個案清單 API 失敗：', e.message)
   }
 })
 </script>
