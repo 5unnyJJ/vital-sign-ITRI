@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/hf-api/:path*",
+      "destination": "https://www.sstcmedicare.com/imedical/division/api/:path*"
+    }
+  ]
+}

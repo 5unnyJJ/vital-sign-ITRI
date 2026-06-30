@@ -1,8 +1,6 @@
 /* ── HF API Service ── */
 
-const BASE = import.meta.env.DEV
-  ? '/hf-api'
-  : 'https://www.sstcmedicare.com/imedical/division/api'
+const BASE = '/hf-api'
 
 const ENDPOINT           = `${BASE}/getPhysiDataList?location=yt`
 const SUMMARIES_ENDPOINT = `${BASE}/getPatientSummaries?location=yt`
